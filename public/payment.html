@@ -1,0 +1,2040 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment | Mr.A Crackers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Golden/Purple Theme Variables */
+        :root {
+            --bg-primary: #0a0f1e;
+            --bg-secondary: #151e2f;
+            --bg-card: #1a2538;
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --text-muted: #a0b3d9;
+            --border-color: #2d3a5e;
+            --accent-primary: #fbbf24;
+            --accent-secondary: #c084fc;
+            --accent-gradient: linear-gradient(135deg, #fbbf24 0%, #c084fc 100%);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --input-bg: #0f172a;
+            --gold: #fbbf24;
+            --purple: #c084fc;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Offers Banner */
+        .offers-banner {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            text-align: center;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--bg-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover {
+            color: var(--gold);
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .nav-login-btn {
+            background: var(--accent-gradient);
+            color: var(--bg-primary) !important;
+            font-weight: 600;
+        }
+
+        .nav-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .nav-logout-btn {
+            background: var(--danger);
+            color: white !important;
+        }
+
+        .nav-logout-btn:hover {
+            background: #dc2626;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .welcome-user {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .orders,
+        .cart {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            width: 45px;
+            height: 45px;
+            color: var(--text-secondary);
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            transition: all 0.3s;
+        }
+
+        .orders:hover,
+        .cart:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .cart-count,
+        .orders-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            font-size: 11px;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Layout */
+        .cart-layout {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+        }
+
+        /* Cart Section */
+        .cart-section {
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .section-head {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: var(--bg-secondary);
+        }
+
+        .section-head h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-head p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-top: 5px;
+        }
+
+        .continue-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .continue-link:hover {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .continue-link::before {
+            content: 'â†';
+            font-size: 18px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 80px 30px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h2 {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .empty-cta {
+            display: inline-block;
+            padding: 14px 35px;
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .empty-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+        }
+
+        /* Cart List */
+        .cart-list {
+            padding: 30px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .cart-item:hover {
+            border-color: var(--gold);
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            color: var(--gold);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Payment Section */
+        .payment-section {
+            padding: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .address-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .address-header h2 i {
+            color: var(--gold);
+        }
+
+        /* Saved Addresses Section */
+        .saved-addresses-section {
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            background: var(--bg-secondary);
+        }
+
+        .saved-addresses-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .saved-addresses-section h3 i {
+            color: var(--gold);
+        }
+
+        .address-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .address-radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .address-radio-option:hover {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .address-radio-option.selected {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.15);
+        }
+
+        .address-radio-option input[type="radio"] {
+            margin-top: 5px;
+            min-width: 18px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--gold);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .address-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .address-details .name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .address-details .name-badge {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .address-details .address-line {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+
+        .address-details .phone {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            border-radius: 16px;
+            width: fit-content;
+        }
+
+        .address-details .phone i {
+            color: var(--gold);
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .address-edit-btn,
+        .address-delete-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 6px;
+            cursor: pointer;
+            border-radius: 6px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .address-edit-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .address-delete-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .new-address-toggle {
+            margin-top: 15px;
+            padding: 14px;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: var(--gold);
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--bg-primary);
+        }
+
+        .new-address-toggle:hover {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        /* Address Form */
+        .address-form {
+            margin-top: 20px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            background: var(--bg-secondary);
+        }
+
+        .address-form h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .address-form h3 i {
+            color: var(--gold);
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .input-group label span {
+            color: var(--danger);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+        }
+
+        /* Payment Options */
+        .payment-options-container {
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            height: fit-content;
+        }
+
+        .payment-options-container p {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .payment-options label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .payment-options label:hover {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .payment-options input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--gold);
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .payment-options i {
+            color: var(--gold);
+            width: 18px;
+            text-align: center;
+        }
+
+        .save-address-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .save-address-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--gold);
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .save-address-checkbox span {
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        /* Divider */
+        .address-section-divider {
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .address-section-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+
+        .address-section-divider span {
+            background: var(--bg-card);
+            padding: 0 15px;
+            color: var(--text-muted);
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-note {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .form-note i {
+            color: var(--gold);
+            margin-right: 5px;
+        }
+
+        /* No Addresses Message */
+        .no-addresses-message {
+            text-align: center;
+            padding: 30px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-muted);
+        }
+
+        .no-addresses-message i {
+            font-size: 40px;
+            color: var(--gold);
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .no-addresses-message button {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .no-addresses-message button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .summary-row strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .summary-row .discount {
+            color: var(--success);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-top: 10px;
+            border-top: 2px solid var(--border-color);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .summary-total strong {
+            color: var(--gold);
+            font-size: 24px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .place-order-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+        }
+
+        .place-order-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Order Success */
+        .order-success {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 15, 30, 0.95);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .order-success[hidden] {
+            display: none;
+        }
+
+        .success-card {
+            background: var(--bg-card);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            animation: successPop 0.5s ease;
+        }
+
+        @keyframes successPop {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .success-icon {
+            font-size: 70px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .success-card h3 {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .success-card p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .success-actions a {
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .success-actions a:first-child {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+        }
+
+        .success-actions a:last-child {
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .success-actions a:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .cart-layout {
+                grid-template-columns: 1fr 320px;
+                gap: 20px;
+            }
+
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .nav-item {
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 6px 16px;
+                font-size: 13px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+            }
+
+            .section-head {
+                padding: 20px;
+            }
+
+            .cart-list,
+            .payment-section {
+                padding: 20px;
+            }
+
+            .address-radio-option {
+                flex-direction: column;
+            }
+
+            .address-actions {
+                margin-left: 0;
+                margin-top: 10px;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 12px 15px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-item:not(.active):not(.btn) {
+                display: none;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .cart-layout {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+
+            .section-head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .continue-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+            }
+
+            .item-image {
+                width: 100%;
+                height: 150px;
+            }
+
+            .address-form {
+                padding: 15px;
+            }
+
+            .payment-options-container {
+                padding: 15px;
+            }
+
+            .success-actions {
+                flex-direction: column;
+            }
+
+            .summary-card {
+                padding: 20px;
+            }
+
+            .summary-total strong {
+                font-size: 20px;
+            }
+
+            .orders,
+            .cart {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .welcome-user {
+                display: none;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .cart-layout {
+                padding: 0 10px;
+            }
+
+            .address-details .name {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* All-Products Theme Alignment Overrides */
+        .offers-banner {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .navbar {
+            background: var(--bg-secondary);
+            backdrop-filter: none;
+        }
+
+        .nav-login-btn:hover {
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .cart-layout {
+            gap: 26px;
+        }
+
+        .cart-section,
+        .summary-card {
+            background: var(--bg-card);
+            border-color: var(--border-color);
+            box-shadow: 0 14px 38px rgba(5, 10, 24, 0.42);
+        }
+
+        .section-head {
+            background: var(--bg-secondary);
+        }
+
+        .section-head h1 {
+            letter-spacing: 0.3px;
+            text-shadow: none;
+        }
+
+        .section-head p {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .continue-link {
+            border-color: var(--border-color);
+            background: transparent;
+            color: var(--gold);
+        }
+
+        .continue-link:hover {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .cart-list {
+            padding: 24px;
+            background: transparent;
+        }
+
+        .cart-item {
+            grid-template-columns: 124px 1fr auto;
+            gap: 18px;
+            border-radius: 18px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .cart-item:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.16);
+        }
+
+        .item-image {
+            width: 124px;
+            height: 124px;
+            border-radius: 14px;
+            border-color: var(--border-color);
+        }
+
+        .item-info {
+            min-width: 0;
+        }
+
+        .item-title {
+            font-size: 18px;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-bottom: 6px;
+        }
+
+        .item-meta {
+            display: none;
+        }
+
+        .item-price {
+            color: var(--gold);
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .item-original-line {
+            margin-top: 4px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .item-original {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .item-off {
+            font-weight: 700;
+            color: var(--bg-primary);
+            background: var(--accent-gradient);
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            letter-spacing: 0.3px;
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--bg-primary);
+            background: var(--accent-gradient);
+        }
+
+        .stock-badge.low {
+            background: var(--gold);
+        }
+
+        .stock-badge.out {
+            background: var(--danger);
+            color: #ffffff;
+        }
+
+        .stock-warning {
+            margin-top: 8px;
+            color: #fca5a5;
+            font-size: 12px;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .qty-control {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        .qty-btn {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--gold);
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .qty-btn:hover:not(:disabled) {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--text-primary);
+        }
+
+        .qty-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .qty-input {
+            width: 54px;
+            height: 34px;
+            border: 0;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .remove-btn {
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .remove-btn:hover {
+            background: rgba(239, 68, 68, 0.18);
+            border-color: rgba(239, 68, 68, 0.65);
+            color: #ffd1d7;
+        }
+
+        .line-total {
+            min-width: 140px;
+            border-left: 1px dashed var(--border-color);
+            padding-left: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: right;
+        }
+
+        .line-total p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .line-total strong {
+            margin-top: 4px;
+            color: var(--gold);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .cart-item.out-of-stock {
+            opacity: 0.72;
+        }
+
+        .address-header h2,
+        .address-form h3,
+        .saved-addresses-section h3 {
+            color: var(--text-primary);
+        }
+
+        .saved-addresses-section,
+        .address-form,
+        .payment-options-container {
+            border-color: var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .address-radio-option:hover,
+        .address-radio-option.selected {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .new-address-toggle:hover {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .input-group input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+        }
+
+        .payment-options label:hover {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .save-address-checkbox {
+            border-color: var(--border-color);
+            background: var(--bg-primary);
+        }
+
+        .manage-addresses-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .manage-addresses-link:hover {
+            color: var(--text-secondary);
+            text-decoration: underline;
+        }
+
+        .no-addresses-message button {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+        }
+
+        .no-addresses-message button:hover {
+            box-shadow: 0 6px 16px rgba(251, 191, 36, 0.3);
+        }
+
+        .form-note {
+            background: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .summary-card h2 {
+            margin-bottom: 16px;
+        }
+
+        .summary-row {
+            color: var(--text-secondary);
+        }
+
+        .summary-row strong {
+            color: var(--text-primary);
+        }
+
+        .summary-total {
+            margin-top: 14px;
+            border-top-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .summary-total strong {
+            color: var(--gold);
+            text-shadow: none;
+        }
+
+        .place-order-btn {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            box-shadow: 0 12px 26px rgba(251, 191, 36, 0.3);
+        }
+
+        .place-order-btn:hover:not(:disabled) {
+            box-shadow: 0 16px 34px rgba(251, 191, 36, 0.38);
+        }
+
+        @media (max-width: 900px) {
+            .cart-item {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .item-image {
+                width: 100%;
+                height: 180px;
+            }
+
+            .line-total {
+                border-left: 0;
+                border-top: 1px dashed var(--border-color);
+                padding: 12px 0 0;
+                text-align: left;
+                min-width: 0;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
+        /* Touch-friendly */
+        button,
+        .cart,
+        .orders,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+    <link rel="stylesheet" href="/css/theme.css">
+</head>
+
+<body class="payment-page page-payment">
+    <div class="offers-banner">
+        <i class="fas fa-tag"></i> Diwali Special: 20% OFF on Festival Packs | Limited Stock!
+    </div>
+
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='/'">Mr.A Crackers</div>
+        <div class="nav-links">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/all-products.html" class="nav-item">All Products</a>
+            <a href="/login.html" id="loginLink" class="btn nav-login-btn">Login</a>
+            <div class="user-section" id="userSection" hidden>
+                <span id="welcomeUser" class="welcome-user"></span>
+                <button id="logoutBtn" type="button" class="btn nav-logout-btn">Logout</button>
+            </div>
+            <a href="/order-details.html" class="orders" aria-label="Orders">
+                <i class="fa-solid fa-box-open"></i>
+                <span class="orders-count" id="ordersCount" style="display: none;">0</span>
+            </a>
+            <button type="button" class="cart" id="cartBtn" aria-label="Cart page">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="headerCartCount">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="cart-layout">
+        <section class="cart-section">
+            <div class="section-head">
+                <div>
+                    <h1>Confirm Payment</h1>
+                    <p id="cartMeta">0 item(s)</p>
+                </div>
+                <a class="continue-link" href="/all-products.html">Continue Shopping</a>
+            </div>
+
+            <div class="empty-state" id="emptyState" hidden>
+                <div class="empty-icon"><i class="fas fa-cart-shopping"></i></div>
+                <h2>Your cart is empty</h2>
+                <p>Add products from our latest festival collections to continue.</p>
+                <a class="empty-cta" href="/all-products.html"><i class="fas fa-shopping-bag"></i> Browse Products</a>
+            </div>
+
+            <div class="cart-list" id="cartList"></div>
+
+            <div id="paymentSection" class="payment-section">
+                <div class="address-header">
+                    <h2><i class="fas fa-map-marker-alt"></i> Address & Payment Details</h2>
+                </div>
+
+                <!-- Saved Addresses Section -->
+                <div class="saved-addresses-section" id="savedAddressesSection" style="display: none;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3><i class="fas fa-map-marker-alt"></i> Saved Addresses</h3>
+                        <a href="#" class="manage-addresses-link" id="manageAddressesLink">Manage Addresses</a>
+                    </div>
+                    <div class="address-radio-group" id="savedAddressesList"></div>
+                    <div class="new-address-toggle" id="newAddressToggle">
+                        <i class="fas fa-plus-circle"></i> Add New Address
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="address-section-divider" id="addressDivider" style="display: none;">
+                    <span>OR</span>
+                </div>
+
+                <!-- Address Form -->
+                <div class="address-form" id="addressForm">
+                    <h3>
+                        <i class="fas fa-pencil-alt"></i>
+                        Enter Address Details
+                    </h3>
+                    <div class="payment-grid">
+                        <div>
+                            <div class="input-group">
+                                <label for="addrName">Full Name <span>*</span></label>
+                                <input id="addrName" type="text" required maxlength="80"
+                                    placeholder="Enter your full name" />
+                            </div>
+                            <div class="input-group">
+                                <label for="addrMobile">Mobile Number <span>*</span></label>
+                                <input id="addrMobile" type="tel" maxlength="10" inputmode="numeric" required
+                                    placeholder="10-digit mobile number" />
+                            </div>
+                            <div class="input-group">
+                                <label for="addrLine1">Address Line 1 <span>*</span></label>
+                                <input id="addrLine1" type="text" maxlength="100" required
+                                    placeholder="House/Flat No., Building Name" />
+                            </div>
+                            <div class="input-group">
+                                <label for="addrLine2">Address Line 2</label>
+                                <input id="addrLine2" type="text" maxlength="100"
+                                    placeholder="Street, Area (Optional)" />
+                            </div>
+                            <div class="input-group">
+                                <label for="addrCity">City <span>*</span></label>
+                                <input id="addrCity" type="text" maxlength="50" required placeholder="City" />
+                            </div>
+                            <div class="input-group">
+                                <label for="addrState">State <span>*</span></label>
+                                <input id="addrState" type="text" maxlength="50" required placeholder="State" />
+                            </div>
+                            <div class="input-group">
+                                <label for="addrPin">PIN Code <span>*</span></label>
+                                <input id="addrPin" type="text" maxlength="6" inputmode="numeric" required
+                                    placeholder="6-digit PIN code" />
+                            </div>
+                            <label class="save-address-checkbox">
+                                <input type="checkbox" id="saveAddressCheckbox" checked>
+                                <span>Save this address for future orders</span>
+                            </label>
+                        </div>
+                        <div class="payment-options-container">
+                            <p><i class="fas fa-credit-card"></i> Choose payment method:</p>
+                            <div class="payment-options">
+                                <label>
+                                    <input type="radio" name="paymentMethod" value="upi" checked>
+                                    <i class="fas fa-mobile-alt"></i>
+                                    UPI
+                                </label>
+                                <label>
+                                    <input type="radio" name="paymentMethod" value="card">
+                                    <i class="fas fa-credit-card"></i>
+                                    Credit/Debit Card
+                                </label>
+                                <label>
+                                    <input type="radio" name="paymentMethod" value="netbanking">
+                                    <i class="fas fa-university"></i>
+                                    Net Banking
+                                </label>
+                                <label>
+                                    <input type="radio" name="paymentMethod" value="wallet">
+                                    <i class="fas fa-wallet"></i>
+                                    Wallet
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Note -->
+                <div class="form-note" id="formNote">
+                    <i class="fas fa-info-circle"></i> Select a saved address or add a new address below
+                </div>
+
+                <button type="button" id="payNowBtn" class="place-order-btn">
+                    <i class="fas fa-lock"></i> Pay Now
+                </button>
+            </div>
+        </section>
+
+        <aside class="summary-card" id="summaryCard">
+            <h2>Price Details</h2>
+            <div class="summary-row">
+                <span>Original Price (<span id="summaryItems">0</span> item)</span>
+                <strong id="summaryOriginal">&#8377;0</strong>
+            </div>
+            <div class="summary-row">
+                <span>Discount (<span id="summaryDiscountPercent">0%</span>)</span>
+                <strong class="discount" id="summaryDiscount">-&#8377;0</strong>
+            </div>
+            <div class="summary-total">
+                <span>Final Discounted Price</span>
+                <strong id="summaryFinal">&#8377;0</strong>
+            </div>
+        </aside>
+    </main>
+
+    <section class="order-success" id="orderSuccess" hidden>
+        <div class="success-card">
+            <div class="success-icon"><i class="fas fa-circle-check"></i></div>
+            <h3>Order placed successfully</h3>
+            <p id="orderSuccessMessage"></p>
+            <div class="success-actions">
+                <a href="/all-products.html"><i class="fas fa-shopping-bag"></i> Shop More</a>
+                <a href="/"><i class="fas fa-home"></i> Go Home</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/auth-session.js"></script>
+    <script src="/js/navbar-auth.js"></script>
+    <script src="/js/cart-utils.js"></script>
+    <script src="/js/checkout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // âœ… FIXED: getUserStorageKey function add pannita
+            function getUserStorageKey(baseKey) {
+                const userId = localStorage.getItem('userId');
+                return userId ? `${baseKey}_${userId}` : baseKey;
+            }
+
+            // Initialize addresses from USER-SPECIFIC localStorage
+            let savedAddresses = [];
+            try {
+                const userAddressesKey = getUserStorageKey('savedAddresses');
+                const parsed = JSON.parse(localStorage.getItem(userAddressesKey) || '[]');
+                savedAddresses = Array.isArray(parsed) ? parsed : [];
+            } catch {
+                savedAddresses = [];
+            }
+
+            // If user is logged in, fetch addresses from database
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                fetchSavedAddressesFromDB(userId);
+            }
+
+            const savedAddressesSection = document.getElementById('savedAddressesSection');
+            const savedAddressesList = document.getElementById('savedAddressesList');
+            const addressForm = document.getElementById('addressForm');
+            const newAddressToggle = document.getElementById('newAddressToggle');
+            const manageAddressesLink = document.getElementById('manageAddressesLink');
+            const addressDivider = document.getElementById('addressDivider');
+            const formNote = document.getElementById('formNote');
+
+            // Make inputs numeric only
+            makeNumeric(document.getElementById('addrMobile'));
+            makeNumeric(document.getElementById('addrPin'));
+
+            // Load saved addresses
+            loadSavedAddresses();
+
+            function loadSavedAddresses() {
+                if (savedAddresses.length > 0) {
+                    savedAddressesSection.style.display = 'block';
+                    renderSavedAddresses();
+
+                    // âœ… FIXED: User-specific lastUsedAddressIndex
+                    const userLastUsedKey = getUserStorageKey('lastUsedAddressIndex');
+                    const lastUsedIndex = localStorage.getItem(userLastUsedKey);
+
+                    if (lastUsedIndex !== null && !isNaN(lastUsedIndex) && savedAddresses[parseInt(lastUsedIndex)]) {
+                        selectAddress(parseInt(lastUsedIndex));
+                    } else {
+                        // âœ… FIXED: First address as DEFAULT (index 0)
+                        selectAddress(0);
+                    }
+
+                    addressForm.style.display = 'block';
+                    addressDivider.style.display = 'block';
+                    formNote.style.display = 'block';
+                } else {
+                    savedAddressesSection.style.display = 'none';
+                    addressDivider.style.display = 'none';
+                    addressForm.style.display = 'block';
+                    formNote.style.display = 'none';
+
+                    const storedName = localStorage.getItem('username');
+                    const storedMobile = localStorage.getItem('mobile');
+                    if (storedName) document.getElementById('addrName').value = storedName;
+                    if (storedMobile) document.getElementById('addrMobile').value = storedMobile;
+                }
+            }
+
+            function renderSavedAddresses() {
+                if (savedAddresses.length === 0) {
+                    savedAddressesList.innerHTML = `
+                <div class="no-addresses-message">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>No saved addresses found</p>
+                    <button onclick="document.getElementById('newAddressToggle').click()">
+                        <i class="fas fa-plus-circle"></i> Add New Address
+                    </button>
+                </div>
+            `;
+                    return;
+                }
+
+                savedAddressesList.innerHTML = savedAddresses.map((addr, index) => `
+            <div class="address-radio-option ${index === 0 ? 'selected' : ''}" data-address-index="${index}">
+                <input type="radio" name="savedAddress" value="${index}" id="addr_${index}" ${index === 0 ? 'checked' : ''}>
+                <div class="address-details">
+                    <div class="name">
+                        ${escapeHtml(addr.name || '')}
+                        <span class="name-badge">Default</span>
+                    </div>
+                    <div class="address-line">
+                        ${escapeHtml(addr.line1 || '')}${addr.line2 ? ', ' + escapeHtml(addr.line2) : ''}<br>
+                        ${escapeHtml(addr.city || '')}, ${escapeHtml(addr.state || '')} - ${escapeHtml(addr.pin || '')}
+                    </div>
+                    <div class="phone">
+                        <i class="fas fa-phone"></i> ${escapeHtml(addr.mobile || '')}
+                    </div>
+                </div>
+                <div class="address-actions">
+                    <button class="address-edit-btn" onclick="event.stopPropagation(); window.editAddress(${index})" title="Edit address">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="address-delete-btn" onclick="event.stopPropagation(); window.deleteAddress(${index})" title="Delete address">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+                // Add click handlers
+                document.querySelectorAll('.address-radio-option').forEach(option => {
+                    option.addEventListener('click', function (e) {
+                        if (e.target.closest('.address-edit-btn') || e.target.closest('.address-delete-btn')) {
+                            return;
+                        }
+
+                        const radio = this.querySelector('input[type="radio"]');
+                        radio.checked = true;
+                        selectAddress(parseInt(this.dataset.addressIndex));
+
+                        document.querySelectorAll('.address-radio-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                        addressForm.style.display = 'block';
+                        addressDivider.style.display = 'block';
+                    });
+                });
+            }
+
+            window.editAddress = function (index) {
+                const addr = savedAddresses[index];
+                if (!addr) return;
+
+                document.getElementById('addrName').value = addr.name || '';
+                document.getElementById('addrMobile').value = addr.mobile || '';
+                document.getElementById('addrLine1').value = addr.line1 || '';
+                document.getElementById('addrLine2').value = addr.line2 || '';
+                document.getElementById('addrCity').value = addr.city || '';
+                document.getElementById('addrState').value = addr.state || '';
+                document.getElementById('addrPin').value = addr.pin || '';
+
+                addressForm.style.display = 'block';
+                addressDivider.style.display = 'block';
+
+                savedAddresses.splice(index, 1);
+                saveUserAddresses(savedAddresses); // âœ… FIXED: User-specific save
+
+                if (savedAddresses.length === 0) {
+                    savedAddressesSection.style.display = 'none';
+                    addressDivider.style.display = 'none';
+                    formNote.style.display = 'none';
+                } else {
+                    renderSavedAddresses();
+                }
+
+                showCartMessage('Edit address and click "Pay Now" to save changes', 'info');
+            };
+
+            window.deleteAddress = function (index) {
+                if (confirm('Are you sure you want to delete this address?')) {
+                    savedAddresses.splice(index, 1);
+                    saveUserAddresses(savedAddresses); // âœ… FIXED: User-specific save
+
+                    if (savedAddresses.length === 0) {
+                        savedAddressesSection.style.display = 'none';
+                        addressDivider.style.display = 'none';
+                        formNote.style.display = 'none';
+                    } else {
+                        renderSavedAddresses();
+                        selectAddress(0); // Default to first address
+                    }
+
+                    showCartMessage('Address deleted successfully', 'success');
+                }
+            };
+
+            function selectAddress(index) {
+                const addr = savedAddresses[index];
+                if (!addr) return;
+
+                document.getElementById('addrName').value = addr.name || '';
+                document.getElementById('addrMobile').value = addr.mobile || '';
+                document.getElementById('addrLine1').value = addr.line1 || '';
+                document.getElementById('addrLine2').value = addr.line2 || '';
+                document.getElementById('addrCity').value = addr.city || '';
+                document.getElementById('addrState').value = addr.state || '';
+                document.getElementById('addrPin').value = addr.pin || '';
+
+                // âœ… FIXED: User-specific lastUsedAddressIndex
+                const userLastUsedKey = getUserStorageKey('lastUsedAddressIndex');
+                localStorage.setItem(userLastUsedKey, index);
+
+                addressForm.style.display = 'block';
+                addressDivider.style.display = 'block';
+
+                // Update UI selection
+                document.querySelectorAll('.address-radio-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                const selectedOption = document.querySelector(`[data-address-index="${index}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                    selectedOption.querySelector('input[type="radio"]').checked = true;
+                }
+            }
+
+            // âœ… FIXED: User-specific save function
+            function saveUserAddresses(addresses) {
+                const userAddressesKey = getUserStorageKey('savedAddresses');
+                localStorage.setItem(userAddressesKey, JSON.stringify(addresses));
+            }
+
+            newAddressToggle.addEventListener('click', function () {
+                addressForm.style.display = 'block';
+                addressDivider.style.display = 'block';
+
+                document.querySelectorAll('input[name="savedAddress"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                document.querySelectorAll('.address-radio-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+
+                document.getElementById('addrLine1').value = '';
+                document.getElementById('addrLine2').value = '';
+                document.getElementById('addrCity').value = '';
+                document.getElementById('addrState').value = '';
+                document.getElementById('addrPin').value = '';
+
+                const storedName = localStorage.getItem('username');
+                const storedMobile = localStorage.getItem('mobile');
+                if (storedName) document.getElementById('addrName').value = storedName;
+                if (storedMobile) document.getElementById('addrMobile').value = storedMobile;
+
+                addressForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            const payBtn = document.getElementById('payNowBtn');
+            payBtn?.addEventListener('click', async function () {
+                const addr = {
+                    name: document.getElementById('addrName').value.trim(),
+                    mobile: document.getElementById('addrMobile').value.trim(),
+                    line1: document.getElementById('addrLine1').value.trim(),
+                    line2: document.getElementById('addrLine2').value.trim(),
+                    city: document.getElementById('addrCity').value.trim(),
+                    state: document.getElementById('addrState').value.trim(),
+                    pin: document.getElementById('addrPin').value.trim(),
+                };
+
+                if (!addr.name || !addr.mobile || !addr.line1 || !addr.city || !addr.state || !addr.pin) {
+                    showCartMessage('Please fill all required address fields', 'error');
+                    return;
+                }
+
+                if (!/^\d{10}$/.test(addr.mobile)) {
+                    showCartMessage('Please enter a valid 10-digit mobile number', 'error');
+                    return;
+                }
+
+                if (!/^\d{6}$/.test(addr.pin)) {
+                    showCartMessage('Please enter a valid 6-digit PIN code', 'error');
+                    return;
+                }
+
+                const saveAddress = document.getElementById('saveAddressCheckbox').checked;
+                if (saveAddress) {
+                    await saveAddressToStorage(addr);
+                }
+
+                const methodEl = document.querySelector('input[name="paymentMethod"]:checked');
+                const paymentMethod = methodEl ? methodEl.value : 'upi';
+
+                showCartMessage('Processing payment...', 'info');
+                await new Promise((r) => setTimeout(r, 1500));
+                await completeOrder({ address: addr, paymentMethod });
+            });
+
+            // âœ… FIXED: User-specific address save
+            async function saveAddressToStorage(addr) {
+                try {
+                    const userAddressesKey = getUserStorageKey('savedAddresses');
+                    let addresses = [];
+                    try {
+                        const parsed = JSON.parse(localStorage.getItem(userAddressesKey) || '[]');
+                        addresses = Array.isArray(parsed) ? parsed : [];
+                    } catch {
+                        addresses = [];
+                    }
+
+                    const isDuplicate = addresses.some(a =>
+                        a.name === addr.name &&
+                        a.mobile === addr.mobile &&
+                        a.line1 === addr.line1 &&
+                        a.city === addr.city &&
+                        a.pin === addr.pin
+                    );
+
+                    if (!isDuplicate) {
+                        addresses.unshift(addr); // Add as first (DEFAULT) address
+                        localStorage.setItem(userAddressesKey, JSON.stringify(addresses));
+                        savedAddresses = addresses;
+
+                        if (savedAddresses.length > 0) {
+                            savedAddressesSection.style.display = 'block';
+                            renderSavedAddresses();
+                            addressDivider.style.display = 'block';
+                            formNote.style.display = 'block';
+                        }
+
+                        const userId = localStorage.getItem('userId');
+                        if (userId) {
+                            await fetch('/api/user/addresses', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ user_id: userId, address: addr })
+                            }).catch(err => console.warn('Failed to save address to DB:', err));
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Failed to save address:', error);
+                }
+            }
+
+            async function fetchSavedAddressesFromDB(userId) {
+                try {
+                    const response = await fetch(`/api/user/addresses?user_id=${userId}`);
+                    if (response.ok) {
+                        const dbAddresses = await response.json();
+                        if (Array.isArray(dbAddresses) && dbAddresses.length > 0) {
+                            const userAddressesKey = getUserStorageKey('savedAddresses');
+                            let localAddresses = [];
+                            try {
+                                const parsed = JSON.parse(localStorage.getItem(userAddressesKey) || '[]');
+                                localAddresses = Array.isArray(parsed) ? parsed : [];
+                            } catch { }
+
+                            const allAddresses = [...dbAddresses, ...localAddresses];
+                            const uniqueAddresses = allAddresses.filter((addr, index, self) =>
+                                index === self.findIndex(a =>
+                                    a.name === addr.name &&
+                                    a.mobile === addr.mobile &&
+                                    a.line1 === addr.line1 &&
+                                    a.pin === addr.pin
+                                )
+                            );
+
+                            localStorage.setItem(userAddressesKey, JSON.stringify(uniqueAddresses));
+                            savedAddresses = uniqueAddresses;
+                            loadSavedAddresses();
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Failed to fetch addresses from DB:', error);
+                }
+            }
+        });
+
+        function makeNumeric(el) {
+            if (!el) return;
+            el.addEventListener('input', () => {
+                el.value = el.value.replace(/\D/g, '');
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showCartMessage(message, type = 'info') {
+            if (window.CartUtils && window.CartUtils.showToast) {
+                window.CartUtils.showToast(message, type);
+            } else {
+                alert(message);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
+
+
+
+

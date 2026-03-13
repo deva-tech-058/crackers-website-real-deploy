@@ -1,0 +1,500 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | User Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0e17 0%, #1a2236 100%);
+            color: #fff;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            background: rgba(20, 20, 40, 0.98);
+            padding: 16px 40px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-links .active {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.12);
+        }
+
+        .nav-links .logout-btn {
+            background: #ff4444;
+            color: #fff;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links .logout-btn:hover {
+            background: #ff3333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #ff8c42;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            color: #c9d2ea;
+            font-size: 14px;
+        }
+
+        .count-card {
+            background: rgba(18, 24, 38, 0.95);
+            border: 1px solid rgba(255, 140, 66, 0.2);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #ffd5b4;
+        }
+
+        .table-wrap {
+            background: rgba(18, 24, 38, 0.95);
+            border: 1px solid rgba(255, 140, 66, 0.15);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(42, 52, 77, 0.55);
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            color: #ff8c42;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(255, 140, 66, 0.12);
+        }
+
+        td:nth-child(1),
+        td:nth-child(4) {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        td:nth-child(6) {
+            text-align: center;
+        }
+
+        .role-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .role-pill.admin {
+            color: #2f1b00;
+            background: linear-gradient(135deg, #ffd166, #ff9f1c);
+        }
+
+        .role-pill.user {
+            color: #062b18;
+            background: linear-gradient(135deg, #7dffb2, #2dd881);
+        }
+
+        .state {
+            text-align: center;
+            padding: 28px 16px;
+            color: #d7deef;
+            font-size: 14px;
+        }
+
+        .state.error {
+            color: #ff9090;
+        }
+
+        .action-message {
+            min-height: 20px;
+            margin: 0 0 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #9fb0d4;
+        }
+
+        .action-message.success {
+            color: #7dffb2;
+        }
+
+        .action-message.error {
+            color: #ff9090;
+        }
+
+        .role-action-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #08111f;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            background: linear-gradient(135deg, #ffd166, #ff9f1c);
+        }
+
+        .role-action-btn.demote {
+            color: #fff;
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+        }
+
+        .role-action-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+                gap: 12px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+
+            .table-wrap {
+                padding: 14px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/theme.css">
+</head>
+
+<body class="page-admin-users">
+    <div class="container">
+        <div class="navbar">
+            <div class="logo" onclick="location.href='/admin/admin-dashboard.html'">Mr.A Crackers Admin</div>
+            <div class="nav-links">
+                <a href="/admin/admin-dashboard.html">Dashboard</a>
+                <a href="/admin/admin-products.html">Products</a>
+                <a href="/admin/category.html">Categories</a>
+                <a href="/admin/admin-hero.html">Hero</a>
+                <a href="/admin/admin-users.html" class="active">Users</a>
+                <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1>Admin User Details</h1>
+            <p>Registered users data from users table</p>
+        </div>
+
+        <div class="count-card">
+            <i class="fas fa-user-group"></i>
+            <span>Total Users: <span id="userCount">0</span></span>
+        </div>
+        <p id="actionMessage" class="action-message" aria-live="polite"></p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Mobile</th>
+                        <th>Role</th>
+                        <th>Joined On</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable">
+                    <tr>
+                        <td colspan="6" class="state" id="stateMessage">Loading users...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/js/auth-session.js"></script>
+    <script src="/js/admin-navbar.js"></script>
+    <script>
+        const userTable = document.getElementById("userTable");
+        const userCountEl = document.getElementById("userCount");
+        const actionMessageEl = document.getElementById("actionMessage");
+        const currentAdminId = Number.parseInt(localStorage.getItem("userId") || "", 10) || 0;
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function toRoleClass(role) {
+            const normalized = String(role || "user").trim().toLowerCase();
+            return normalized === "admin" ? "admin" : "user";
+        }
+
+        function formatRole(role) {
+            const normalized = String(role || "user").trim().toLowerCase();
+            return normalized === "admin" ? "Admin" : "User";
+        }
+
+        function formatJoinedOn(value) {
+            if (!value) return "--";
+
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) {
+                return escapeHtml(value);
+            }
+
+            return date.toLocaleString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function renderState(message, isError) {
+            userTable.innerHTML = `<tr><td colspan="6" class="state${isError ? " error" : ""}">${escapeHtml(message)}</td></tr>`;
+        }
+
+        function showActionMessage(type, message) {
+            actionMessageEl.className = "action-message";
+            if (type) {
+                actionMessageEl.classList.add(type);
+            }
+            actionMessageEl.textContent = message || "";
+        }
+
+        function buildActionButton(user, normalizedRole) {
+            const userId = Number(user.id) || 0;
+            const isAdmin = normalizedRole === "admin";
+            const isSelfAdmin = isAdmin && userId === currentAdminId;
+            const nextRole = isAdmin ? "user" : "admin";
+            const buttonText = isAdmin ? "Demote" : "Promote";
+            const disabledAttr = isSelfAdmin ? "disabled" : "";
+            const className = `role-action-btn ${isAdmin ? "demote" : "promote"}`;
+            const title = isSelfAdmin
+                ? "You cannot demote your own admin access"
+                : (isAdmin ? "Set as User" : "Set as Admin");
+
+            return `<button type="button" class="${className}" data-user-id="${userId}" data-next-role="${nextRole}" title="${escapeHtml(title)}" ${disabledAttr}>${buttonText}</button>`;
+        }
+
+        function renderUsers(users) {
+            userCountEl.textContent = String(users.length);
+
+            if (!users.length) {
+                renderState("No users found in users table", false);
+                return;
+            }
+
+            userTable.innerHTML = users.map((user) => {
+                const role = formatRole(user.role);
+                const roleClass = toRoleClass(user.role);
+
+                return `
+                <tr>
+                    <td>${Number(user.id) || 0}</td>
+                    <td>${escapeHtml(user.full_name || "--")}</td>
+                    <td>${escapeHtml(user.mobile || "--")}</td>
+                    <td><span class="role-pill ${roleClass}">${role}</span></td>
+                    <td>${formatJoinedOn(user.created_at)}</td>
+                    <td>${buildActionButton(user, roleClass)}</td>
+                </tr>`;
+            }).join("");
+        }
+
+        async function updateUserRole(userId, nextRole, triggerButton) {
+            if (!userId || !nextRole) return;
+
+            const originalText = triggerButton.textContent;
+            triggerButton.disabled = true;
+            triggerButton.textContent = "Updating...";
+            showActionMessage("", "");
+
+            try {
+                const endpoint = `/api/auth/users/${encodeURIComponent(String(userId))}/role`;
+                let response = await fetch(endpoint, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ role: nextRole }),
+                });
+
+                if (response.status === 404 || response.status === 405) {
+                    response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "same-origin",
+                        body: JSON.stringify({ role: nextRole }),
+                    });
+                }
+
+                const payload = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(payload.message || "Failed to update role");
+                }
+
+                showActionMessage("success", payload.message || "Role updated");
+                await loadUsers();
+            } catch (error) {
+                showActionMessage("error", error.message || "Failed to update role");
+                triggerButton.disabled = false;
+                triggerButton.textContent = originalText;
+            }
+        }
+
+        async function loadUsers() {
+            renderState("Loading users...", false);
+
+            try {
+                const response = await fetch("/api/auth/users", { cache: "no-store" });
+                const payload = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(payload.message || "Failed to load users");
+                }
+
+                renderUsers(Array.isArray(payload) ? payload : []);
+            } catch (error) {
+                renderState(error.message || "Failed to load users", true);
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch("/api/auth/logout", { method: "POST" });
+            } catch (error) {
+                console.error("Logout API failed:", error);
+            }
+
+            if (window.AuthSession && typeof window.AuthSession.clear === "function") {
+                window.AuthSession.clear();
+            } else {
+                localStorage.removeItem("authSession");
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                localStorage.removeItem("mobile");
+                localStorage.removeItem("role");
+                localStorage.removeItem("isAdmin");
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+            }
+
+            window.location.href = "/login.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", loadUsers);
+
+        userTable.addEventListener("click", (event) => {
+            const button = event.target.closest(".role-action-btn");
+            if (!button) return;
+
+            const userId = Number.parseInt(button.dataset.userId || "", 10);
+            const nextRole = String(button.dataset.nextRole || "").trim().toLowerCase();
+
+            updateUserRole(userId, nextRole, button);
+        });
+    </script>
+</body>
+
+</html>
+
+

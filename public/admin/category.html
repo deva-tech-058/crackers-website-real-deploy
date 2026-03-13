@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Categories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0e17;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(20, 20, 40, 0.98);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            margin-bottom: 30px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-links a.active {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.12);
+        }
+
+        .nav-links .logout-btn {
+            background: #ff4444;
+            color: #fff;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-links .logout-btn:hover {
+            background: #ff3333;
+        }
+
+        h2 {
+            color: #ff8c42;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+        }
+
+        form {
+            background: #121826;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            margin: 15px 0 0 0;
+            border-radius: 8px;
+            border: none;
+            background: #1a2236;
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.4);
+            background: #222c40;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #ff8c42, #ff7a30);
+            color: #fff;
+            width: 100%;
+            padding: 16px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 140, 66, 0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #121826;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        th,
+        td {
+            padding: 16px 12px;
+            text-align: center;
+            border-bottom: 1px solid #2a344d;
+        }
+
+        th {
+            background: #1a2236;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            color: #ff8c42;
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, #f4c430, #e6b800);
+            color: #1a0f08;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            margin: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 196, 48, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 15px 20px;
+                gap: 12px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/theme.css">
+</head>
+
+<body class="page-admin-category">
+    <div class="navbar">
+        <div class="logo" onclick="location.href='/admin/admin-dashboard.html'">Mr.A Crackers Admin</div>
+        <div class="nav-links">
+            <a href="/admin/admin-dashboard.html">Dashboard</a>
+            <a href="/admin/admin-products.html">Products</a>
+            <a href="/admin/category.html" class="active">Categories</a>
+            <a href="/admin/admin-hero.html">Hero</a>
+            <a href="/admin/admin-users.html">Users</a>
+            <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <h2>Add Category</h2>
+    <form id="categoryForm">
+        <input name="name" placeholder="Enter Category Name (e.g. Sky Shots, Ground Chakra...)" required>
+        <button type="submit" class="add-btn">Add Category</button>
+    </form>
+
+    <h2>All Categories (Total: <span id="categoryCount">0</span>)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="categoryTable"></tbody>
+    </table>
+
+    <script src="/js/auth-session.js"></script>
+    <script src="/js/admin-navbar.js"></script>
+    <script>
+        const form = document.getElementById("categoryForm");
+        const table = document.getElementById("categoryTable");
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function loadCategories() {
+            fetch("/api/categories")
+                .then((res) => {
+                    if (!res.ok) {
+                        return res.json().then((err) => {
+                            throw new Error(err.error || "Network response was not ok");
+                        });
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    const categories = Array.isArray(data) ? data : [];
+                    table.innerHTML = "";
+                    document.getElementById("categoryCount").textContent = categories.length;
+
+                    if (categories.length === 0) {
+                        table.innerHTML = "<tr><td colspan='3' style='color: #888;'>No Categories Found</td></tr>";
+                        return;
+                    }
+
+                    categories.forEach((category) => {
+                        const id = Number(category.id) || 0;
+                        const encodedName = encodeURIComponent(category.name || "");
+
+                        table.innerHTML += `
+                        <tr>
+                            <td>${id}</td>
+                            <td style="font-weight: 500;">${escapeHtml(category.name || "")}</td>
+                            <td>
+                                <button class="edit-btn" type="button" onclick="editCategory(${id}, '${encodedName}')">
+                                    Edit Category
+                                </button>
+                            </td>
+                        </tr>`;
+                    });
+                })
+                .catch((err) => {
+                    console.error("Load Error:", err);
+                    table.innerHTML = "<tr><td colspan='3' style='color: #ff4444;'>Error loading categories</td></tr>";
+                });
+        }
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = form.name.value.trim();
+            if (!name) {
+                alert("Category name is required");
+                return;
+            }
+
+            fetch("/api/categories", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name })
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        return res.json().then((err) => {
+                            throw new Error(err.error || "Add failed");
+                        });
+                    }
+                    return res.json();
+                })
+                .then(() => {
+                    form.reset();
+                    loadCategories();
+                    alert("Category added successfully");
+                })
+                .catch((err) => {
+                    console.error("Add Error:", err);
+                    alert(err.message || "Failed to add category");
+                });
+        });
+
+        function editCategory(id, encodedOldName) {
+            const oldName = decodeURIComponent(encodedOldName || "");
+            const newName = prompt("Enter new category name", oldName);
+            if (!newName || newName.trim() === oldName) return;
+
+            const trimmedName = newName.trim();
+
+            fetch(`/api/categories/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: trimmedName })
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        return res.json().then((err) => {
+                            throw new Error(err.error || "Update failed");
+                        });
+                    }
+                    return res.json();
+                })
+                .then(() => {
+                    loadCategories();
+                    alert("Category updated successfully");
+                })
+                .catch((err) => {
+                    console.error("Update Error:", err);
+                    alert(err.message || "Failed to update category");
+                });
+        }
+
+        async function logout() {
+            try {
+                await fetch("/api/auth/logout", { method: "POST" });
+            } catch (error) {
+                console.error("Logout API failed:", error);
+            }
+
+            if (window.AuthSession && typeof window.AuthSession.clear === "function") {
+                window.AuthSession.clear();
+            } else {
+                localStorage.removeItem("authSession");
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                localStorage.removeItem("mobile");
+                localStorage.removeItem("role");
+                localStorage.removeItem("isAdmin");
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+            }
+            window.location.href = "/login.html";
+        }
+
+        window.addEventListener("DOMContentLoaded", loadCategories);
+    </script>
+</body>
+
+</html>
+
+

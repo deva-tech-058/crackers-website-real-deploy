@@ -1,0 +1,976 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Admin | Products</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0e17 0%, #1a2236 100%);
+            color: white;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            background: rgba(20, 20, 40, 0.98);
+            padding: 16px 40px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-links .active {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.12);
+        }
+
+        .nav-links .logout-btn {
+            background: #ff4444;
+            color: #fff;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links .logout-btn:hover {
+            background: #ff3333;
+        }
+
+        .section-title {
+            color: #ff8c42;
+            text-align: center;
+            font-size: 2rem;
+            margin: 40px 0 20px 0;
+            font-weight: 600;
+        }
+
+        .form-card {
+            background: rgba(18, 24, 38, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 140, 66, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group.full-width {
+            flex: 100%;
+        }
+
+        .upload-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffcf9f;
+            letter-spacing: 0.3px;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffcf9f;
+            letter-spacing: 0.3px;
+            text-align: left;
+        }
+
+        .file-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 8px;
+        }
+
+        .file-row .form-group {
+            flex: 1;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: rgba(26, 34, 54, 0.8);
+            color: white;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #ff8c42;
+            box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
+            background: rgba(26, 34, 54, 0.95);
+        }
+
+        input::placeholder {
+            color: #a0a0a0;
+        }
+
+        .checkbox-group {
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .add-btn {
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 140, 66, 0.4);
+        }
+
+        /* PERFECT TABLE ALIGNMENT */
+        .products-table-container {
+            background: rgba(18, 24, 38, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 140, 66, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            /* CRITICAL: Ensures perfect cell alignment */
+            background: transparent;
+            table-layout: fixed;
+            /* CRITICAL: Forces exact column widths */
+            min-width: 1520px;
+        }
+
+        /* PERFECT COLUMN WIDTHS - EXACT MATCHING */
+        colgroup {
+            width: 100%;
+        }
+
+        col:nth-child(1) {
+            width: 60px;
+        }
+
+        /* ID */
+        col:nth-child(2) {
+            width: 80px;
+        }
+
+        /* Image */
+        col:nth-child(3) {
+            width: 90px;
+        }
+
+        /* Video */
+        col:nth-child(4) {
+            width: 220px;
+        }
+
+        /* Name */
+        col:nth-child(5) {
+            width: 140px;
+        }
+
+        /* Category */
+        col:nth-child(6) {
+            width: 110px;
+        }
+
+        /* Original Price */
+        col:nth-child(7) {
+            width: 110px;
+        }
+
+        /* Offer Price */
+        col:nth-child(8) {
+            width: 90px;
+        }
+
+        /* Discount */
+        col:nth-child(9) {
+            width: 80px;
+        }
+
+        /* Stock */
+        col:nth-child(10) {
+            width: 100px;
+        }
+
+        /* Best Selling */
+        col:nth-child(11) {
+            width: 170px;
+        }
+
+        /* Actions */
+
+        th,
+        td {
+            padding: 12px 6px;
+            /* Uniform padding */
+            border-bottom: 1px solid rgba(42, 52, 77, 0.5);
+            vertical-align: middle;
+            /* Perfect vertical centering */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        th {
+            color: #ff8c42;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(255, 140, 66, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Column-specific text alignment */
+        th:nth-child(3),
+        td:nth-child(3) {
+            text-align: center;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4) {
+            text-align: left;
+        }
+
+        /* Name - Left align */
+        td:nth-child(1),
+        td:nth-child(8),
+        td:nth-child(9),
+        td:nth-child(10) {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* ID, Discount, Stock - Center + Bold */
+
+        td img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 140, 66, 0.3);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .price {
+            font-weight: 600;
+            color: #ff8c42;
+            font-size: 14px;
+        }
+
+        .offer-price {
+            color: #4ade80;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .discount {
+            color: #ff4444;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .best-selling {
+            font-weight: 700;
+            color: #f4c430;
+            text-shadow: 0 0 8px rgba(244, 196, 48, 0.5);
+            font-size: 13px;
+        }
+
+        .not-selling {
+            color: #a0a0a0;
+            font-size: 13px;
+        }
+
+        .video-icon-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: linear-gradient(45deg, #4f46e5, #3b82f6);
+            color: white;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-icon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.35);
+        }
+
+        .video-icon-btn i {
+            pointer-events: none;
+            font-size: 14px;
+        }
+
+        /* PERFECT BUTTON ALIGNMENT */
+        .actions {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            border: none;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 75px;
+            height: 32px;
+            /* FIXED HEIGHT */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .edit-btn {
+            background: linear-gradient(45deg, #f4c430, #f4b400);
+            color: #000;
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(244, 196, 48, 0.4);
+        }
+
+        .delete-btn {
+            background: linear-gradient(45deg, #ff4444, #ff3333);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: rgba(18, 24, 38, 0.98);
+            backdrop-filter: blur(20px);
+            margin: 8% auto;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 140, 66, 0.2);
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff8c42;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: #ff6b35;
+            transform: rotate(90deg);
+        }
+
+        .product-count {
+            color: #ff8c42;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .file-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+
+            body {
+                padding: 10px;
+            }
+
+            table {
+                min-width: 1000px;
+            }
+
+            .edit-btn,
+            .delete-btn {
+                padding: 5px 8px;
+                font-size: 11px;
+                max-width: 65px;
+                height: 28px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/theme.css">
+</head>
+
+<body class="page-admin-products">
+    <div class="container">
+        <!-- NAVBAR -->
+        <div class="navbar">
+            <div class="logo" onclick="location.href='/admin/admin-dashboard.html'">Mr.A Crackers Admin</div>
+            <div class="nav-links">
+                <a href="/admin/admin-dashboard.html">Dashboard</a>
+                <a href="/admin/admin-products.html" class="active">Products</a>
+                <a href="/admin/category.html">Categories</a>
+                <a href="/admin/admin-hero.html">Hero</a>
+                <a href="/admin/admin-users.html">Users</a>
+                <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- ADD PRODUCT FORM -->
+        <h2 class="section-title">Add New Product</h2>
+        <div class="form-card">
+            <form id="productForm" enctype="multipart/form-data">
+                <div class="form-row">
+                    <div class="form-group">
+                        <input name="name" placeholder="Product Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="original_price" type="number" placeholder="Original Price (INR)" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input name="discount" type="number" placeholder="Discount % (0-90)" max="90" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="quantity" type="number" placeholder="Stock Quantity" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <select name="category_id" id="categorySelect" required>
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" name="is_best_selling" id="bestSelling">
+                    <label for="bestSelling">Mark as Best Selling</label>
+                </div>
+                <div class="file-row">
+                    <div class="form-group">
+                        <label class="upload-label" for="addImageFile">Image Upload</label>
+                        <input id="addImageFile" name="image" type="file" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="upload-label" for="addVideoFile">Video Upload (optional)</label>
+                        <input id="addVideoFile" name="video" type="file" accept="video/mp4,video/webm,video/ogg">
+                    </div>
+                </div>
+                <button type="submit" class="add-btn">Add Product</button>
+            </form>
+        </div>
+
+        <!-- PRODUCTS TABLE -->
+        <h2 class="section-title">All Products <span class="product-count">(Total: <span
+                    id="productCount">0</span>)</span></h2>
+        <div class="products-table-container">
+            <table>
+                <colgroup>
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                    <col span="1">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Video</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Original Price</th>
+                        <th>Offer Price</th>
+                        <th>Discount</th>
+                        <th>Stock</th>
+                        <th>Best Selling</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable"></tbody>
+            </table>
+        </div>
+
+        <!-- EDIT MODAL -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>Edit Product</h2>
+                <form id="editForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editProductId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="field-label" for="editName">Product Name</label>
+                            <input id="editName" name="name" placeholder="Enter product name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="field-label" for="editPrice">Original Price (INR)</label>
+                            <input id="editPrice" name="original_price" type="number" placeholder="Enter original price"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="field-label" for="editDiscount">Discount (%)</label>
+                            <input id="editDiscount" name="discount" type="number" max="90" placeholder="Enter discount %"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="field-label" for="editQty">Stock Quantity</label>
+                            <input id="editQty" name="quantity" type="number" min="0" placeholder="Enter stock quantity"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label class="field-label" for="editCategory">Category</label>
+                            <select id="editCategory" name="category_id" required></select>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="editBestSelling" name="is_best_selling">
+                        <label for="editBestSelling">Best Selling</label>
+                    </div>
+                    <div class="file-row">
+                        <div class="form-group">
+                            <label class="upload-label" for="editImageFile">Image Upload (optional)</label>
+                            <input id="editImageFile" name="image" type="file" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label class="upload-label" for="editVideoFile">Video Upload (optional)</label>
+                            <input id="editVideoFile" name="video" type="file" accept="video/mp4,video/webm,video/ogg">
+                        </div>
+                    </div>
+                    <button type="submit" class="add-btn">Update Product</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="videoPreviewModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeVideoModal()">&times;</span>
+                <h2>Video Preview</h2>
+                <video id="previewVideoPlayer" controls
+                    style="width:100%; border-radius:12px; margin-top:16px; background:#000;"></video>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth-session.js"></script>
+    <script src="/js/admin-navbar.js"></script>
+    <script>
+        let allProducts = [];
+        let allCategories = [];
+
+        async function logout() {
+            if (!confirm("Are you sure you want to logout?")) return;
+
+            try {
+                await fetch("/api/auth/logout", { method: "POST" });
+            } catch (error) {
+                console.error("Logout API failed:", error);
+            }
+
+            if (window.AuthSession && typeof window.AuthSession.clear === "function") {
+                window.AuthSession.clear();
+            } else {
+                localStorage.removeItem("authSession");
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                localStorage.removeItem("mobile");
+                localStorage.removeItem("role");
+                localStorage.removeItem("isAdmin");
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+            }
+            window.location.href = "/login.html";
+        }
+
+        /* ================= LOAD CATEGORIES ================= */
+        function loadCategories() {
+            fetch("/api/categories")
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Categories Loaded:", data);
+                    allCategories = data || [];
+                    populateCategorySelect("categorySelect");
+                    populateCategorySelect("editCategory");
+                })
+                .catch(err => console.error("Error loading categories:", err));
+        }
+
+        function populateCategorySelect(id) {
+            const select = document.getElementById(id);
+            select.innerHTML = '<option value="">Select Category</option>';
+            allCategories.forEach(cat => {
+                select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+            });
+        }
+
+        function previewVideo(encodedUrl) {
+            const decodedUrl = decodeURIComponent(encodedUrl || "");
+            if (!decodedUrl) return;
+
+            const modal = document.getElementById("videoPreviewModal");
+            const player = document.getElementById("previewVideoPlayer");
+            player.src = decodedUrl;
+            player.load();
+            modal.style.display = "block";
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById("videoPreviewModal");
+            const player = document.getElementById("previewVideoPlayer");
+            player.pause();
+            player.removeAttribute("src");
+            player.load();
+            modal.style.display = "none";
+        }
+        /* ================= LOAD PRODUCTS ================= */
+        function loadProducts() {
+            fetch("/api/products", { cache: "no-store" })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Products Loaded:", data);
+
+                    if (!Array.isArray(data)) {
+                        console.error("Invalid API response");
+                        return;
+                    }
+
+                    allProducts = data;
+                    renderProducts();
+                    document.getElementById("productCount").textContent = data.length;
+                })
+                .catch(err => console.error("Error loading products:", err));
+        }
+
+        /* ================= RENDER PRODUCTS ================= */
+        function renderProducts() {
+            const table = document.getElementById("productTable");
+            table.innerHTML = "";
+
+            if (!allProducts || allProducts.length === 0) {
+                table.innerHTML = `
+                <tr>
+                    <td colspan="11" style="text-align:center; padding:20px;">
+                        No Products Found
+                    </td>
+                </tr>`;
+                return;
+            }
+
+            allProducts.forEach((p) => {
+                const offer = (p.original_price * (100 - p.discount) / 100).toFixed(0);
+                const encodedVideo = p.video_url ? encodeURIComponent(p.video_url) : "";
+
+                table.innerHTML += `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>
+                        <img src="${p.image_url}" 
+                             alt="${p.name}" 
+                             onerror="this.src='https://via.placeholder.com/50x50/1a2236/ffffff?text=?';">
+                    </td>
+                    <td>
+                        ${p.video_url
+                        ? `<button class="video-icon-btn" title="Preview video" onclick="previewVideo('${encodedVideo}')"><i class="fas fa-circle-play"></i></button>`
+                        : `<span class="not-selling">--</span>`}
+                    </td>
+                    <td title="${p.name}">${p.name}</td>
+                    <td>${p.category_name ?? "Uncategorized"}</td>
+                    <td><span class="price">\u20B9${p.original_price}</span></td>
+                    <td><span class="offer-price">\u20B9${offer}</span></td>
+                    <td><span class="discount">${p.discount}%</span></td>
+                    <td>${p.quantity}</td>
+                    <td>
+                        <span class="${p.is_best_selling ? 'best-selling' : 'not-selling'}">
+                            ${p.is_best_selling ? 'YES' : 'NO'}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        <button class="edit-btn" onclick="editProduct(${p.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteProduct(${p.id})">Delete</button>
+                    </td>
+                </tr>`;
+            });
+        }
+        /* ================= ADD PRODUCT ================= */
+        document.getElementById("productForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch("/api/products", { method: "POST", body: formData })
+                .then(async (res) => {
+                    const body = await res.json().catch(() => ({}));
+                    if (!res.ok) {
+                        throw new Error(body.error || "Error adding product");
+                    }
+                    return body;
+                })
+                .then(response => {
+                    console.log("Product Added:", response);
+                    this.reset();
+                    loadProducts();
+                    alert("Product added successfully!");
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert(err.message || "Error adding product!");
+                });
+        });
+
+        /* ================= DELETE PRODUCT ================= */
+        function deleteProduct(id) {
+            if (!confirm("Are you sure you want to delete this product?")) return;
+
+            fetch(`/api/products/${id}`, { method: "DELETE" })
+                .then(() => {
+                    loadProducts();
+                    alert("Product deleted successfully!");
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("Error deleting product!");
+                });
+        }
+
+        /* ================= EDIT PRODUCT ================= */
+        function editProduct(id) {
+            const p = allProducts.find(x => x.id === id);
+            if (!p) return;
+
+            document.getElementById("editProductId").value = id;
+            document.getElementById("editName").value = p.name;
+            document.getElementById("editPrice").value = p.original_price;
+            document.getElementById("editDiscount").value = p.discount;
+            document.getElementById("editQty").value = p.quantity;
+            document.getElementById("editCategory").value = p.category_id || "";
+            document.getElementById("editBestSelling").checked = p.is_best_selling;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";
+            document.getElementById("editForm").reset();
+        }
+
+        document.getElementById("editForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const id = document.getElementById("editProductId").value;
+
+            fetch(`/api/products/${id}`, { method: "PUT", body: formData })
+                .then(async (res) => {
+                    const body = await res.json().catch(() => ({}));
+                    if (!res.ok) {
+                        throw new Error(body.error || "Error updating product");
+                    }
+                    return body;
+                })
+                .then(() => {
+                    loadProducts();
+                    closeEditModal();
+                    alert("Product updated successfully!");
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert(err.message || "Error updating product!");
+                });
+        });
+
+        window.onclick = function (e) {
+            if (e.target == document.getElementById("editModal")) closeEditModal();
+            if (e.target == document.getElementById("videoPreviewModal")) closeVideoModal();
+        };
+
+        /* ================= FORCE LOAD ================= */
+        window.onload = function () {
+            console.log("Admin Products Page Loaded");
+            loadCategories();
+            loadProducts();
+        };
+    </script>
+</body>
+
+</html>
+
+
+

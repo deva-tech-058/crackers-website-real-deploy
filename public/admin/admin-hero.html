@@ -1,0 +1,365 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin | Hero Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e17, #111827);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            background: rgba(20, 20, 40, 0.98);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            margin-bottom: 30px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-links a.active {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.12);
+        }
+
+        .nav-links .logout-btn {
+            background: #ff4444;
+            color: #fff;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-links .logout-btn:hover {
+            background: #ff3333;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 12px 0 40px;
+            color: #ffd700;
+            font-size: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ffd700;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background: #1f2937;
+            color: #fff;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #000;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .preview {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .preview img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table th {
+            color: #ffd700;
+        }
+
+        .slide-image {
+            width: 120px;
+            height: 68px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .delete-btn {
+            background: crimson;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .delete-btn:hover {
+            background: red;
+        }
+
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 15px 20px;
+                gap: 12px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/theme.css">
+</head>
+
+<body class="page-admin-hero">
+    <div class="navbar">
+        <div class="logo" onclick="location.href='/admin/admin-dashboard.html'">Mr.A Crackers Admin</div>
+        <div class="nav-links">
+            <a href="/admin/admin-dashboard.html">Dashboard</a>
+            <a href="/admin/admin-products.html">Products</a>
+            <a href="/admin/category.html">Categories</a>
+            <a href="/admin/admin-hero.html" class="active">Hero</a>
+            <a href="/admin/admin-users.html">Users</a>
+            <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <h1>Hero Carousel Management</h1>
+
+    <div class="card">
+        <form action="/api/hero" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="heroTitle">Hero Title</label>
+                <input id="heroTitle" type="text" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="heroSubtitle">Subtitle</label>
+                <input id="heroSubtitle" type="text" name="subtitle" required>
+            </div>
+
+            <div class="form-group">
+                <label for="imageInput">Upload Image</label>
+                <input type="file" name="image" id="imageInput" required>
+            </div>
+
+            <button type="submit" class="btn">
+                <i class="fas fa-upload"></i> Upload Slide
+            </button>
+
+            <div class="preview" id="preview"></div>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2 style="margin-bottom:20px; color:#ffd700;">Existing Slides</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Subtitle</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="heroTableBody"></tbody>
+        </table>
+    </div>
+
+    <script src="/js/auth-session.js"></script>
+    <script src="/js/admin-navbar.js"></script>
+    <script>
+        document.getElementById("imageInput").addEventListener("change", function () {
+            const file = this.files[0];
+            const preview = document.getElementById("preview");
+            preview.innerHTML = "";
+
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.innerHTML = `<img src="${e.target.result}" alt="Preview" />`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        async function loadSlides() {
+            try {
+                const res = await fetch("/api/hero", { cache: "no-store" });
+                const slides = await res.json().catch(() => []);
+                const tableBody = document.getElementById("heroTableBody");
+                tableBody.innerHTML = "";
+
+                if (!Array.isArray(slides) || slides.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='4'>No slides found</td></tr>";
+                    return;
+                }
+
+                slides.forEach((slide) => {
+                    tableBody.innerHTML += `
+                    <tr>
+                        <td><img class="slide-image" src="/uploads/${slide.image}" alt="Slide image"></td>
+                        <td>${slide.title || "--"}</td>
+                        <td>${slide.subtitle || "--"}</td>
+                        <td>
+                            <button class="delete-btn" type="button" onclick="deleteSlide(${Number(slide.id) || 0})">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>`;
+                });
+            } catch (err) {
+                console.error("Load hero slides error:", err);
+                document.getElementById("heroTableBody").innerHTML = "<tr><td colspan='4'>Failed to load slides</td></tr>";
+            }
+        }
+
+        async function deleteSlide(id) {
+            if (!id) return;
+            await fetch("/api/hero/" + id, { method: "DELETE" });
+            loadSlides();
+        }
+
+        async function logout() {
+            try {
+                await fetch("/api/auth/logout", { method: "POST" });
+            } catch (error) {
+                console.error("Logout API failed:", error);
+            }
+
+            if (window.AuthSession && typeof window.AuthSession.clear === "function") {
+                window.AuthSession.clear();
+            } else {
+                localStorage.removeItem("authSession");
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                localStorage.removeItem("mobile");
+                localStorage.removeItem("role");
+                localStorage.removeItem("isAdmin");
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+            }
+            window.location.href = "/login.html";
+        }
+
+        loadSlides();
+    </script>
+</body>
+
+</html>
+
+
