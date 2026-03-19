@@ -81,8 +81,17 @@ async function loadHeroSlides() {
         }
 
         slides.forEach((slide, index) => {
+            const fallbackImage = String(slide.image || "").trim();
+            const heroImageUrl =
+                slide.image_url ||
+                (fallbackImage
+                    ? (/^[a-z][a-z\d+\-.]*:/i.test(fallbackImage) || fallbackImage.startsWith("//") || fallbackImage.startsWith("/")
+                        ? fallbackImage
+                        : `/uploads/${fallbackImage}`)
+                    : "https://via.placeholder.com/1440x640?text=Hero+Slide");
+
             container.innerHTML += `
-                <div class="slide ${index === 0 ? "active" : ""}" style="background-image:url('/uploads/${slide.image}')">
+                <div class="slide ${index === 0 ? "active" : ""}" style="background-image:url('${heroImageUrl}')">
                     <div class="overlay"></div>
                     <div class="hero-content">
                         <h1>${slide.title || "Mr.A Crackers"}</h1>

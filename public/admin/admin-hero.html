@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -223,6 +223,9 @@
         }
     </style>
     <link rel="stylesheet" href="/css/theme.css">
+    <script src="/js/runtime-config.js"></script>
+    <script src="/js/api-client.js"></script>
+    <script src="/js/shared-navbar.js"></script>
 </head>
 
 <body class="page-admin-hero">
@@ -241,7 +244,7 @@
     <h1>Hero Carousel Management</h1>
 
     <div class="card">
-        <form action="/api/hero" method="POST" enctype="multipart/form-data">
+        <form id="heroForm" action="/api/hero" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="heroTitle">Hero Title</label>
                 <input id="heroTitle" type="text" name="title" required>
@@ -283,6 +286,31 @@
     <script src="/js/auth-session.js"></script>
     <script src="/js/admin-navbar.js"></script>
     <script>
+        document.getElementById("heroForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch("/api/hero", {
+                    method: "POST",
+                    body: formData,
+                });
+                const payload = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(payload.message || "Failed to upload hero slide");
+                }
+
+                this.reset();
+                document.getElementById("preview").innerHTML = "";
+                await loadSlides();
+                alert(payload.message || "Hero slide uploaded successfully");
+            } catch (error) {
+                console.error("Hero upload failed:", error);
+                alert(error.message || "Failed to upload hero slide");
+            }
+        });
+
         document.getElementById("imageInput").addEventListener("change", function () {
             const file = this.files[0];
             const preview = document.getElementById("preview");
@@ -310,9 +338,17 @@
                 }
 
                 slides.forEach((slide) => {
+                    const fallbackImage = String(slide.image || "").trim();
+                    const imageUrl = slide.image_url || (
+                        fallbackImage
+                            ? (/^[a-z][a-z\d+\-.]*:/i.test(fallbackImage) || fallbackImage.startsWith("//") || fallbackImage.startsWith("/")
+                                ? fallbackImage
+                                : `/uploads/${fallbackImage}`)
+                            : ""
+                    );
                     tableBody.innerHTML += `
                     <tr>
-                        <td><img class="slide-image" src="/uploads/${slide.image}" alt="Slide image"></td>
+                        <td><img class="slide-image" src="${imageUrl}" alt="Slide image"></td>
                         <td>${slide.title || "--"}</td>
                         <td>${slide.subtitle || "--"}</td>
                         <td>
@@ -331,7 +367,7 @@
         async function deleteSlide(id) {
             if (!id) return;
             await fetch("/api/hero/" + id, { method: "DELETE" });
-            loadSlides();
+            await loadSlides();
         }
 
         async function logout() {

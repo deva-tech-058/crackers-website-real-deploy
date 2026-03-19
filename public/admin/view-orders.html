@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -871,6 +871,9 @@
         }
     </style>
     <link rel="stylesheet" href="/css/theme.css">
+    <script src="/js/runtime-config.js"></script>
+    <script src="/js/api-client.js"></script>
+    <script src="/js/shared-navbar.js"></script>
 </head>
 
 <body class="page-admin-orders">
@@ -920,7 +923,7 @@
                 <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
                 <div class="stat-info">
                     <h3>Total Revenue</h3>
-                    <p id="totalRevenue">â‚¹0</p>
+                    <p id="totalRevenue">₹0</p>
                 </div>
             </div>
         </div>
@@ -1034,13 +1037,13 @@
 
         // Format currency properly
         function formatCurrency(amount) {
-            if (!amount || isNaN(amount)) return 'â‚¹0';
+            if (!amount || isNaN(amount)) return '₹0';
 
             // Convert to number and handle large numbers
             const num = Number(amount);
 
             // Format with Indian number system
-            return 'â‚¹' + num.toLocaleString('en-IN', {
+            return '₹' + num.toLocaleString('en-IN', {
                 maximumFractionDigits: 0,
                 minimumFractionDigits: 0
             });
@@ -1069,12 +1072,12 @@
         // Fetch orders from database
         async function fetchOrders() {
             try {
-                console.log('ðŸ“¦ Fetching orders...');
+                console.log('📦 Fetching orders...');
                 const response = await fetch('/api/orders');
                 if (!response.ok) throw new Error('Failed to fetch orders');
 
                 const orders = await response.json();
-                console.log('âœ… Orders fetched:', orders.length);
+                console.log('✅ Orders fetched:', orders.length);
 
                 // Fetch order items for each order
                 const ordersWithItems = await Promise.all(
@@ -1096,7 +1099,7 @@
                 filterOrders();
                 updateStats();
             } catch (error) {
-                console.error('âŒ Error fetching orders:', error);
+                console.error('❌ Error fetching orders:', error);
                 showError('Failed to load orders. Please try again.');
             }
         }
@@ -1236,7 +1239,7 @@
             const pending = allOrders.filter(o => o.status === 'pending').length;
             const delivered = allOrders.filter(o => o.status === 'delivered').length;
 
-            // âœ… FIXED: Properly calculate revenue
+            // ✅ FIXED: Properly calculate revenue
             const revenue = allOrders.reduce((sum, o) => {
                 const amount = Number(o.total_amount) || 0;
                 return sum + amount;

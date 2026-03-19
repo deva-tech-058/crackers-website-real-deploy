@@ -1,72 +1,125 @@
-# Crackers Website
+# Crackers Website (AWS EC2 + Jenkins Ready)
 
-Production-ready Node.js + PostgreSQL project for crackers e-commerce (customer + admin pages).
+This project is now prepared for:
 
-## Tech Stack
+- Frontend on **separate EC2**
+- Backend Node.js API on **separate EC2**
+- Database on **Amazon RDS PostgreSQL**
+- Images/media on **Amazon S3**
+- Domain via **Route 53**
+- CI/CD via **Jenkins pipeline** (no Docker)
 
-- Node.js (CommonJS)
-- Express
-- PostgreSQL (`pg`)
-- Static frontend from `public/`
+## Target Architecture
 
-## Run Locally
+1. `www.example.com` -> Frontend EC2 (Nginx serving `public/`)
+2. `api.example.com` -> Backend EC2 (Nginx reverse proxy to Node/PM2)
+3. Backend -> RDS PostgreSQL
+4. Media uploads -> S3 bucket
+5. Jenkins -> deploys frontend and backend to both EC2 servers over SSH
 
-1. Install dependencies:
-   `npm install`
-2. Create env file:
-   `copy .env.example .env`
-3. Update `.env` with real DB + JWT values.
-4. Start server:
-   `npm start`
-
-Server starts on `http://localhost:3000` by default.
-
-## Environment Variables
-
-Required keys are documented in `.env.example`:
-
-- `PORT`
-- `DB_HOST`
-- `DB_PORT`
-- `DB_DATABASE`
-- `DB_USER`
-- `DB_PASSWORD`
-- `JWT_SECRET`
-
-## Database
-
-- Run SQL migrations from:
-  `src/infrastructure/database/migrations/`
-- Full one-shot DevOps SQL script:
-  `docs/database/DEVOPS_FULL_DATABASE_SCRIPT.sql`
-- Table-wise reference:
-  `docs/database/TABLE_REFERENCE.md`
-
-## Current Production Structure
+## Project Structure
 
 ```txt
 public/
-  admin/
-  *.html
   js/
+    runtime-config.js
+    api-client.js
 src/
   app.js
   server.js
   config/
+    app.config.js
+    auth-cookie.config.js
     db.js
   controllers/
-  services/
   routes/
+  services/
   middleware/
-  infrastructure/
-    database/
-      migrations/
-scripts/
-docs/
-  architecture/
-  database/
+  utils/
+Jenkinsfile
+ecosystem.config.js
+deploy/
+  nginx/
+    frontend.conf
+    backend-api.conf
+  scripts/
+    render-runtime-config.sh
+    remote-deploy-backend.sh
+    remote-deploy-frontend.sh
+docs/deployment/
 ```
 
-## AWS Handoff
+## Local Run
 
-Use `docs/deployment/AWS_HANDOFF.md` for DevOps handover checklist.
+```bash
+npm install
+copy .env.example .env
+npm start
+```
+
+## Production Env (Backend EC2)
+
+Set in backend EC2 `.env`:
+
+- `NODE_ENV=production`
+- `PORT=3000`
+- `SERVE_STATIC=false`
+- `DATABASE_URL=...` (RDS connection string)
+- `DB_SSL=true`
+- `JWT_SECRET=...`
+- `CORS_ALLOWED_ORIGINS=https://www.example.com`
+- `AUTH_COOKIE_SAME_SITE=none` (if frontend/backend are different domains)
+- `AUTH_COOKIE_SECURE=true`
+- `STORAGE_DRIVER=s3`
+- `S3_REGION=ap-south-1`
+- `S3_BUCKET_NAME=your-crackers-assets`
+- `S3_UPLOAD_PREFIX=uploads`
+- `S3_PUBLIC_BASE_URL=https://your-crackers-assets.s3.ap-south-1.amazonaws.com` (optional)
+- `S3_UPLOAD_ACL=` (optional; keep empty for modern ACL-disabled buckets)
+
+If you want local files instead of S3:
+
+- `STORAGE_DRIVER=local`
+
+## Frontend Runtime Config
+
+Frontend API routing is controlled by `public/js/runtime-config.js`.
+
+Jenkins automatically generates this using:
+
+- `API_BASE_URL`
+- `ASSET_BASE_URL`
+- `FRONTEND_BASE_URL`
+
+## Jenkins CI/CD
+
+Use root [Jenkinsfile](C:\Users\devaraj\OneDrive\Desktop\project\crackers-website\Jenkinsfile).
+
+Pipeline does:
+
+1. Install + syntax validation
+2. Generate frontend runtime config
+3. Package backend + frontend artifacts
+4. Deploy backend to backend EC2 and reload PM2
+5. Deploy frontend to frontend EC2
+
+## Nginx Samples
+
+- Frontend: [frontend.conf](C:\Users\devaraj\OneDrive\Desktop\project\crackers-website\deploy\nginx\frontend.conf)
+- Backend API: [backend-api.conf](C:\Users\devaraj\OneDrive\Desktop\project\crackers-website\deploy\nginx\backend-api.conf)
+
+## PM2
+
+PM2 process config is in:
+
+- [ecosystem.config.js](C:\Users\devaraj\OneDrive\Desktop\project\crackers-website\ecosystem.config.js)
+
+## Health Check
+
+- `GET /api/health`
+
+## Deployment Docs
+
+- [AWS_HANDOFF.md](C:\Users\devaraj\OneDrive\Desktop\project\crackers-website\docs\deployment\AWS_HANDOFF.md)
+- [AWS_SPLIT_DEPLOYMENT.md](C:\Users\devaraj\OneDrive\Desktop\project\crackers-website\docs\deployment\AWS_SPLIT_DEPLOYMENT.md)
+- [JENKINS_EC2_PIPELINE.md](C:\Users\devaraj\OneDrive\Desktop\project\crackers-website\docs\deployment\JENKINS_EC2_PIPELINE.md)

@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const pool = require("../config/db");
+const { AUTH_COOKIE_NAME } = require("../config/auth-cookie.config");
 
-const AUTH_COOKIE = "authToken";
+const AUTH_COOKIE = AUTH_COOKIE_NAME;
 const ADMIN_ROLE_VALUES = new Set([
   "admin",
   "administrator",

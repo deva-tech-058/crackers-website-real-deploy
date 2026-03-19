@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -238,7 +238,7 @@
     }
 
     .continue-link::before {
-      content: 'â†';
+      content: '←';
       font-size: 18px;
     }
 
@@ -641,6 +641,9 @@
     }
   </style>
     <link rel="stylesheet" href="/css/theme.css">
+    <script src="/js/runtime-config.js"></script>
+    <script src="/js/api-client.js"></script>
+    <script src="/js/shared-navbar.js"></script>
 </head>
 
 <body class="page-order-details">
@@ -807,8 +810,8 @@
             html += `<tr>
               <td>${item.name || item.product_name || 'Product'}</td>
               <td>${item.quantity || 1}</td>
-              <td>${window.CartUtils ? window.CartUtils.formatCurrency(item.price || 0) : 'â‚¹' + (item.price || 0)}</td>
-              <td>${window.CartUtils ? window.CartUtils.formatCurrency(itemTotal) : 'â‚¹' + itemTotal}</td>
+              <td>${window.CartUtils ? window.CartUtils.formatCurrency(item.price || 0) : '₹' + (item.price || 0)}</td>
+              <td>${window.CartUtils ? window.CartUtils.formatCurrency(itemTotal) : '₹' + itemTotal}</td>
             </tr>`;
           });
         } else {
@@ -816,7 +819,7 @@
         }
 
         html += `</tbody></table></div>`;
-        html += `<div class="order-total">Total Amount: <span>${window.CartUtils ? window.CartUtils.formatCurrency(total) : 'â‚¹' + total}</span></div>`;
+        html += `<div class="order-total">Total Amount: <span>${window.CartUtils ? window.CartUtils.formatCurrency(total) : '₹' + total}</span></div>`;
 
         if (order.address_line1 || order.address) {
           const addr = order.address || {};

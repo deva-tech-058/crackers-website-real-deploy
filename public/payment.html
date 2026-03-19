@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -240,7 +240,7 @@
         }
 
         .continue-link::before {
-            content: 'â†';
+            content: '←';
             font-size: 18px;
         }
 
@@ -1460,6 +1460,9 @@
         }
     </style>
     <link rel="stylesheet" href="/css/theme.css">
+    <script src="/js/runtime-config.js"></script>
+    <script src="/js/api-client.js"></script>
+    <script src="/js/shared-navbar.js"></script>
 </head>
 
 <body class="payment-page page-payment">
@@ -1650,7 +1653,7 @@
     <script src="/js/checkout.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // âœ… FIXED: getUserStorageKey function add pannita
+            // ✅ FIXED: getUserStorageKey function add pannita
             function getUserStorageKey(baseKey) {
                 const userId = localStorage.getItem('userId');
                 return userId ? `${baseKey}_${userId}` : baseKey;
@@ -1692,14 +1695,14 @@
                     savedAddressesSection.style.display = 'block';
                     renderSavedAddresses();
 
-                    // âœ… FIXED: User-specific lastUsedAddressIndex
+                    // ✅ FIXED: User-specific lastUsedAddressIndex
                     const userLastUsedKey = getUserStorageKey('lastUsedAddressIndex');
                     const lastUsedIndex = localStorage.getItem(userLastUsedKey);
 
                     if (lastUsedIndex !== null && !isNaN(lastUsedIndex) && savedAddresses[parseInt(lastUsedIndex)]) {
                         selectAddress(parseInt(lastUsedIndex));
                     } else {
-                        // âœ… FIXED: First address as DEFAULT (index 0)
+                        // ✅ FIXED: First address as DEFAULT (index 0)
                         selectAddress(0);
                     }
 
@@ -1797,7 +1800,7 @@
                 addressDivider.style.display = 'block';
 
                 savedAddresses.splice(index, 1);
-                saveUserAddresses(savedAddresses); // âœ… FIXED: User-specific save
+                saveUserAddresses(savedAddresses); // ✅ FIXED: User-specific save
 
                 if (savedAddresses.length === 0) {
                     savedAddressesSection.style.display = 'none';
@@ -1813,7 +1816,7 @@
             window.deleteAddress = function (index) {
                 if (confirm('Are you sure you want to delete this address?')) {
                     savedAddresses.splice(index, 1);
-                    saveUserAddresses(savedAddresses); // âœ… FIXED: User-specific save
+                    saveUserAddresses(savedAddresses); // ✅ FIXED: User-specific save
 
                     if (savedAddresses.length === 0) {
                         savedAddressesSection.style.display = 'none';
@@ -1840,7 +1843,7 @@
                 document.getElementById('addrState').value = addr.state || '';
                 document.getElementById('addrPin').value = addr.pin || '';
 
-                // âœ… FIXED: User-specific lastUsedAddressIndex
+                // ✅ FIXED: User-specific lastUsedAddressIndex
                 const userLastUsedKey = getUserStorageKey('lastUsedAddressIndex');
                 localStorage.setItem(userLastUsedKey, index);
 
@@ -1858,7 +1861,7 @@
                 }
             }
 
-            // âœ… FIXED: User-specific save function
+            // ✅ FIXED: User-specific save function
             function saveUserAddresses(addresses) {
                 const userAddressesKey = getUserStorageKey('savedAddresses');
                 localStorage.setItem(userAddressesKey, JSON.stringify(addresses));
@@ -1929,7 +1932,7 @@
                 await completeOrder({ address: addr, paymentMethod });
             });
 
-            // âœ… FIXED: User-specific address save
+            // ✅ FIXED: User-specific address save
             async function saveAddressToStorage(addr) {
                 try {
                     const userAddressesKey = getUserStorageKey('savedAddresses');

@@ -1,4 +1,9 @@
-﻿const authService = require("../services/auth.service");
+const authService = require("../services/auth.service");
+const {
+  AUTH_COOKIE_NAME,
+  getAuthCookieOptions,
+  getAuthCookieClearOptions,
+} = require("../config/auth-cookie.config");
 
 async function register(req, res) {
   try {
@@ -16,13 +21,7 @@ async function login(req, res) {
     const { mobile, password } = req.body;
     const { token, username, userId, role } = await authService.login({ mobile, password });
 
-    res.cookie("authToken", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 1000,
-      path: "/",
-    });
+    res.cookie(AUTH_COOKIE_NAME, token, getAuthCookieOptions());
 
     res.json({ message: "Login Successful", token, username, userId, role });
   } catch (err) {
@@ -32,13 +31,7 @@ async function login(req, res) {
 }
 
 function logout(req, res) {
-  res.clearCookie("authToken", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-  });
-
+  res.clearCookie(AUTH_COOKIE_NAME, getAuthCookieClearOptions());
   res.json({ message: "Logout successful" });
 }
 
@@ -107,3 +100,4 @@ module.exports = {
   listUsers,
   updateUserRole,
 };
+
