@@ -81,6 +81,14 @@ If you want local files instead of S3:
 
 - `STORAGE_DRIVER=local`
 
+If frontend + backend are served from the same EC2/ALB endpoint:
+
+- `SERVE_STATIC=true`
+- `API_BASE_URL=` (keep empty)
+- `ASSET_BASE_URL=` (keep empty)
+- `AUTH_COOKIE_SAME_SITE=lax`
+- `AUTH_COOKIE_SECURE=false` for HTTP-only ALB endpoint (switch to `true` after HTTPS is enabled)
+
 ## Frontend Runtime Config
 
 Frontend API routing is controlled by `public/js/runtime-config.js`.

@@ -50,4 +50,3 @@ pool
   });
 
 module.exports = pool;
-

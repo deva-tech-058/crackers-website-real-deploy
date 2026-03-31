@@ -32,7 +32,13 @@ function parseCookies(cookieHeader = "") {
 function extractBearerToken(req) {
   const authHeader = String(req.headers.authorization || "");
   if (!authHeader.toLowerCase().startsWith("bearer ")) return "";
-  return authHeader.slice(7).trim();
+  const token = authHeader.slice(7).trim();
+  const lowered = token.toLowerCase();
+  if (!token || lowered === "undefined" || lowered === "null") {
+    return "";
+  }
+
+  return token;
 }
 
 function getTokenFromRequest(req) {

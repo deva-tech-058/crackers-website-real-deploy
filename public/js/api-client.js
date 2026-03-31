@@ -71,6 +71,60 @@
     return isApiPath(parsed.pathname) || isUploadPath(parsed.pathname);
   }
 
+  function isPublicAuthPath(pathname) {
+    const normalizedPath = normalizePath(pathname);
+    return (
+      normalizedPath === "/api/auth/login" ||
+      normalizedPath === "/api/auth/register"
+    );
+  }
+
+  function getStoredToken() {
+    try {
+      if (global.AuthSession && typeof global.AuthSession.get === "function") {
+        const sessionToken = String(global.AuthSession.get()?.token || "").trim();
+        if (sessionToken) return sessionToken;
+      }
+
+      const serializedSession = global.localStorage?.getItem("authSession");
+      if (serializedSession) {
+        const parsedSession = JSON.parse(serializedSession);
+        const parsedToken = String(parsedSession?.token || "").trim();
+        if (parsedToken) return parsedToken;
+      }
+
+      return String(global.localStorage?.getItem("token") || "").trim();
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function attachAuthorizationHeader(nextInput, nextInit, currentRequestUrl) {
+    if (!currentRequestUrl) return nextInit;
+
+    const parsed = new URL(String(currentRequestUrl), global.location.origin);
+    if (!isApiPath(parsed.pathname) || isPublicAuthPath(parsed.pathname)) {
+      return nextInit;
+    }
+
+    const token = getStoredToken();
+    if (!token) return nextInit;
+
+    const existingHeaders = new Headers(
+      nextInit?.headers ||
+      (global.Request && nextInput instanceof Request ? nextInput.headers : undefined)
+    );
+
+    if (!existingHeaders.has("Authorization")) {
+      existingHeaders.set("Authorization", `Bearer ${token}`);
+    }
+
+    return {
+      ...(nextInit || {}),
+      headers: existingHeaders,
+    };
+  }
+
   function rewriteFormActions() {
     const forms = document.querySelectorAll("form[action]");
     forms.forEach((form) => {
@@ -115,6 +169,8 @@
           : nextInput instanceof URL
             ? nextInput.toString()
             : nextInput?.url;
+
+      nextInit = attachAuthorizationHeader(nextInput, nextInit, currentRequestUrl);
 
       if (currentRequestUrl && isApiOrUploadUrl(currentRequestUrl)) {
         const existingCredentials =

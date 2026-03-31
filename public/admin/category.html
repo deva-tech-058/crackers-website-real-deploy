@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | Categories</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -246,148 +247,114 @@
     <script src="/js/auth-session.js"></script>
     <script src="/js/admin-navbar.js"></script>
     <script>
-        const form = document.getElementById("categoryForm");
-        const table = document.getElementById("categoryTable");
 
-        function escapeHtml(value) {
-            return String(value ?? "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/\"/g, "&quot;")
-                .replace(/'/g, "&#39;");
+        // ✅ GET TOKEN
+        function getToken() {
+            const authSession = JSON.parse(localStorage.getItem("authSession"));
+            return authSession?.token;
         }
 
-        function loadCategories() {
-            fetch("/api/categories")
-                .then((res) => {
-                    if (!res.ok) {
-                        return res.json().then((err) => {
-                            throw new Error(err.error || "Network response was not ok");
-                        });
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    const categories = Array.isArray(data) ? data : [];
-                    table.innerHTML = "";
-                    document.getElementById("categoryCount").textContent = categories.length;
+        // 🔥 LOAD CATEGORIES
+        async function loadCategories() {
+            try {
+                const res = await fetch("/api/categories");
+                const data = await res.json();
 
-                    if (categories.length === 0) {
-                        table.innerHTML = "<tr><td colspan='3' style='color: #888;'>No Categories Found</td></tr>";
-                        return;
-                    }
+                const table = document.getElementById("categoryTable");
+                table.innerHTML = "";
 
-                    categories.forEach((category) => {
-                        const id = Number(category.id) || 0;
-                        const encodedName = encodeURIComponent(category.name || "");
-
-                        table.innerHTML += `
-                        <tr>
-                            <td>${id}</td>
-                            <td style="font-weight: 500;">${escapeHtml(category.name || "")}</td>
-                            <td>
-                                <button class="edit-btn" type="button" onclick="editCategory(${id}, '${encodedName}')">
-                                    Edit Category
-                                </button>
-                            </td>
-                        </tr>`;
-                    });
-                })
-                .catch((err) => {
-                    console.error("Load Error:", err);
-                    table.innerHTML = "<tr><td colspan='3' style='color: #ff4444;'>Error loading categories</td></tr>";
+                data.forEach(cat => {
+                    table.innerHTML += `
+                <tr>
+                    <td>${cat.id}</td>
+                    <td>${cat.name || ""}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editCategory(${cat.id}, '${cat.name}')">Edit</button>
+                    </td>
+                </tr>
+            `;
                 });
-        }
 
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const name = form.name.value.trim();
-            if (!name) {
-                alert("Category name is required");
-                return;
+            } catch (err) {
+                console.error(err);
             }
+        }
 
-            fetch("/api/categories", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name })
-            })
-                .then((res) => {
-                    if (!res.ok) {
-                        return res.json().then((err) => {
-                            throw new Error(err.error || "Add failed");
-                        });
-                    }
-                    return res.json();
-                })
-                .then(() => {
-                    form.reset();
-                    loadCategories();
-                    alert("Category added successfully");
-                })
-                .catch((err) => {
-                    console.error("Add Error:", err);
-                    alert(err.message || "Failed to add category");
+        // 🔥 ADD CATEGORY (FIXED 🔥)
+        document.getElementById("categoryForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const name = this.name.value;
+            const token = getToken();
+
+            try {
+                const res = await fetch("/api/categories", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token   // 🔥 IMPORTANT FIX
+                    },
+                    body: JSON.stringify({ name })
                 });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(data.message || "Add failed");
+                    return;
+                }
+
+                alert("Category added ✅");
+                this.reset();
+                loadCategories();
+
+            } catch (err) {
+                console.error(err);
+                alert("Error");
+            }
         });
 
-        function editCategory(id, encodedOldName) {
-            const oldName = decodeURIComponent(encodedOldName || "");
-            const newName = prompt("Enter new category name", oldName);
-            if (!newName || newName.trim() === oldName) return;
+        // 🔥 EDIT CATEGORY (FIXED 🔥)
+        async function editCategory(id, oldName) {
+            const newName = prompt("Enter new name", oldName);
+            if (!newName) return;
 
-            const trimmedName = newName.trim();
+            const token = getToken();
 
-            fetch(`/api/categories/${id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: trimmedName })
-            })
-                .then((res) => {
-                    if (!res.ok) {
-                        return res.json().then((err) => {
-                            throw new Error(err.error || "Update failed");
-                        });
-                    }
-                    return res.json();
-                })
-                .then(() => {
-                    loadCategories();
-                    alert("Category updated successfully");
-                })
-                .catch((err) => {
-                    console.error("Update Error:", err);
-                    alert(err.message || "Failed to update category");
+            try {
+                const res = await fetch(`/api/categories/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token   // 🔥 IMPORTANT FIX
+                    },
+                    body: JSON.stringify({ name: newName })
                 });
+
+                if (!res.ok) {
+                    alert("Update failed");
+                    return;
+                }
+
+                alert("Updated ✅");
+                loadCategories();
+
+            } catch (err) {
+                console.error(err);
+            }
         }
 
-        async function logout() {
-            try {
-                await fetch("/api/auth/logout", { method: "POST" });
-            } catch (error) {
-                console.error("Logout API failed:", error);
-            }
-
-            if (window.AuthSession && typeof window.AuthSession.clear === "function") {
-                window.AuthSession.clear();
-            } else {
-                localStorage.removeItem("authSession");
-                localStorage.removeItem("token");
-                localStorage.removeItem("username");
-                localStorage.removeItem("mobile");
-                localStorage.removeItem("role");
-                localStorage.removeItem("isAdmin");
-                localStorage.removeItem("isLoggedIn");
-                localStorage.removeItem("userId");
-            }
+        // 🔥 LOGOUT
+        function logout() {
+            localStorage.clear();
             window.location.href = "/login.html";
         }
 
-        window.addEventListener("DOMContentLoaded", loadCategories);
+        // AUTO LOAD
+        loadCategories();
+
     </script>
+
 </body>
 
 </html>
-
-
