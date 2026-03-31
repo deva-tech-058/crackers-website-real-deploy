@@ -80,6 +80,7 @@ app.get("/api/health", (req, res) => {
     service: "crackers-api",
     time: new Date().toISOString(),
     env: appConfig.nodeEnv,
+    upload_limit_mb: appConfig.uploadFileMaxMb,
   });
 });
 
