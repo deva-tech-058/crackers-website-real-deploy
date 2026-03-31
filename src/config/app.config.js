@@ -37,6 +37,7 @@ const serveStatic = parseBoolean(process.env.SERVE_STATIC, !isProduction);
 const publicDir = path.join(__dirname, "..", "..", "public");
 const adminDir = path.join(publicDir, "admin");
 const uploadDir = path.resolve(process.cwd(), process.env.UPLOAD_DIR || "uploads");
+const uploadFileMaxMb = parseInteger(process.env.UPLOAD_FILE_MAX_MB, 200);
 
 const frontendBaseUrl = normalizeBaseUrl(process.env.FRONTEND_BASE_URL);
 const apiBaseUrl = normalizeBaseUrl(process.env.API_BASE_URL);
@@ -66,6 +67,7 @@ module.exports = {
   publicDir,
   adminDir,
   uploadDir,
+  uploadFileMaxMb,
   frontendBaseUrl,
   apiBaseUrl,
   assetBaseUrl,

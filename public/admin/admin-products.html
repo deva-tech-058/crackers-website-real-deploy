@@ -831,6 +831,10 @@
         }
 
         async function parseApiPayload(response) {
+            if (response.status === 413) {
+                return { error: "File too large. Please upload a smaller image/video." };
+            }
+
             const contentType = String(response.headers.get("content-type") || "").toLowerCase();
             if (contentType.includes("application/json")) {
                 return response.json().catch(() => ({}));

@@ -313,6 +313,20 @@
                 .replace(/'/g, "&#39;");
         }
 
+        async function parseHeroPayload(response) {
+            if (response.status === 413) {
+                return { message: "File too large. Please upload a smaller hero image." };
+            }
+
+            const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+            if (contentType.includes("application/json")) {
+                return response.json().catch(() => ({}));
+            }
+
+            const text = await response.text().catch(() => "");
+            return { message: text || `Request failed (${response.status})` };
+        }
+
         document.getElementById("heroForm").addEventListener("submit", async function (event) {
             event.preventDefault();
             const title = String(document.getElementById("heroTitle").value || "").trim();
@@ -329,7 +343,7 @@
                     method: "POST",
                     body: formData,
                 });
-                const payload = await response.json().catch(() => ({}));
+                const payload = await parseHeroPayload(response);
 
                 if (!response.ok) {
                     throw new Error(payload.message || "Failed to upload hero slide");

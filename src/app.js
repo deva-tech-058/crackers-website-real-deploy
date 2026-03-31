@@ -66,7 +66,13 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const maxUploadFileSizeBytes = Math.max(1, appConfig.uploadFileMaxMb) * 1024 * 1024;
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: maxUploadFileSizeBytes,
+  },
+});
 
 app.get("/api/health", (req, res) => {
   res.json({
@@ -100,4 +106,3 @@ app.use((req, res) => {
 app.use(errorMiddleware);
 
 module.exports = app;
-
