@@ -161,17 +161,33 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            min-width: 760px;
+            table-layout: fixed;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
         }
 
         table th,
         table td {
             padding: 12px;
-            text-align: center;
+            text-align: left;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            vertical-align: middle;
+            word-wrap: break-word;
         }
 
         table th {
             color: #ffd700;
+            background: rgba(255, 215, 0, 0.07);
+        }
+
+        table th:nth-child(1),
+        table td:nth-child(1),
+        table th:nth-child(4),
+        table td:nth-child(4) {
+            text-align: center;
         }
 
         .slide-image {
@@ -270,24 +286,42 @@
 
     <div class="card">
         <h2 style="margin-bottom:20px; color:#ffd700;">Existing Slides</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Subtitle</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="heroTableBody"></tbody>
-        </table>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Subtitle</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="heroTableBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <script src="/js/auth-session.js"></script>
     <script src="/js/admin-navbar.js"></script>
     <script>
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
         document.getElementById("heroForm").addEventListener("submit", async function (event) {
             event.preventDefault();
+            const title = String(document.getElementById("heroTitle").value || "").trim();
+            const subtitle = String(document.getElementById("heroSubtitle").value || "").trim();
+            if (!title || !subtitle) {
+                alert("Hero title and subtitle are required");
+                return;
+            }
+
             const formData = new FormData(this);
 
             try {
@@ -333,7 +367,7 @@
                 tableBody.innerHTML = "";
 
                 if (!Array.isArray(slides) || slides.length === 0) {
-                    tableBody.innerHTML = "<tr><td colspan='4'>No slides found</td></tr>";
+                    tableBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No slides found</td></tr>";
                     return;
                 }
 
@@ -346,11 +380,14 @@
                                 : `/uploads/${fallbackImage}`)
                             : ""
                     );
+                    const safeTitle = escapeHtml(slide.title || "--");
+                    const safeSubtitle = escapeHtml(slide.subtitle || "--");
+                    const safeImageUrl = imageUrl || "https://via.placeholder.com/120x68/1a2236/ffffff?text=No+Image";
                     tableBody.innerHTML += `
                     <tr>
-                        <td><img class="slide-image" src="${imageUrl}" alt="Slide image"></td>
-                        <td>${slide.title || "--"}</td>
-                        <td>${slide.subtitle || "--"}</td>
+                        <td><img class="slide-image" src="${safeImageUrl}" alt="Slide image"></td>
+                        <td>${safeTitle}</td>
+                        <td>${safeSubtitle}</td>
                         <td>
                             <button class="delete-btn" type="button" onclick="deleteSlide(${Number(slide.id) || 0})">
                                 Delete
@@ -360,13 +397,20 @@
                 });
             } catch (err) {
                 console.error("Load hero slides error:", err);
-                document.getElementById("heroTableBody").innerHTML = "<tr><td colspan='4'>Failed to load slides</td></tr>";
+                document.getElementById("heroTableBody").innerHTML = "<tr><td colspan='4' style='text-align:center;'>Failed to load slides</td></tr>";
             }
         }
 
         async function deleteSlide(id) {
             if (!id) return;
-            await fetch("/api/hero/" + id, { method: "DELETE" });
+            if (!confirm("Delete this hero slide?")) return;
+
+            const response = await fetch("/api/hero/" + id, { method: "DELETE" });
+            if (!response.ok) {
+                const payload = await response.json().catch(() => ({}));
+                alert(payload.message || "Unable to delete hero slide");
+                return;
+            }
             await loadSlides();
         }
 

@@ -5,15 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | Categories</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
             background: #0a0e17;
             color: #fff;
             padding: 20px;
@@ -78,7 +77,7 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
         }
 
         .nav-links .logout-btn:hover {
@@ -110,7 +109,7 @@
             background: #1a2236;
             color: #fff;
             font-size: 15px;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
         }
 
         input::placeholder {
@@ -144,20 +143,27 @@
             box-shadow: 0 8px 25px rgba(255, 140, 66, 0.4);
         }
 
+        .table-wrap {
+            background: #121826;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #121826;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            min-width: 640px;
+            table-layout: fixed;
         }
 
         th,
         td {
             padding: 16px 12px;
-            text-align: center;
+            text-align: left;
             border-bottom: 1px solid #2a344d;
+            vertical-align: middle;
+            word-wrap: break-word;
         }
 
         th {
@@ -166,6 +172,13 @@
             text-transform: uppercase;
             font-size: 13px;
             color: #ff8c42;
+        }
+
+        th:nth-child(1),
+        td:nth-child(1),
+        th:nth-child(3),
+        td:nth-child(3) {
+            text-align: center;
         }
 
         .edit-btn {
@@ -177,7 +190,6 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: 700;
-            margin: 5px;
             transition: all 0.3s ease;
             text-transform: uppercase;
             box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
@@ -233,88 +245,101 @@
     </form>
 
     <h2>All Categories (Total: <span id="categoryCount">0</span>)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Category Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="categoryTable"></tbody>
-    </table>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="categoryTable"></tbody>
+        </table>
+    </div>
 
     <script src="/js/auth-session.js"></script>
     <script src="/js/admin-navbar.js"></script>
     <script>
-
-        // ✅ GET TOKEN
         function getToken() {
-            const authSession = JSON.parse(localStorage.getItem("authSession"));
+            const authSession = JSON.parse(localStorage.getItem("authSession") || "{}");
             return authSession?.token;
         }
 
-        // 🔥 LOAD CATEGORIES
         async function loadCategories() {
             try {
-                const res = await fetch("/api/categories");
-                const data = await res.json();
-
+                const res = await fetch("/api/categories", { cache: "no-store" });
+                const data = await res.json().catch(() => []);
+                const rows = Array.isArray(data) ? data : [];
                 const table = document.getElementById("categoryTable");
                 table.innerHTML = "";
+                document.getElementById("categoryCount").textContent = rows.length;
 
-                data.forEach(cat => {
+                if (!rows.length) {
+                    table.innerHTML = `
+                        <tr>
+                            <td colspan="3" style="text-align:center;">No categories found</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                rows.forEach((cat) => {
+                    const id = Number(cat.id) || 0;
+                    const safeName = String(cat.name || "");
                     table.innerHTML += `
-                <tr>
-                    <td>${cat.id}</td>
-                    <td>${cat.name || ""}</td>
-                    <td>
-                        <button class="edit-btn" onclick="editCategory(${cat.id}, '${cat.name}')">Edit</button>
-                    </td>
-                </tr>
-            `;
+                        <tr>
+                            <td>${id}</td>
+                            <td>${safeName}</td>
+                            <td><button class="edit-btn" type="button" onclick='editCategory(${id}, ${JSON.stringify(safeName)})'>Edit</button></td>
+                        </tr>
+                    `;
                 });
-
             } catch (err) {
-                console.error(err);
+                console.error("Category load failed:", err);
+                document.getElementById("categoryTable").innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align:center;">Failed to load categories</td>
+                    </tr>
+                `;
             }
         }
 
-        // 🔥 ADD CATEGORY (FIXED 🔥)
         document.getElementById("categoryForm").addEventListener("submit", async function (e) {
             e.preventDefault();
-
-            const name = this.name.value;
+            const name = String(this.name.value || "").trim();
             const token = getToken();
+
+            if (!name) {
+                alert("Category name is required");
+                return;
+            }
 
             try {
                 const res = await fetch("/api/categories", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token   // 🔥 IMPORTANT FIX
+                        "Authorization": "Bearer " + token
                     },
                     body: JSON.stringify({ name })
                 });
 
-                const data = await res.json();
-
+                const data = await res.json().catch(() => ({}));
                 if (!res.ok) {
-                    alert(data.message || "Add failed");
+                    alert(data.error || data.message || "Add failed");
                     return;
                 }
 
-                alert("Category added ✅");
+                alert("Category added successfully");
                 this.reset();
                 loadCategories();
-
             } catch (err) {
-                console.error(err);
-                alert("Error");
+                console.error("Category add failed:", err);
+                alert("Error adding category");
             }
         });
 
-        // 🔥 EDIT CATEGORY (FIXED 🔥)
         async function editCategory(id, oldName) {
             const newName = prompt("Enter new name", oldName);
             if (!newName) return;
@@ -326,35 +351,50 @@
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token   // 🔥 IMPORTANT FIX
+                        "Authorization": "Bearer " + token
                     },
-                    body: JSON.stringify({ name: newName })
+                    body: JSON.stringify({ name: String(newName).trim() })
                 });
 
+                const data = await res.json().catch(() => ({}));
                 if (!res.ok) {
-                    alert("Update failed");
+                    alert(data.error || data.message || "Update failed");
                     return;
                 }
 
-                alert("Updated ✅");
+                alert("Updated successfully");
                 loadCategories();
-
             } catch (err) {
-                console.error(err);
+                console.error("Category update failed:", err);
             }
         }
 
-        // 🔥 LOGOUT
-        function logout() {
-            localStorage.clear();
+        async function logout() {
+            try {
+                await fetch("/api/auth/logout", { method: "POST" });
+            } catch (error) {
+                console.error("Logout API failed:", error);
+            }
+
+            if (window.AuthSession && typeof window.AuthSession.clear === "function") {
+                window.AuthSession.clear();
+            } else {
+                localStorage.removeItem("authSession");
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                localStorage.removeItem("mobile");
+                localStorage.removeItem("role");
+                localStorage.removeItem("isAdmin");
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+            }
             window.location.href = "/login.html";
         }
 
-        // AUTO LOAD
         loadCategories();
-
     </script>
 
 </body>
 
 </html>
+

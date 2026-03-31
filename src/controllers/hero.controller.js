@@ -28,7 +28,13 @@ function mapHeroSlide(req, slide = {}) {
 
 async function addHero(req, res) {
   try {
-    const { title, subtitle } = req.body;
+    const title = String(req.body?.title || "").trim();
+    const subtitle = String(req.body?.subtitle || "").trim();
+
+    if (!title || !subtitle) {
+      return res.status(400).json({ message: "Hero title and subtitle are required" });
+    }
+
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });
     }

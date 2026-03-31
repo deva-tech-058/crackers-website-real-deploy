@@ -323,7 +323,8 @@
         .orders-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1200px;
+            min-width: 1050px;
+            table-layout: fixed;
         }
 
         .orders-table th {
@@ -332,7 +333,7 @@
             font-weight: 600;
             font-size: 14px;
             padding: 18px 15px;
-            text-align: left;
+            text-align: center;
             white-space: nowrap;
         }
 
@@ -341,6 +342,15 @@
             color: #fff;
             font-size: 14px;
             border-bottom: 1px solid #262640;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .orders-table th:nth-child(3),
+        .orders-table td:nth-child(3),
+        .orders-table th:nth-child(4),
+        .orders-table td:nth-child(4) {
+            text-align: left;
         }
 
         .orders-table tr:last-child td {
@@ -577,6 +587,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
+            table-layout: fixed;
         }
 
         .items-table th {
@@ -585,7 +596,7 @@
             font-weight: 600;
             font-size: 13px;
             padding: 12px;
-            text-align: left;
+            text-align: center;
         }
 
         .items-table td {
@@ -593,6 +604,13 @@
             color: #ddd;
             font-size: 13px;
             border-bottom: 1px solid #333355;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .items-table th:nth-child(1),
+        .items-table td:nth-child(1) {
+            text-align: left;
         }
 
         .items-table tr:last-child td {

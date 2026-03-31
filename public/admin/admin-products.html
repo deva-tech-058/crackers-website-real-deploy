@@ -231,81 +231,64 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            /* CRITICAL: Ensures perfect cell alignment */
             background: transparent;
             table-layout: fixed;
-            /* CRITICAL: Forces exact column widths */
-            min-width: 1520px;
+            min-width: 1100px;
         }
 
-        /* PERFECT COLUMN WIDTHS - EXACT MATCHING */
         colgroup {
             width: 100%;
         }
 
         col:nth-child(1) {
-            width: 60px;
+            width: 56px;
         }
 
-        /* ID */
         col:nth-child(2) {
-            width: 80px;
+            width: 84px;
         }
 
-        /* Image */
         col:nth-child(3) {
-            width: 90px;
+            width: 84px;
         }
 
-        /* Video */
         col:nth-child(4) {
-            width: 220px;
+            width: 190px;
         }
 
-        /* Name */
         col:nth-child(5) {
-            width: 140px;
+            width: 120px;
         }
 
-        /* Category */
         col:nth-child(6) {
             width: 110px;
         }
 
-        /* Original Price */
         col:nth-child(7) {
+            width: 105px;
+        }
+
+        col:nth-child(8) {
+            width: 88px;
+        }
+
+        col:nth-child(9) {
+            width: 88px;
+        }
+
+        col:nth-child(10) {
             width: 110px;
         }
 
-        /* Offer Price */
-        col:nth-child(8) {
-            width: 90px;
-        }
-
-        /* Discount */
-        col:nth-child(9) {
-            width: 80px;
-        }
-
-        /* Stock */
-        col:nth-child(10) {
-            width: 100px;
-        }
-
-        /* Best Selling */
         col:nth-child(11) {
             width: 170px;
         }
 
-        /* Actions */
-
         th,
         td {
-            padding: 12px 6px;
-            /* Uniform padding */
+            padding: 11px 8px;
             border-bottom: 1px solid rgba(42, 52, 77, 0.5);
             vertical-align: middle;
-            /* Perfect vertical centering */
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -324,7 +307,6 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Column-specific text alignment */
         th:nth-child(3),
         td:nth-child(3) {
             text-align: center;
@@ -335,7 +317,6 @@
             text-align: left;
         }
 
-        /* Name - Left align */
         td:nth-child(1),
         td:nth-child(8),
         td:nth-child(9),
@@ -343,8 +324,6 @@
             text-align: center;
             font-weight: 600;
         }
-
-        /* ID, Discount, Stock - Center + Bold */
 
         td img {
             width: 50px;
@@ -411,17 +390,18 @@
             font-size: 14px;
         }
 
-        /* PERFECT BUTTON ALIGNMENT */
         .actions {
             display: flex;
             gap: 6px;
             justify-content: center;
             align-items: center;
             height: 100%;
+            flex-wrap: wrap;
         }
 
         .edit-btn,
-        .delete-btn {
+        .delete-btn,
+        .view-btn {
             padding: 6px 10px;
             border-radius: 6px;
             cursor: pointer;
@@ -432,7 +412,6 @@
             flex: 1;
             max-width: 75px;
             height: 32px;
-            /* FIXED HEIGHT */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -457,6 +436,78 @@
         .delete-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+        }
+
+        .view-btn {
+            background: linear-gradient(45deg, #4f46e5, #3b82f6);
+            color: #fff;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .search-wrap {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .search-wrap input {
+            margin: 0;
+        }
+
+        .search-btn,
+        .reset-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .search-btn {
+            background: linear-gradient(45deg, #ff8c42, #ff6b35);
+            color: #fff;
+        }
+
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.14);
+            color: #fff;
+        }
+
+        .details-table {
+            width: 100%;
+            min-width: 100%;
+            table-layout: fixed;
+            margin-top: 14px;
+        }
+
+        .details-table th,
+        .details-table td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            white-space: normal;
+        }
+
+        .details-table th {
+            width: 180px;
+            color: #ffcf9f;
         }
 
         .modal {
@@ -556,15 +607,20 @@
             }
 
             table {
-                min-width: 1000px;
+                min-width: 920px;
             }
 
             .edit-btn,
-            .delete-btn {
+            .delete-btn,
+            .view-btn {
                 padding: 5px 8px;
                 font-size: 11px;
                 max-width: 65px;
                 height: 28px;
+            }
+
+            .search-wrap {
+                max-width: 100%;
             }
         }
     </style>
@@ -637,6 +693,13 @@
         <!-- PRODUCTS TABLE -->
         <h2 class="section-title">All Products <span class="product-count">(Total: <span
                     id="productCount">0</span>)</span></h2>
+        <div class="toolbar">
+            <div class="search-wrap">
+                <input id="productSearchInput" type="text" placeholder="Search by Product ID or Name">
+                <button type="button" class="search-btn" onclick="applyProductSearch()">Search</button>
+                <button type="button" class="reset-btn" onclick="resetProductSearch()">Reset</button>
+            </div>
+        </div>
         <div class="products-table-container">
             <table>
                 <colgroup>
@@ -734,13 +797,57 @@
                     style="width:100%; border-radius:12px; margin-top:16px; background:#000;"></video>
             </div>
         </div>
+
+        <div id="productDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeProductDetailsModal()">&times;</span>
+                <h2>Product Details</h2>
+                <table class="details-table">
+                    <tbody id="productDetailsBody"></tbody>
+                </table>
+                <div id="productDetailsVideoWrap" style="display:none; margin-top:16px;">
+                    <h3 style="margin:0 0 10px; color:#ffcf9f;">Video</h3>
+                    <video id="productDetailsVideo" controls
+                        style="width:100%; border-radius:12px; background:#000; max-height:320px;"></video>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="/js/auth-session.js"></script>
     <script src="/js/admin-navbar.js"></script>
     <script>
         let allProducts = [];
+        let filteredProducts = [];
         let allCategories = [];
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        async function parseApiPayload(response) {
+            const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+            if (contentType.includes("application/json")) {
+                return response.json().catch(() => ({}));
+            }
+            const text = await response.text().catch(() => "");
+            return { error: text || `Request failed (${response.status})` };
+        }
+
+        function getProductOfferPrice(product) {
+            const price = Number(product?.original_price) || 0;
+            const discount = Number(product?.discount) || 0;
+            return Math.max(0, Math.round(price - (price * discount) / 100));
+        }
+
+        function updateProductCount(count) {
+            document.getElementById("productCount").textContent = String(count);
+        }
 
         async function logout() {
             if (!confirm("Are you sure you want to logout?")) return;
@@ -767,16 +874,16 @@
         }
 
         /* ================= LOAD CATEGORIES ================= */
-        function loadCategories() {
-            fetch("/api/categories")
-                .then(res => res.json())
-                .then(data => {
-                    console.log("Categories Loaded:", data);
-                    allCategories = data || [];
-                    populateCategorySelect("categorySelect");
-                    populateCategorySelect("editCategory");
-                })
-                .catch(err => console.error("Error loading categories:", err));
+        async function loadCategories() {
+            try {
+                const response = await fetch("/api/categories", { cache: "no-store" });
+                const data = await parseApiPayload(response);
+                allCategories = Array.isArray(data) ? data : [];
+                populateCategorySelect("categorySelect");
+                populateCategorySelect("editCategory");
+            } catch (error) {
+                console.error("Error loading categories:", error);
+            }
         }
 
         function populateCategorySelect(id) {
@@ -786,6 +893,232 @@
                 select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
             });
         }
+
+        function openProductDetails(id) {
+            const product = allProducts.find((item) => Number(item.id) === Number(id));
+            if (!product) return;
+
+            const detailsBody = document.getElementById("productDetailsBody");
+            const offerPrice = getProductOfferPrice(product);
+            const rows = [
+                ["Product ID", product.id || "--"],
+                ["Name", product.name || "--"],
+                ["Category", product.category_name || "Uncategorized"],
+                ["Original Price", `\u20B9${Number(product.original_price) || 0}`],
+                ["Offer Price", `\u20B9${offerPrice}`],
+                ["Discount", `${Number(product.discount) || 0}%`],
+                ["Stock Quantity", Number(product.quantity) || 0],
+                ["Best Selling", product.is_best_selling ? "Yes" : "No"],
+                ["Image URL", product.image_url || "--"],
+                ["Video URL", product.video_url || "--"],
+            ];
+
+            detailsBody.innerHTML = rows
+                .map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`)
+                .join("");
+
+            const videoWrap = document.getElementById("productDetailsVideoWrap");
+            const videoPlayer = document.getElementById("productDetailsVideo");
+            if (product.video_url) {
+                videoPlayer.src = product.video_url;
+                videoPlayer.load();
+                videoWrap.style.display = "block";
+            } else {
+                videoPlayer.pause();
+                videoPlayer.removeAttribute("src");
+                videoPlayer.load();
+                videoWrap.style.display = "none";
+            }
+
+            document.getElementById("productDetailsModal").style.display = "block";
+        }
+
+        function closeProductDetailsModal() {
+            const modal = document.getElementById("productDetailsModal");
+            const videoPlayer = document.getElementById("productDetailsVideo");
+            videoPlayer.pause();
+            videoPlayer.removeAttribute("src");
+            videoPlayer.load();
+            modal.style.display = "none";
+        }
+
+        function applyProductSearch() {
+            const searchTerm = String(document.getElementById("productSearchInput").value || "")
+                .trim()
+                .toLowerCase();
+
+            filteredProducts = allProducts.filter((product) => {
+                if (!searchTerm) return true;
+                const idMatch = String(product.id || "").toLowerCase().includes(searchTerm);
+                const nameMatch = String(product.name || "").toLowerCase().includes(searchTerm);
+                return idMatch || nameMatch;
+            });
+
+            renderProducts(filteredProducts);
+            updateProductCount(filteredProducts.length);
+        }
+
+        function resetProductSearch() {
+            document.getElementById("productSearchInput").value = "";
+            applyProductSearch();
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch("/api/products", { cache: "no-store" });
+                const data = await parseApiPayload(response);
+                if (!Array.isArray(data)) {
+                    throw new Error(data.error || "Invalid product response");
+                }
+                allProducts = data;
+                applyProductSearch();
+            } catch (error) {
+                console.error("Error loading products:", error);
+                const table = document.getElementById("productTable");
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="11" style="text-align:center; padding:20px;">
+                            Failed to load products
+                        </td>
+                    </tr>`;
+                updateProductCount(0);
+            }
+        }
+
+        function renderProducts(products) {
+            const table = document.getElementById("productTable");
+            table.innerHTML = "";
+            const rows = Array.isArray(products) ? products : [];
+
+            if (!rows.length) {
+                table.innerHTML = `
+                <tr>
+                    <td colspan="11" style="text-align:center; padding:20px;">
+                        No Products Found
+                    </td>
+                </tr>`;
+                return;
+            }
+
+            rows.forEach((p) => {
+                const id = Number(p.id) || 0;
+                const safeName = escapeHtml(p.name || "Unnamed Product");
+                const safeImageUrl = p.image_url || "https://via.placeholder.com/50x50/1a2236/ffffff?text=?";
+                const offer = getProductOfferPrice(p);
+
+                table.innerHTML += `
+                <tr>
+                    <td>${id}</td>
+                    <td>
+                        <img src="${safeImageUrl}" 
+                             alt="${safeName}" 
+                             onerror="this.src='https://via.placeholder.com/50x50/1a2236/ffffff?text=?';">
+                    </td>
+                    <td>
+                        ${p.video_url
+                        ? `<button class="video-icon-btn" title="View video details" onclick="openProductDetails(${id})"><i class="fas fa-circle-play"></i></button>`
+                        : `<span class="not-selling">--</span>`}
+                    </td>
+                    <td title="${safeName}">${safeName}</td>
+                    <td>${escapeHtml(p.category_name ?? "Uncategorized")}</td>
+                    <td><span class="price">\u20B9${Number(p.original_price) || 0}</span></td>
+                    <td><span class="offer-price">\u20B9${offer}</span></td>
+                    <td><span class="discount">${Number(p.discount) || 0}%</span></td>
+                    <td>${Number(p.quantity) || 0}</td>
+                    <td>
+                        <span class="${p.is_best_selling ? 'best-selling' : 'not-selling'}">
+                            ${p.is_best_selling ? 'YES' : 'NO'}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        <button class="view-btn" onclick="openProductDetails(${id})">View</button>
+                        <button class="edit-btn" onclick="editProduct(${id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteProduct(${id})">Delete</button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        document.getElementById("productForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch("/api/products", { method: "POST", body: formData });
+                const body = await parseApiPayload(response);
+                if (!response.ok) {
+                    throw new Error(body.error || body.message || "Error adding product");
+                }
+                this.reset();
+                await loadProducts();
+                alert("Product added successfully!");
+            } catch (err) {
+                console.error("Error:", err);
+                alert(err.message || "Error adding product!");
+            }
+        });
+
+        async function deleteProduct(id) {
+            if (!confirm("Are you sure you want to delete this product?")) return;
+
+            try {
+                const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
+                const body = await parseApiPayload(response);
+                if (!response.ok) {
+                    throw new Error(body.error || body.message || "Error deleting product");
+                }
+                await loadProducts();
+                alert("Product deleted successfully!");
+            } catch (err) {
+                console.error("Error:", err);
+                alert(err.message || "Error deleting product!");
+            }
+        }
+
+        function editProduct(id) {
+            const p = allProducts.find(x => x.id === id);
+            if (!p) return;
+
+            document.getElementById("editProductId").value = id;
+            document.getElementById("editName").value = p.name;
+            document.getElementById("editPrice").value = p.original_price;
+            document.getElementById("editDiscount").value = p.discount;
+            document.getElementById("editQty").value = p.quantity;
+            document.getElementById("editCategory").value = p.category_id || "";
+            document.getElementById("editBestSelling").checked = p.is_best_selling;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";
+            document.getElementById("editForm").reset();
+        }
+
+        document.getElementById("editForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const id = document.getElementById("editProductId").value;
+
+            try {
+                const response = await fetch(`/api/products/${id}`, { method: "PUT", body: formData });
+                const body = await parseApiPayload(response);
+                if (!response.ok) {
+                    throw new Error(body.error || body.message || "Error updating product");
+                }
+                await loadProducts();
+                closeEditModal();
+                alert("Product updated successfully!");
+            } catch (err) {
+                console.error("Error:", err);
+                alert(err.message || "Error updating product!");
+            }
+        });
+
+        window.onclick = function (e) {
+            if (e.target == document.getElementById("editModal")) closeEditModal();
+            if (e.target == document.getElementById("videoPreviewModal")) closeVideoModal();
+            if (e.target == document.getElementById("productDetailsModal")) closeProductDetailsModal();
+        };
 
         function previewVideo(encodedUrl) {
             const decodedUrl = decodeURIComponent(encodedUrl || "");
@@ -806,167 +1139,15 @@
             player.load();
             modal.style.display = "none";
         }
-        /* ================= LOAD PRODUCTS ================= */
-        function loadProducts() {
-            fetch("/api/products", { cache: "no-store" })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("Products Loaded:", data);
 
-                    if (!Array.isArray(data)) {
-                        console.error("Invalid API response");
-                        return;
-                    }
-
-                    allProducts = data;
-                    renderProducts();
-                    document.getElementById("productCount").textContent = data.length;
-                })
-                .catch(err => console.error("Error loading products:", err));
-        }
-
-        /* ================= RENDER PRODUCTS ================= */
-        function renderProducts() {
-            const table = document.getElementById("productTable");
-            table.innerHTML = "";
-
-            if (!allProducts || allProducts.length === 0) {
-                table.innerHTML = `
-                <tr>
-                    <td colspan="11" style="text-align:center; padding:20px;">
-                        No Products Found
-                    </td>
-                </tr>`;
-                return;
+        document.getElementById("productSearchInput").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                applyProductSearch();
             }
-
-            allProducts.forEach((p) => {
-                const offer = (p.original_price * (100 - p.discount) / 100).toFixed(0);
-                const encodedVideo = p.video_url ? encodeURIComponent(p.video_url) : "";
-
-                table.innerHTML += `
-                <tr>
-                    <td>${p.id}</td>
-                    <td>
-                        <img src="${p.image_url}" 
-                             alt="${p.name}" 
-                             onerror="this.src='https://via.placeholder.com/50x50/1a2236/ffffff?text=?';">
-                    </td>
-                    <td>
-                        ${p.video_url
-                        ? `<button class="video-icon-btn" title="Preview video" onclick="previewVideo('${encodedVideo}')"><i class="fas fa-circle-play"></i></button>`
-                        : `<span class="not-selling">--</span>`}
-                    </td>
-                    <td title="${p.name}">${p.name}</td>
-                    <td>${p.category_name ?? "Uncategorized"}</td>
-                    <td><span class="price">\u20B9${p.original_price}</span></td>
-                    <td><span class="offer-price">\u20B9${offer}</span></td>
-                    <td><span class="discount">${p.discount}%</span></td>
-                    <td>${p.quantity}</td>
-                    <td>
-                        <span class="${p.is_best_selling ? 'best-selling' : 'not-selling'}">
-                            ${p.is_best_selling ? 'YES' : 'NO'}
-                        </span>
-                    </td>
-                    <td class="actions">
-                        <button class="edit-btn" onclick="editProduct(${p.id})">Edit</button>
-                        <button class="delete-btn" onclick="deleteProduct(${p.id})">Delete</button>
-                    </td>
-                </tr>`;
-            });
-        }
-        /* ================= ADD PRODUCT ================= */
-        document.getElementById("productForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            fetch("/api/products", { method: "POST", body: formData })
-                .then(async (res) => {
-                    const body = await res.json().catch(() => ({}));
-                    if (!res.ok) {
-                        throw new Error(body.error || "Error adding product");
-                    }
-                    return body;
-                })
-                .then(response => {
-                    console.log("Product Added:", response);
-                    this.reset();
-                    loadProducts();
-                    alert("Product added successfully!");
-                })
-                .catch(err => {
-                    console.error("Error:", err);
-                    alert(err.message || "Error adding product!");
-                });
         });
 
-        /* ================= DELETE PRODUCT ================= */
-        function deleteProduct(id) {
-            if (!confirm("Are you sure you want to delete this product?")) return;
-
-            fetch(`/api/products/${id}`, { method: "DELETE" })
-                .then(() => {
-                    loadProducts();
-                    alert("Product deleted successfully!");
-                })
-                .catch(err => {
-                    console.error("Error:", err);
-                    alert("Error deleting product!");
-                });
-        }
-
-        /* ================= EDIT PRODUCT ================= */
-        function editProduct(id) {
-            const p = allProducts.find(x => x.id === id);
-            if (!p) return;
-
-            document.getElementById("editProductId").value = id;
-            document.getElementById("editName").value = p.name;
-            document.getElementById("editPrice").value = p.original_price;
-            document.getElementById("editDiscount").value = p.discount;
-            document.getElementById("editQty").value = p.quantity;
-            document.getElementById("editCategory").value = p.category_id || "";
-            document.getElementById("editBestSelling").checked = p.is_best_selling;
-            document.getElementById("editModal").style.display = "block";
-        }
-
-        function closeEditModal() {
-            document.getElementById("editModal").style.display = "none";
-            document.getElementById("editForm").reset();
-        }
-
-        document.getElementById("editForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const id = document.getElementById("editProductId").value;
-
-            fetch(`/api/products/${id}`, { method: "PUT", body: formData })
-                .then(async (res) => {
-                    const body = await res.json().catch(() => ({}));
-                    if (!res.ok) {
-                        throw new Error(body.error || "Error updating product");
-                    }
-                    return body;
-                })
-                .then(() => {
-                    loadProducts();
-                    closeEditModal();
-                    alert("Product updated successfully!");
-                })
-                .catch(err => {
-                    console.error("Error:", err);
-                    alert(err.message || "Error updating product!");
-                });
-        });
-
-        window.onclick = function (e) {
-            if (e.target == document.getElementById("editModal")) closeEditModal();
-            if (e.target == document.getElementById("videoPreviewModal")) closeVideoModal();
-        };
-
-        /* ================= FORCE LOAD ================= */
         window.onload = function () {
-            console.log("Admin Products Page Loaded");
             loadCategories();
             loadProducts();
         };

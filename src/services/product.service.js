@@ -65,6 +65,17 @@ async function createProduct(data) {
   const originalPrice = Math.round(parseFloat(original_price));
   const discountValue = Math.round(parseFloat(discount));
   const qty = parseInt(quantity, 10);
+
+  if (!Number.isFinite(originalPrice) || originalPrice < 0) {
+    throw new Error("Invalid original price");
+  }
+  if (!Number.isFinite(discountValue) || discountValue < 0 || discountValue > 100) {
+    throw new Error("Invalid discount value");
+  }
+  if (!Number.isInteger(qty) || qty < 0) {
+    throw new Error("Invalid quantity value");
+  }
+
   const offer_price = Math.round(
     originalPrice - (originalPrice * discountValue) / 100
   );
@@ -128,6 +139,17 @@ async function updateProduct(id, data) {
   const originalPrice = Math.round(parseFloat(original_price));
   const discountValue = Math.round(parseFloat(discount));
   const qty = parseInt(quantity, 10);
+
+  if (!Number.isFinite(originalPrice) || originalPrice < 0) {
+    throw new Error("Invalid original price");
+  }
+  if (!Number.isFinite(discountValue) || discountValue < 0 || discountValue > 100) {
+    throw new Error("Invalid discount value");
+  }
+  if (!Number.isInteger(qty) || qty < 0) {
+    throw new Error("Invalid quantity value");
+  }
+
   const offer_price = Math.round(
     originalPrice - (originalPrice * discountValue) / 100
   );
