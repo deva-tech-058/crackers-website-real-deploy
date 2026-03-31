@@ -59,8 +59,8 @@ function createS3Client(region) {
 
   const clientConfig = {
     region: normalizedRegion,
-    // Retries 301/PermanentRedirect flows when S3 returns the bucket's true region.
-    followRegionRedirects: true,
+    // Avoid auto checksum hashing on streaming uploads unless S3 strictly requires it.
+    requestChecksumCalculation: "WHEN_REQUIRED",
   };
 
   if (hasExplicitCredentials) {
