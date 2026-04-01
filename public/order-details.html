@@ -743,6 +743,59 @@
       }
     }
 
+    function toNumberAmount(value) {
+      const numeric = Number.parseFloat(String(value ?? '').replace(/,/g, '').trim());
+      return Number.isFinite(numeric) ? numeric : 0;
+    }
+
+    function resolveItemQuantity(item) {
+      const quantity = Number.parseInt(String(item?.quantity ?? ''), 10);
+      return Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
+    }
+
+    function resolveItemUnitPrice(item) {
+      const candidates = [
+        item?.price,
+        item?.unit_price,
+        item?.unitPrice,
+        item?.offer_price,
+        item?.original_price,
+      ];
+
+      for (const candidate of candidates) {
+        const value = toNumberAmount(candidate);
+        if (value > 0) return value;
+      }
+
+      return 0;
+    }
+
+    function resolveItemTotal(item) {
+      const explicitTotal = toNumberAmount(item?.total_price ?? item?.totalPrice ?? item?.total);
+      if (explicitTotal > 0) return explicitTotal;
+
+      return resolveItemUnitPrice(item) * resolveItemQuantity(item);
+    }
+
+    function resolveOrderTotal(order, items) {
+      const directTotal = toNumberAmount(order?.total_amount ?? order?.total ?? order?.grand_total);
+      const computedTotal = (items || []).reduce((sum, item) => sum + resolveItemTotal(item), 0);
+
+      if (directTotal > 0 || computedTotal === 0) {
+        return directTotal;
+      }
+
+      return computedTotal;
+    }
+
+    function formatAmount(value) {
+      const amount = toNumberAmount(value);
+      if (window.CartUtils) {
+        return window.CartUtils.formatCurrency(amount);
+      }
+      return `\u20B9${amount}`;
+    }
+
     async function renderOrder() {
       const metaEl = document.getElementById('orderMeta');
       const container = document.getElementById('orderInfo');
@@ -795,7 +848,7 @@
         const orderId = order.order_id || order.id;
         const orderDate = order.order_date || order.created_at;
         const items = order.items || [];
-        const total = order.total_amount || order.total;
+        const total = resolveOrderTotal(order, items);
         const paymentMethod = order.payment_method || order.paymentMethod;
 
         html += `<div class="order-record">`;
@@ -806,12 +859,14 @@
 
         if (items && items.length > 0) {
           items.forEach(item => {
-            const itemTotal = (item.price || 0) * (item.quantity || 1);
+            const quantity = resolveItemQuantity(item);
+            const unitPrice = resolveItemUnitPrice(item);
+            const itemTotal = resolveItemTotal(item);
             html += `<tr>
               <td>${item.name || item.product_name || 'Product'}</td>
-              <td>${item.quantity || 1}</td>
-              <td>${window.CartUtils ? window.CartUtils.formatCurrency(item.price || 0) : '₹' + (item.price || 0)}</td>
-              <td>${window.CartUtils ? window.CartUtils.formatCurrency(itemTotal) : '₹' + itemTotal}</td>
+              <td>${quantity}</td>
+              <td>${formatAmount(unitPrice)}</td>
+              <td>${formatAmount(itemTotal)}</td>
             </tr>`;
           });
         } else {
@@ -819,7 +874,7 @@
         }
 
         html += `</tbody></table></div>`;
-        html += `<div class="order-total">Total Amount: <span>${window.CartUtils ? window.CartUtils.formatCurrency(total) : '₹' + total}</span></div>`;
+        html += `<div class="order-total">Total Amount: <span>${formatAmount(total)}</span></div>`;
 
         if (order.address_line1 || order.address) {
           const addr = order.address || {};
@@ -864,5 +919,3 @@
 </body>
 
 </html>
-
-

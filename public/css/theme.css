@@ -156,6 +156,43 @@ body {
 .nav-links .active {
   color: #111 !important;
   background: var(--brand-gradient) !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep navbar look identical across every page */
+.navbar,
+.navbar a,
+.navbar button,
+.navbar .nav-item,
+.navbar .nav-links > a,
+.navbar .btn,
+.navbar .nav-login-btn,
+.navbar .nav-logout-btn,
+.navbar .logout-btn,
+.navbar .welcome-user,
+.navbar .nav-auth-name,
+.navbar .admin-welcome {
+  font-family: "Poppins", sans-serif !important;
+  text-decoration: none !important;
+}
+
+.navbar a:hover,
+.navbar a:focus,
+.navbar button:hover,
+.navbar button:focus {
+  text-decoration: none !important;
+}
+
+.navbar .nav-item::before,
+.navbar .nav-item::after,
+.navbar .nav-links > a::before,
+.navbar .nav-links > a::after,
+.navbar .nav-item.active::after,
+.navbar .nav-links > a.active::after,
+.navbar .nav-links .active::after {
+  content: none !important;
+  display: none !important;
 }
 
 .btn,
