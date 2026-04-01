@@ -349,7 +349,7 @@
     if (username) {
       setElementVisible(ui.loginLink, false, "inline-flex");
       setElementVisible(ui.userSection, true, "flex");
-      ui.usernameEl.textContent = isAdmin ? `Hi, ${username} (Admin)` : `Hi, ${username}`;
+      ui.usernameEl.textContent = `Hi, ${username}`;
       return;
     }
 

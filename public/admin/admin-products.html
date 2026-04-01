@@ -476,6 +476,21 @@
             max-width: 520px;
         }
 
+        .filter-wrap {
+            display: inline-flex;
+            align-items: center;
+            width: 100%;
+            max-width: 260px;
+        }
+
+        .filter-wrap select {
+            margin: 0;
+            width: 100%;
+            height: 44px;
+            padding: 0 12px;
+            font-size: 14px;
+        }
+
         .search-wrap input {
             margin: 0;
         }
@@ -633,6 +648,10 @@
             .search-wrap {
                 max-width: 100%;
             }
+
+            .filter-wrap {
+                max-width: 100%;
+            }
         }
     </style>
     <link rel="stylesheet" href="/css/theme.css">
@@ -712,6 +731,11 @@
                 <button type="button" class="search-btn" onclick="applyProductSearch()">Search</button>
                 <button type="button" class="reset-btn" onclick="resetProductSearch()">Reset</button>
             </div>
+            <div class="filter-wrap admin-toolbar-filter">
+                <select id="categoryFilter" aria-label="Filter products by category">
+                    <option value="all">All Categories</option>
+                </select>
+            </div>
         </div>
         <div class="products-table-container">
             <table>
@@ -745,6 +769,10 @@
                 </thead>
                 <tbody id="productTable"></tbody>
             </table>
+        </div>
+        <div class="admin-table-pagination" id="productPaginationContainer">
+            <div class="admin-pagination-info" id="productPaginationInfo">Showing 0-0 of 0 products</div>
+            <div class="admin-pagination-controls" id="productPaginationControls"></div>
         </div>
 
         <!-- EDIT MODAL -->
@@ -834,6 +862,8 @@
         let filteredProducts = [];
         let allCategories = [];
         let uploadLimitMb = 1024;
+        let currentProductPage = 1;
+        const PRODUCTS_PER_PAGE = 5;
 
         function escapeHtml(value) {
             return String(value ?? "")
@@ -948,6 +978,7 @@
                 allCategories = Array.isArray(data) ? data : [];
                 populateCategorySelect("categorySelect");
                 populateCategorySelect("editCategory");
+                populateCategoryFilterOptions();
             } catch (error) {
                 console.error("Error loading categories:", error);
             }
@@ -960,6 +991,23 @@
             allCategories.forEach(cat => {
                 select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
             });
+        }
+
+        function populateCategoryFilterOptions() {
+            const select = document.getElementById("categoryFilter");
+            if (!select) return;
+
+            const previousValue = String(select.value || "all");
+            let options = '<option value="all">All Categories</option>';
+            allCategories.forEach((cat) => {
+                const categoryId = escapeHtml(cat.id);
+                const categoryName = escapeHtml(cat.name || `Category ${cat.id}`);
+                options += `<option value="${categoryId}">${categoryName}</option>`;
+            });
+            select.innerHTML = options;
+
+            const hasPrevious = Array.from(select.options).some((option) => option.value === previousValue);
+            select.value = hasPrevious ? previousValue : "all";
         }
 
         function openProductDetails(id) {
@@ -1010,24 +1058,59 @@
             modal.style.display = "none";
         }
 
-        function applyProductSearch() {
+        function getSelectedCategoryFilter() {
+            return String(document.getElementById("categoryFilter")?.value || "all")
+                .trim()
+                .toLowerCase();
+        }
+
+        function getProductCategoryId(product) {
+            const directId = String(product?.category_id ?? product?.category?.id ?? "")
+                .trim()
+                .toLowerCase();
+            if (directId) return directId;
+
+            const categoryName = String(product?.category_name ?? product?.category?.name ?? "")
+                .trim()
+                .toLowerCase();
+            if (!categoryName) return "";
+
+            const matchedCategory = allCategories.find((cat) =>
+                String(cat?.name ?? "").trim().toLowerCase() === categoryName
+            );
+            return matchedCategory
+                ? String(matchedCategory.id ?? "").trim().toLowerCase()
+                : "";
+        }
+
+        function applyProductSearch(options = {}) {
+            const { resetPage = true } = options;
             const searchTerm = String(document.getElementById("productSearchInput").value || "")
                 .trim()
                 .toLowerCase();
+            const selectedCategory = getSelectedCategoryFilter();
 
             filteredProducts = allProducts.filter((product) => {
-                if (!searchTerm) return true;
                 const idMatch = String(product.id || "").toLowerCase().includes(searchTerm);
                 const nameMatch = String(product.name || "").toLowerCase().includes(searchTerm);
-                return idMatch || nameMatch;
+                const matchesSearch = !searchTerm || idMatch || nameMatch;
+                const matchesCategory = selectedCategory === "all" || getProductCategoryId(product) === selectedCategory;
+                return matchesSearch && matchesCategory;
             });
 
-            renderProducts(filteredProducts);
+            if (resetPage) {
+                currentProductPage = 1;
+            }
+            renderProducts();
             updateProductCount(filteredProducts.length);
         }
 
         function resetProductSearch() {
             document.getElementById("productSearchInput").value = "";
+            const categoryFilter = document.getElementById("categoryFilter");
+            if (categoryFilter) {
+                categoryFilter.value = "all";
+            }
             applyProductSearch();
         }
 
@@ -1039,7 +1122,7 @@
                     throw new Error(data.error || "Invalid product response");
                 }
                 allProducts = data;
-                applyProductSearch();
+                applyProductSearch({ resetPage: false });
             } catch (error) {
                 console.error("Error loading products:", error);
                 const table = document.getElementById("productTable");
@@ -1050,13 +1133,79 @@
                         </td>
                     </tr>`;
                 updateProductCount(0);
+                renderProductPagination(0, 0, 0);
             }
         }
 
-        function renderProducts(products) {
+        function getPaginationItems(totalPages, currentPage) {
+            if (totalPages <= 7) {
+                return Array.from({ length: totalPages }, (_, index) => index + 1);
+            }
+
+            const items = [1];
+            const start = Math.max(2, currentPage - 1);
+            const end = Math.min(totalPages - 1, currentPage + 1);
+
+            if (start > 2) {
+                items.push("ellipsis-start");
+            }
+
+            for (let page = start; page <= end; page += 1) {
+                items.push(page);
+            }
+
+            if (end < totalPages - 1) {
+                items.push("ellipsis-end");
+            }
+
+            items.push(totalPages);
+            return items;
+        }
+
+        function goToProductPage(page) {
+            const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+            const safePage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+            if (safePage === currentProductPage) return;
+            currentProductPage = safePage;
+            renderProducts();
+        }
+
+        function renderProductPagination(totalItems, startIndex, visibleCount) {
+            const infoEl = document.getElementById("productPaginationInfo");
+            const controlsEl = document.getElementById("productPaginationControls");
+            if (!infoEl || !controlsEl) return;
+
+            const totalPages = Math.max(1, Math.ceil(totalItems / PRODUCTS_PER_PAGE));
+            const from = totalItems > 0 ? startIndex + 1 : 0;
+            const to = totalItems > 0 ? startIndex + visibleCount : 0;
+            infoEl.textContent = `Showing ${from}-${to} of ${totalItems} products`;
+
+            const paginationItems = getPaginationItems(totalPages, currentProductPage);
+            let controlsHtml = `
+                <button type="button" class="admin-page-btn" ${currentProductPage === 1 ? "disabled" : ""} onclick="goToProductPage(${currentProductPage - 1})">Prev</button>
+            `;
+
+            paginationItems.forEach((item) => {
+                if (String(item).startsWith("ellipsis")) {
+                    controlsHtml += `<span class="admin-pagination-ellipsis">...</span>`;
+                    return;
+                }
+
+                controlsHtml += `
+                    <button type="button" class="admin-page-btn ${item === currentProductPage ? "is-active" : ""}" onclick="goToProductPage(${item})">${item}</button>
+                `;
+            });
+
+            controlsHtml += `
+                <button type="button" class="admin-page-btn" ${currentProductPage === totalPages ? "disabled" : ""} onclick="goToProductPage(${currentProductPage + 1})">Next</button>
+            `;
+            controlsEl.innerHTML = controlsHtml;
+        }
+
+        function renderProducts() {
             const table = document.getElementById("productTable");
             table.innerHTML = "";
-            const rows = Array.isArray(products) ? products : [];
+            const rows = Array.isArray(filteredProducts) ? filteredProducts : [];
 
             if (!rows.length) {
                 table.innerHTML = `
@@ -1065,10 +1214,20 @@
                         No Products Found
                     </td>
                 </tr>`;
+                currentProductPage = 1;
+                renderProductPagination(0, 0, 0);
                 return;
             }
 
-            rows.forEach((p) => {
+            const totalPages = Math.max(1, Math.ceil(rows.length / PRODUCTS_PER_PAGE));
+            if (currentProductPage > totalPages) {
+                currentProductPage = totalPages;
+            }
+
+            const startIndex = (currentProductPage - 1) * PRODUCTS_PER_PAGE;
+            const pageRows = rows.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+
+            pageRows.forEach((p) => {
                 const id = Number(p.id) || 0;
                 const safeName = escapeHtml(p.name || "Unnamed Product");
                 const safeImageUrl = p.image_url || "https://via.placeholder.com/50x50/1a2236/ffffff?text=?";
@@ -1105,6 +1264,8 @@
                     </td>
                 </tr>`;
             });
+
+            renderProductPagination(rows.length, startIndex, pageRows.length);
         }
 
         const productForm = document.getElementById("productForm");
@@ -1222,6 +1383,11 @@
                 event.preventDefault();
                 applyProductSearch();
             }
+        });
+
+        document.getElementById("categoryFilter").addEventListener("change", function () {
+            currentProductPage = 1;
+            applyProductSearch({ resetPage: false });
         });
 
         window.onload = async function () {

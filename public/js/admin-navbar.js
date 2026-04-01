@@ -62,7 +62,7 @@
     const username = String(session.username).trim();
 
     welcomeNode.hidden = false;
-    welcomeNode.textContent = role === "admin" ? `Hi, ${username} (Admin)` : `Hi, ${username}`;
+    welcomeNode.textContent = `Hi, ${username}`;
   }
 
   function bindListeners() {

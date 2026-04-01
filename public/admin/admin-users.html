@@ -312,6 +312,10 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="admin-table-pagination" id="userPaginationContainer">
+                <div class="admin-pagination-info" id="userPaginationInfo">Showing 0-0 of 0 users</div>
+                <div class="admin-pagination-controls" id="userPaginationControls"></div>
+            </div>
         </div>
     </div>
 
@@ -322,6 +326,9 @@
         const userCountEl = document.getElementById("userCount");
         const actionMessageEl = document.getElementById("actionMessage");
         const currentAdminId = Number.parseInt(localStorage.getItem("userId") || "", 10) || 0;
+        let allUsers = [];
+        let currentUserPage = 1;
+        const USERS_PER_PAGE = 10;
 
         function escapeHtml(value) {
             return String(value ?? "")
@@ -361,6 +368,7 @@
 
         function renderState(message, isError) {
             userTable.innerHTML = `<tr><td colspan="6" class="state${isError ? " error" : ""}">${escapeHtml(message)}</td></tr>`;
+            renderUserPagination(0, 0, 0);
         }
 
         function showActionMessage(type, message) {
@@ -386,15 +394,94 @@
             return `<button type="button" class="${className}" data-user-id="${userId}" data-next-role="${nextRole}" title="${escapeHtml(title)}" ${disabledAttr}>${buttonText}</button>`;
         }
 
-        function renderUsers(users) {
-            userCountEl.textContent = String(users.length);
+        function getPaginationItems(totalPages, currentPage) {
+            if (totalPages <= 7) {
+                return Array.from({ length: totalPages }, (_, index) => index + 1);
+            }
 
-            if (!users.length) {
+            const items = [1];
+            const start = Math.max(2, currentPage - 1);
+            const end = Math.min(totalPages - 1, currentPage + 1);
+
+            if (start > 2) {
+                items.push("ellipsis-start");
+            }
+
+            for (let page = start; page <= end; page += 1) {
+                items.push(page);
+            }
+
+            if (end < totalPages - 1) {
+                items.push("ellipsis-end");
+            }
+
+            items.push(totalPages);
+            return items;
+        }
+
+        function goToUserPage(page) {
+            const totalPages = Math.max(1, Math.ceil(allUsers.length / USERS_PER_PAGE));
+            const safePage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+            if (safePage === currentUserPage) return;
+            currentUserPage = safePage;
+            renderUsers(allUsers, { resetPage: false });
+        }
+
+        function renderUserPagination(totalItems, startIndex, visibleCount) {
+            const infoEl = document.getElementById("userPaginationInfo");
+            const controlsEl = document.getElementById("userPaginationControls");
+            if (!infoEl || !controlsEl) return;
+
+            const totalPages = Math.max(1, Math.ceil(totalItems / USERS_PER_PAGE));
+            const from = totalItems > 0 ? startIndex + 1 : 0;
+            const to = totalItems > 0 ? startIndex + visibleCount : 0;
+            infoEl.textContent = `Showing ${from}-${to} of ${totalItems} users`;
+
+            const paginationItems = getPaginationItems(totalPages, currentUserPage);
+            let controlsHtml = `
+                <button type="button" class="admin-page-btn" ${currentUserPage === 1 ? "disabled" : ""} onclick="goToUserPage(${currentUserPage - 1})">Prev</button>
+            `;
+
+            paginationItems.forEach((item) => {
+                if (String(item).startsWith("ellipsis")) {
+                    controlsHtml += `<span class="admin-pagination-ellipsis">...</span>`;
+                    return;
+                }
+
+                controlsHtml += `
+                    <button type="button" class="admin-page-btn ${item === currentUserPage ? "is-active" : ""}" onclick="goToUserPage(${item})">${item}</button>
+                `;
+            });
+
+            controlsHtml += `
+                <button type="button" class="admin-page-btn" ${currentUserPage === totalPages ? "disabled" : ""} onclick="goToUserPage(${currentUserPage + 1})">Next</button>
+            `;
+            controlsEl.innerHTML = controlsHtml;
+        }
+
+        function renderUsers(users, options = {}) {
+            const { resetPage = true } = options;
+            allUsers = Array.isArray(users) ? users : [];
+            userCountEl.textContent = String(allUsers.length);
+
+            if (resetPage) {
+                currentUserPage = 1;
+            }
+
+            if (!allUsers.length) {
                 renderState("No users found in users table", false);
                 return;
             }
 
-            userTable.innerHTML = users.map((user) => {
+            const totalPages = Math.max(1, Math.ceil(allUsers.length / USERS_PER_PAGE));
+            if (currentUserPage > totalPages) {
+                currentUserPage = totalPages;
+            }
+
+            const startIndex = (currentUserPage - 1) * USERS_PER_PAGE;
+            const pageUsers = allUsers.slice(startIndex, startIndex + USERS_PER_PAGE);
+
+            userTable.innerHTML = pageUsers.map((user) => {
                 const role = formatRole(user.role);
                 const roleClass = toRoleClass(user.role);
 
@@ -408,6 +495,8 @@
                     <td>${buildActionButton(user, roleClass)}</td>
                 </tr>`;
             }).join("");
+
+            renderUserPagination(allUsers.length, startIndex, pageUsers.length);
         }
 
         async function updateUserRole(userId, nextRole, triggerButton) {
@@ -443,7 +532,7 @@
                 }
 
                 showActionMessage("success", payload.message || "Role updated");
-                await loadUsers();
+                await loadUsers(false);
             } catch (error) {
                 showActionMessage("error", error.message || "Failed to update role");
                 triggerButton.disabled = false;
@@ -451,7 +540,7 @@
             }
         }
 
-        async function loadUsers() {
+        async function loadUsers(resetPage = true) {
             renderState("Loading users...", false);
 
             try {
@@ -462,7 +551,7 @@
                     throw new Error(payload.message || "Failed to load users");
                 }
 
-                renderUsers(Array.isArray(payload) ? payload : []);
+                renderUsers(payload, { resetPage });
             } catch (error) {
                 renderState(error.message || "Failed to load users", true);
             }

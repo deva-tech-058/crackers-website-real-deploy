@@ -301,12 +301,19 @@
                 <tbody id="heroTableBody"></tbody>
             </table>
         </div>
+        <div class="admin-table-pagination" id="heroPaginationContainer">
+            <div class="admin-pagination-info" id="heroPaginationInfo">Showing 0-0 of 0 slides</div>
+            <div class="admin-pagination-controls" id="heroPaginationControls"></div>
+        </div>
     </div>
 
     <script src="/js/auth-session.js"></script>
     <script src="/js/admin-navbar.js"></script>
     <script>
         let uploadLimitMb = 1024;
+        let allSlides = [];
+        let currentHeroPage = 1;
+        const HERO_SLIDES_PER_PAGE = 5;
 
         function escapeHtml(value) {
             return String(value ?? "")
@@ -427,31 +434,104 @@
             reader.readAsDataURL(file);
         });
 
-        async function loadSlides() {
-            try {
-                const res = await fetch("/api/hero", { cache: "no-store" });
-                const slides = await res.json().catch(() => []);
-                const tableBody = document.getElementById("heroTableBody");
-                tableBody.innerHTML = "";
+        function getPaginationItems(totalPages, currentPage) {
+            if (totalPages <= 7) {
+                return Array.from({ length: totalPages }, (_, index) => index + 1);
+            }
 
-                if (!Array.isArray(slides) || slides.length === 0) {
-                    tableBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No slides found</td></tr>";
+            const items = [1];
+            const start = Math.max(2, currentPage - 1);
+            const end = Math.min(totalPages - 1, currentPage + 1);
+
+            if (start > 2) {
+                items.push("ellipsis-start");
+            }
+
+            for (let page = start; page <= end; page += 1) {
+                items.push(page);
+            }
+
+            if (end < totalPages - 1) {
+                items.push("ellipsis-end");
+            }
+
+            items.push(totalPages);
+            return items;
+        }
+
+        function goToHeroPage(page) {
+            const totalPages = Math.max(1, Math.ceil(allSlides.length / HERO_SLIDES_PER_PAGE));
+            const safePage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+            if (safePage === currentHeroPage) return;
+            currentHeroPage = safePage;
+            renderSlides();
+        }
+
+        function renderHeroPagination(totalItems, startIndex, visibleCount) {
+            const infoEl = document.getElementById("heroPaginationInfo");
+            const controlsEl = document.getElementById("heroPaginationControls");
+            if (!infoEl || !controlsEl) return;
+
+            const totalPages = Math.max(1, Math.ceil(totalItems / HERO_SLIDES_PER_PAGE));
+            const from = totalItems > 0 ? startIndex + 1 : 0;
+            const to = totalItems > 0 ? startIndex + visibleCount : 0;
+            infoEl.textContent = `Showing ${from}-${to} of ${totalItems} slides`;
+
+            const paginationItems = getPaginationItems(totalPages, currentHeroPage);
+            let controlsHtml = `
+                <button type="button" class="admin-page-btn" ${currentHeroPage === 1 ? "disabled" : ""} onclick="goToHeroPage(${currentHeroPage - 1})">Prev</button>
+            `;
+
+            paginationItems.forEach((item) => {
+                if (String(item).startsWith("ellipsis")) {
+                    controlsHtml += `<span class="admin-pagination-ellipsis">...</span>`;
                     return;
                 }
 
-                slides.forEach((slide) => {
-                    const fallbackImage = String(slide.image || "").trim();
-                    const imageUrl = slide.image_url || (
-                        fallbackImage
-                            ? (/^[a-z][a-z\d+\-.]*:/i.test(fallbackImage) || fallbackImage.startsWith("//") || fallbackImage.startsWith("/")
-                                ? fallbackImage
-                                : `/uploads/${fallbackImage}`)
-                            : ""
-                    );
-                    const safeTitle = escapeHtml(slide.title || "--");
-                    const safeSubtitle = escapeHtml(slide.subtitle || "--");
-                    const safeImageUrl = imageUrl || "https://via.placeholder.com/120x68/1a2236/ffffff?text=No+Image";
-                    tableBody.innerHTML += `
+                controlsHtml += `
+                    <button type="button" class="admin-page-btn ${item === currentHeroPage ? "is-active" : ""}" onclick="goToHeroPage(${item})">${item}</button>
+                `;
+            });
+
+            controlsHtml += `
+                <button type="button" class="admin-page-btn" ${currentHeroPage === totalPages ? "disabled" : ""} onclick="goToHeroPage(${currentHeroPage + 1})">Next</button>
+            `;
+            controlsEl.innerHTML = controlsHtml;
+        }
+
+        function renderSlides() {
+            const tableBody = document.getElementById("heroTableBody");
+            if (!tableBody) return;
+
+            if (!Array.isArray(allSlides) || allSlides.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No slides found</td></tr>";
+                currentHeroPage = 1;
+                renderHeroPagination(0, 0, 0);
+                return;
+            }
+
+            const totalPages = Math.max(1, Math.ceil(allSlides.length / HERO_SLIDES_PER_PAGE));
+            if (currentHeroPage > totalPages) {
+                currentHeroPage = totalPages;
+            }
+
+            const startIndex = (currentHeroPage - 1) * HERO_SLIDES_PER_PAGE;
+            const pageSlides = allSlides.slice(startIndex, startIndex + HERO_SLIDES_PER_PAGE);
+
+            tableBody.innerHTML = pageSlides.map((slide) => {
+                const fallbackImage = String(slide.image || "").trim();
+                const imageUrl = slide.image_url || (
+                    fallbackImage
+                        ? (/^[a-z][a-z\d+\-.]*:/i.test(fallbackImage) || fallbackImage.startsWith("//") || fallbackImage.startsWith("/")
+                            ? fallbackImage
+                            : `/uploads/${fallbackImage}`)
+                        : ""
+                );
+                const safeTitle = escapeHtml(slide.title || "--");
+                const safeSubtitle = escapeHtml(slide.subtitle || "--");
+                const safeImageUrl = imageUrl || "https://via.placeholder.com/120x68/1a2236/ffffff?text=No+Image";
+
+                return `
                     <tr>
                         <td><img class="slide-image" src="${safeImageUrl}" alt="Slide image"></td>
                         <td>${safeTitle}</td>
@@ -461,11 +541,25 @@
                                 Delete
                             </button>
                         </td>
-                    </tr>`;
-                });
+                    </tr>
+                `;
+            }).join("");
+
+            renderHeroPagination(allSlides.length, startIndex, pageSlides.length);
+        }
+
+        async function loadSlides() {
+            try {
+                const res = await fetch("/api/hero", { cache: "no-store" });
+                const slides = await res.json().catch(() => []);
+                allSlides = Array.isArray(slides) ? slides : [];
+                renderSlides();
             } catch (err) {
                 console.error("Load hero slides error:", err);
                 document.getElementById("heroTableBody").innerHTML = "<tr><td colspan='4' style='text-align:center;'>Failed to load slides</td></tr>";
+                allSlides = [];
+                currentHeroPage = 1;
+                renderHeroPagination(0, 0, 0);
             }
         }
 
