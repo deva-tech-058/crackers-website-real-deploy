@@ -278,19 +278,47 @@ function clearMessage() {
 }
 
 async function apiRequest(url, body) {
-  const response = await fetch(url, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  let response;
+  try {
+    response = await fetch(url, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+  } catch (error) {
+    throw new Error("Unable to reach server. Please check backend status and try again.");
+  }
 
-  const data = await response.json().catch(() => ({}));
+  const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+  const data = contentType.includes("application/json")
+    ? await response.json().catch(() => ({}))
+    : {
+      message: await response.text().catch(() => ""),
+    };
 
   if (!response.ok) {
-    throw new Error(data.message || "Request failed");
+    const apiMessage = String(data.message || data.error || "").trim();
+    if (apiMessage) {
+      throw new Error(apiMessage);
+    }
+
+    if (response.status === 502) {
+      throw new Error("Backend unavailable (502 Bad Gateway). Please retry in a few seconds.");
+    }
+    if (response.status === 503) {
+      throw new Error("Service unavailable (503). Please retry shortly.");
+    }
+    if (response.status === 504) {
+      throw new Error("Gateway timeout (504). The server took too long to respond.");
+    }
+    if (response.status >= 500) {
+      throw new Error(`Server error (${response.status}). Please try again.`);
+    }
+
+    throw new Error(`Request failed (${response.status})`);
   }
 
   return data;

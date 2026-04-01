@@ -304,6 +304,8 @@
     <script src="/js/auth-session.js"></script>
     <script src="/js/admin-navbar.js"></script>
     <script>
+        let uploadLimitMb = 1024;
+
         function escapeHtml(value) {
             return String(value ?? "")
                 .replace(/&/g, "&amp;")
@@ -325,8 +327,54 @@
                 };
             }
 
+            if (response.status === 502) {
+                return {
+                    message: "Backend unavailable (502 Bad Gateway). PM2/Nginx status check pannunga."
+                };
+            }
+            if (response.status === 503) {
+                return {
+                    message: "Service unavailable (503). Server restart/overload la irukku, retry pannunga."
+                };
+            }
+            if (response.status === 504) {
+                return {
+                    message: "Gateway timeout (504). Large upload took too long."
+                };
+            }
+
             const text = await response.text().catch(() => "");
             return { message: text || `Request failed (${response.status})` };
+        }
+
+        function formatMegaBytes(bytes) {
+            const numeric = Number(bytes) || 0;
+            return (numeric / (1024 * 1024)).toFixed(2);
+        }
+
+        function validateHeroUploadSize() {
+            const file = document.getElementById("imageInput")?.files?.[0];
+            if (!file) return;
+
+            const maxBytes = Math.max(1, Number(uploadLimitMb) || 1024) * 1024 * 1024;
+            if (file.size > maxBytes) {
+                throw new Error(
+                    `Hero image too large (${formatMegaBytes(file.size)} MB). Max allowed is ${uploadLimitMb} MB.`
+                );
+            }
+        }
+
+        async function loadUploadLimit() {
+            try {
+                const response = await fetch("/api/health", { cache: "no-store" });
+                const payload = await parseHeroPayload(response);
+                const limit = Number.parseInt(String(payload?.upload_limit_mb || ""), 10);
+                if (Number.isInteger(limit) && limit > 0) {
+                    uploadLimitMb = limit;
+                }
+            } catch (error) {
+                console.warn("Unable to fetch upload limit. Using default:", uploadLimitMb);
+            }
         }
 
         document.getElementById("heroForm").addEventListener("submit", async function (event) {
@@ -341,6 +389,8 @@
             const formData = new FormData(this);
 
             try {
+                validateHeroUploadSize();
+
                 const response = await fetch("/api/hero", {
                     method: "POST",
                     body: formData,
@@ -452,7 +502,10 @@
             window.location.href = "/login.html";
         }
 
-        loadSlides();
+        (async function initPage() {
+            await loadUploadLimit();
+            await loadSlides();
+        })();
     </script>
 </body>
 

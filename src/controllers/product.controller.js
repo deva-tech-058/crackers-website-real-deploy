@@ -19,13 +19,20 @@ function mapProductMediaUrls(req, product = {}) {
   };
 }
 
+async function uploadProductMediaFiles({ imageFile, videoFile }) {
+  const imageUrl = await uploadSingleFile(imageFile);
+  const videoUrl = await uploadSingleFile(videoFile);
+  return { imageUrl, videoUrl };
+}
+
 async function listProducts(req, res) {
   try {
     const rows = await productService.getProducts();
     res.json((rows || []).map((row) => mapProductMediaUrls(req, row)));
   } catch (err) {
     console.error("Product Fetch Error:", err);
-    res.status(500).json({ error: err.message });
+    const message = err?.message || "Unable to fetch products";
+    res.status(err.status || 500).json({ error: message, message });
   }
 }
 
@@ -40,10 +47,10 @@ async function addProduct(req, res) {
 
     const is_best_selling =
       req.body.is_best_selling === "on" || req.body.is_best_selling === "true";
-    const [imageUrl, videoUrl] = await Promise.all([
-      uploadSingleFile(imageFile),
-      uploadSingleFile(videoFile),
-    ]);
+    const { imageUrl, videoUrl } = await uploadProductMediaFiles({
+      imageFile,
+      videoFile,
+    });
 
     await productService.createProduct({
       ...req.body,
@@ -55,7 +62,8 @@ async function addProduct(req, res) {
     res.json({ message: "Product Added Successfully" });
   } catch (err) {
     console.error("Product Add Error:", err);
-    res.status(500).json({ error: err.message });
+    const message = err?.message || "Unable to add product";
+    res.status(err.status || 500).json({ error: message, message });
   }
 }
 
@@ -66,10 +74,10 @@ async function editProduct(req, res) {
 
     const is_best_selling =
       req.body.is_best_selling === "on" || req.body.is_best_selling === "true";
-    const [imageUrl, videoUrl] = await Promise.all([
-      uploadSingleFile(imageFile),
-      uploadSingleFile(videoFile),
-    ]);
+    const { imageUrl, videoUrl } = await uploadProductMediaFiles({
+      imageFile,
+      videoFile,
+    });
 
     await productService.updateProduct(req.params.id, {
       ...req.body,
@@ -81,7 +89,8 @@ async function editProduct(req, res) {
     res.json({ message: "Product Updated Successfully" });
   } catch (err) {
     console.error("Update Error:", err);
-    res.status(500).json({ error: err.message });
+    const message = err?.message || "Unable to update product";
+    res.status(err.status || 500).json({ error: message, message });
   }
 }
 
@@ -91,7 +100,8 @@ async function removeProduct(req, res) {
     res.json({ message: "Product Deleted Successfully" });
   } catch (err) {
     console.error("Delete Error:", err);
-    res.status(500).json({ error: err.message });
+    const message = err?.message || "Unable to delete product";
+    res.status(err.status || 500).json({ error: message, message });
   }
 }
 

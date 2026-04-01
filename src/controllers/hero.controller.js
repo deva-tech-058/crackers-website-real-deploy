@@ -57,7 +57,11 @@ async function addHero(req, res) {
     });
   } catch (err) {
     console.error("Hero Insert Error:", err);
-    return res.status(500).json({ message: err.message || "Unable to upload hero slide" });
+    const message = err?.message || "Unable to upload hero slide";
+    return res.status(err.status || 500).json({
+      message,
+      error: message,
+    });
   }
 }
 
@@ -67,7 +71,8 @@ async function listHeroes(req, res) {
     res.json((rows || []).map((slide) => mapHeroSlide(req, slide)));
   } catch (err) {
     console.error("Hero Fetch Error:", err);
-    res.status(500).json({ error: err.message });
+    const message = err?.message || "Unable to fetch hero slides";
+    res.status(err.status || 500).json({ error: message, message });
   }
 }
 
@@ -77,7 +82,8 @@ async function removeHero(req, res) {
     res.json({ message: "Hero Deleted Successfully" });
   } catch (err) {
     console.error("Hero Delete Error:", err);
-    res.status(500).json({ error: err.message });
+    const message = err?.message || "Unable to delete hero slide";
+    res.status(err.status || 500).json({ error: message, message });
   }
 }
 

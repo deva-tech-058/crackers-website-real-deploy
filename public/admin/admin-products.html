@@ -820,6 +820,7 @@
         let allProducts = [];
         let filteredProducts = [];
         let allCategories = [];
+        let uploadLimitMb = 1024;
 
         function escapeHtml(value) {
             return String(value ?? "")
@@ -841,8 +842,55 @@
                     error: "Upload blocked before API (HTTP 413). Nginx/proxy file-size limit increase pannunga, app limit mattum pothathu."
                 };
             }
+
+            if (response.status === 502) {
+                return {
+                    error: "Backend unavailable (502 Bad Gateway). PM2/Nginx state check pannunga, then retry pannunga."
+                };
+            }
+            if (response.status === 503) {
+                return {
+                    error: "Service unavailable (503). Server currently restarting or overloaded."
+                };
+            }
+            if (response.status === 504) {
+                return {
+                    error: "Gateway timeout (504). Large upload or backend response timeout occurred."
+                };
+            }
             const text = await response.text().catch(() => "");
             return { error: text || `Request failed (${response.status})` };
+        }
+
+        function formatMegaBytes(bytes) {
+            const numeric = Number(bytes) || 0;
+            return (numeric / (1024 * 1024)).toFixed(2);
+        }
+
+        function validateUploadFileSize(inputId, label) {
+            const input = document.getElementById(inputId);
+            const file = input?.files?.[0];
+            if (!file) return;
+
+            const maxBytes = Math.max(1, Number(uploadLimitMb) || 1024) * 1024 * 1024;
+            if (file.size > maxBytes) {
+                throw new Error(
+                    `${label} too large (${formatMegaBytes(file.size)} MB). Max allowed is ${uploadLimitMb} MB.`
+                );
+            }
+        }
+
+        async function loadUploadLimit() {
+            try {
+                const response = await fetch("/api/health", { cache: "no-store" });
+                const payload = await parseApiPayload(response);
+                const limit = Number.parseInt(String(payload?.upload_limit_mb || ""), 10);
+                if (Number.isInteger(limit) && limit > 0) {
+                    uploadLimitMb = limit;
+                }
+            } catch (error) {
+                console.warn("Unable to fetch upload limit. Using default:", uploadLimitMb);
+            }
         }
 
         function getProductOfferPrice(product) {
@@ -1050,6 +1098,9 @@
             const formData = new FormData(this);
 
             try {
+                validateUploadFileSize("addImageFile", "Product image");
+                validateUploadFileSize("addVideoFile", "Product video");
+
                 const response = await fetch("/api/products", { method: "POST", body: formData });
                 const body = await parseApiPayload(response);
                 if (!response.ok) {
@@ -1106,6 +1157,9 @@
             const id = document.getElementById("editProductId").value;
 
             try {
+                validateUploadFileSize("editImageFile", "Product image");
+                validateUploadFileSize("editVideoFile", "Product video");
+
                 const response = await fetch(`/api/products/${id}`, { method: "PUT", body: formData });
                 const body = await parseApiPayload(response);
                 if (!response.ok) {
@@ -1153,9 +1207,9 @@
             }
         });
 
-        window.onload = function () {
-            loadCategories();
-            loadProducts();
+        window.onload = async function () {
+            await loadUploadLimit();
+            await Promise.all([loadCategories(), loadProducts()]);
         };
     </script>
 </body>

@@ -1,8 +1,8 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
+const path = require("path");
 
 const appConfig = require("./config/app.config");
 const createProductRoutes = require("./routes/products.routes");
@@ -16,6 +16,23 @@ const authMiddleware = require("./middleware/auth.middleware");
 
 const app = express();
 const { authenticateTokenForPage, requireAdminForPage } = authMiddleware;
+const allowedImageMimeTypes = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/svg+xml",
+  "image/avif",
+]);
+const allowedVideoMimeTypes = new Set([
+  "video/mp4",
+  "video/webm",
+  "video/ogg",
+  "video/quicktime",
+  "video/x-matroska",
+]);
+const allowedImageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif"]);
+const allowedVideoExtensions = new Set([".mp4", ".webm", ".ogv", ".ogg", ".mov", ".mkv"]);
 
 if (appConfig.trustProxy) {
   app.set("trust proxy", 1);
@@ -44,7 +61,7 @@ function corsOptionsDelegate(req, callback) {
 
 app.use(cors(corsOptionsDelegate));
 app.use(express.json({ limit: "2mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 
 if (!fs.existsSync(appConfig.uploadDir)) {
   fs.mkdirSync(appConfig.uploadDir, { recursive: true });
@@ -67,11 +84,70 @@ const storage = multer.diskStorage({
 });
 
 const maxUploadFileSizeBytes = Math.max(1, appConfig.uploadFileMaxMb) * 1024 * 1024;
+
+function getFileExtension(fileName = "") {
+  return path.extname(String(fileName || "").trim()).toLowerCase();
+}
+
+function createBadUploadRequest(message) {
+  const err = new Error(message);
+  err.status = 400;
+  return err;
+}
+
+function validateImageUpload(file) {
+  const mimeType = String(file?.mimetype || "").trim().toLowerCase();
+  const extension = getFileExtension(file?.originalname || file?.filename || "");
+
+  if (allowedImageMimeTypes.has(mimeType) || allowedImageExtensions.has(extension)) {
+    return null;
+  }
+
+  return createBadUploadRequest(
+    "Invalid image format. Allowed: jpg, jpeg, png, webp, gif, svg, avif."
+  );
+}
+
+function validateVideoUpload(file) {
+  const mimeType = String(file?.mimetype || "").trim().toLowerCase();
+  const extension = getFileExtension(file?.originalname || file?.filename || "");
+
+  if (allowedVideoMimeTypes.has(mimeType) || allowedVideoExtensions.has(extension)) {
+    return null;
+  }
+
+  return createBadUploadRequest(
+    "Invalid video format. Allowed: mp4, webm, ogg, mov, mkv."
+  );
+}
+
+function uploadFileFilter(req, file, cb) {
+  if (!file) {
+    return cb(null, true);
+  }
+
+  const fieldName = String(file.fieldname || "").trim().toLowerCase();
+  if (fieldName === "image") {
+    const imageError = validateImageUpload(file);
+    if (imageError) return cb(imageError);
+    return cb(null, true);
+  }
+
+  if (fieldName === "video") {
+    const videoError = validateVideoUpload(file);
+    if (videoError) return cb(videoError);
+    return cb(null, true);
+  }
+
+  return cb(createBadUploadRequest(`Unsupported upload field: ${fieldName || "unknown"}`));
+}
+
 const upload = multer({
   storage,
   limits: {
     fileSize: maxUploadFileSizeBytes,
   },
+  fileFilter: uploadFileFilter,
 });
 
 app.get("/api/health", (req, res) => {
