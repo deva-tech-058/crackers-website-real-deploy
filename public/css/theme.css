@@ -47,8 +47,8 @@ body {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 12px !important;
-  padding: 14px 24px !important;
+  gap: 10px !important;
+  padding: 10px 18px !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   background: rgba(11, 18, 33, 0.88) !important;
   backdrop-filter: blur(16px);
@@ -85,23 +85,23 @@ body {
 }
 
 .logo .brand-icon {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--brand-gradient);
   color: #13100c;
-  font-size: 18px;
+  font-size: 14px;
   box-shadow: 0 8px 24px rgba(255, 154, 61, 0.3);
   transform: none !important;
 }
 
 .logo .brand-text {
-  font-size: clamp(18px, 2.1vw, 24px);
+  font-size: clamp(15px, 1.9vw, 20px);
   font-weight: 800;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   line-height: 1.1;
   background: var(--brand-gradient);
   -webkit-background-clip: text;
@@ -113,20 +113,20 @@ body {
   -webkit-text-fill-color: #13100c !important;
   background: none !important;
   filter: none !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
 }
 
 /* fallback when script has not converted logo markup */
 .logo {
-  font-size: clamp(18px, 2.1vw, 24px) !important;
+  font-size: clamp(15px, 1.9vw, 20px) !important;
   font-weight: 800 !important;
-  letter-spacing: 0.4px !important;
+  letter-spacing: 0.3px !important;
 }
 
 .nav-links {
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
+  gap: 8px !important;
   flex-wrap: wrap;
   margin-left: auto !important;
 }
@@ -135,13 +135,13 @@ body {
 .nav-links > a {
   display: inline-flex !important;
   align-items: center;
-  height: 38px;
-  padding: 0 14px !important;
-  border-radius: 12px !important;
+  height: 34px;
+  padding: 0 12px !important;
+  border-radius: 10px !important;
   text-decoration: none !important;
   color: var(--text-soft) !important;
   font-weight: 600 !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
   transition: all 0.22s ease;
 }
 
@@ -163,11 +163,11 @@ body {
 .nav-logout-btn,
 .logout-btn,
 .btn.nav-auth-logout {
-  height: 38px !important;
-  padding: 0 16px !important;
+  height: 34px !important;
+  padding: 0 13px !important;
   border: none !important;
-  border-radius: 12px !important;
-  font-size: 13px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
   line-height: 1 !important;
   display: inline-flex !important;
@@ -223,13 +223,13 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  max-width: 220px;
-  height: 34px;
-  padding: 0 12px;
+  max-width: 200px;
+  height: 30px;
+  padding: 0 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 999px;
   color: #ffeec2 !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -249,9 +249,9 @@ body {
 
 .orders,
 .cart {
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 12px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255, 255, 255, 0.16) !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -288,10 +288,10 @@ body {
 }
 
 .nav-toggle {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.06);
   color: #fff;
   display: none;
@@ -421,7 +421,7 @@ h2.gradient-title,
 /* ---------- Mobile Nav ---------- */
 @media (max-width: 960px) {
   .navbar {
-    padding: 12px 14px !important;
+    padding: 10px 12px !important;
     gap: 10px !important;
     flex-wrap: wrap;
   }
@@ -441,14 +441,14 @@ h2.gradient-title,
   }
 
   .logo .brand-icon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .logo .brand-text {
-    font-size: 19px;
+    font-size: 16px;
   }
 
   .nav-toggle {
@@ -490,7 +490,7 @@ h2.gradient-title,
   .navbar.nav-mobile-ready .logout-btn {
     width: 100% !important;
     justify-content: flex-start !important;
-    height: 40px !important;
+    height: 36px !important;
     padding: 0 14px !important;
     border-radius: 12px !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -543,10 +543,10 @@ h2.gradient-title,
     width: 100%;
     max-width: none;
     justify-content: flex-start;
-    height: 40px;
+    height: 36px;
     border-radius: 12px;
     margin: 0 !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: rgba(255, 255, 255, 0.06);
   }
@@ -556,7 +556,7 @@ h2.gradient-title,
     width: 100% !important;
     justify-content: flex-start !important;
     padding-left: 12px;
-    height: 40px !important;
+    height: 36px !important;
     border-radius: 12px !important;
   }
 
@@ -587,7 +587,7 @@ h2.gradient-title,
 
 @media (max-width: 560px) {
   .logo .brand-text {
-    font-size: 17px;
+    font-size: 15px;
   }
 
   .card,

@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>Admin | Add Products</title>
+    <title>Admin | View Products</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -641,66 +641,21 @@
     <script src="/js/shared-navbar.js"></script>
 </head>
 
-<body class="page-admin-products">
+<body class="page-admin-view-products">
     <div class="container">
         <!-- NAVBAR -->
         <div class="navbar">
             <div class="logo" onclick="location.href='/admin/admin-dashboard.html'">Mr.A Crackers Admin</div>
             <div class="nav-links">
                 <a href="/admin/admin-dashboard.html">Dashboard</a>
-                <a href="/admin/admin-products.html" class="active">Add Product</a>
-                <a href="/admin/view-products.html">View Products</a>
+                <a href="/admin/admin-products.html">Add Product</a>
+                <a href="/admin/view-products.html" class="active">View Products</a>
                 <a href="/admin/category.html">Categories</a>
                 <a href="/admin/admin-hero.html">Hero</a>
                 <a href="/admin/admin-users.html">Users</a>
                 <a href="/admin/view-orders.html">Orders</a>
                 <button type="button" class="logout-btn" onclick="logout()">Logout</button>
             </div>
-        </div>
-
-        <!-- ADD PRODUCT FORM -->
-        <h2 class="section-title">Add New Product</h2>
-        <div class="form-card">
-            <form id="productForm" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="form-group">
-                        <input name="name" placeholder="Product Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input name="original_price" type="number" placeholder="Original Price (INR)" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <input name="discount" type="number" placeholder="Discount % (0-90)" max="90" required>
-                    </div>
-                    <div class="form-group">
-                        <input name="quantity" type="number" placeholder="Stock Quantity" min="0" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <select name="category_id" id="categorySelect" required>
-                            <option value="">Select Category</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" name="is_best_selling" id="bestSelling">
-                    <label for="bestSelling">Mark as Best Selling</label>
-                </div>
-                <div class="file-row">
-                    <div class="form-group">
-                        <label class="upload-label" for="addImageFile">Image Upload</label>
-                        <input id="addImageFile" name="image" type="file" accept="image/*" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="upload-label" for="addVideoFile">Video Upload (optional)</label>
-                        <input id="addVideoFile" name="video" type="file" accept="video/mp4,video/webm,video/ogg">
-                    </div>
-                </div>
-                <button type="submit" class="add-btn">Add Product</button>
-            </form>
         </div>
 
         <!-- PRODUCTS TABLE -->
