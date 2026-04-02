@@ -4215,3 +4215,141 @@ body[class*="page-admin"] textarea::placeholder {
   opacity: 1 !important;
   font-weight: 800 !important;
 }
+
+/* ===== Payment Contrast + Login Button + Scrollbar Visibility (v10) ===== */
+.navbar .nav-login-btn,
+.navbar .btn.nav-login-btn,
+.navbar .nav-auth-login {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+  border: 1px solid #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.34) !important;
+}
+
+.navbar .nav-login-btn:hover,
+.navbar .btn.nav-login-btn:hover,
+.navbar .nav-auth-login:hover {
+  background: linear-gradient(135deg, #4f8ef9, #2f6cf0) !important;
+  border-color: #2f6cf0 !important;
+  color: #ffffff !important;
+}
+
+.page-payment .section-head h1,
+.page-payment .section-head h2,
+.page-payment .address-header h2,
+.page-payment .saved-addresses-section h3,
+.page-payment .address-form h3,
+.page-payment .payment-options-container p,
+.page-payment .summary-card h2 {
+  color: #f5faff !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+  opacity: 1 !important;
+}
+
+.page-payment .input-group label,
+.page-payment .address-form label,
+.page-payment .save-address-checkbox span,
+.page-payment .address-line,
+.page-payment .phone,
+.page-payment .form-note,
+.page-payment .no-addresses-message p,
+.page-payment .name,
+.page-payment .summary-row span,
+.page-payment .summary-row strong,
+.page-payment .summary-total span {
+  color: #d8e7ff !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+.page-payment .payment-options-container {
+  background: #102746 !important;
+  border-color: rgba(153, 183, 229, 0.33) !important;
+}
+
+.page-payment .payment-options label {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(153, 183, 229, 0.3) !important;
+  color: #e6f1ff !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+.page-payment .payment-options label i {
+  color: #ffce73 !important;
+  opacity: 1 !important;
+}
+
+.page-payment .payment-options label:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 214, 132, 0.82) !important;
+  color: #ffffff !important;
+}
+
+.page-payment .payment-options label:has(input:checked) {
+  background: rgba(255, 209, 122, 0.18) !important;
+  border-color: rgba(255, 209, 122, 0.84) !important;
+  color: #fff1cf !important;
+  box-shadow: 0 0 0 3px rgba(255, 209, 122, 0.16) !important;
+}
+
+.table-wrap,
+.table-container,
+.products-table-container,
+.modal-body,
+.cart-list,
+#orderInfo,
+.orders-table-wrap,
+.admin-table-wrap {
+  scrollbar-color: #60a5fa rgba(255, 255, 255, 0.12);
+  scrollbar-width: auto;
+}
+
+.table-wrap::-webkit-scrollbar,
+.table-container::-webkit-scrollbar,
+.products-table-container::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.cart-list::-webkit-scrollbar,
+#orderInfo::-webkit-scrollbar,
+.orders-table-wrap::-webkit-scrollbar,
+.admin-table-wrap::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+.table-wrap::-webkit-scrollbar-track,
+.table-container::-webkit-scrollbar-track,
+.products-table-container::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+.cart-list::-webkit-scrollbar-track,
+#orderInfo::-webkit-scrollbar-track,
+.orders-table-wrap::-webkit-scrollbar-track,
+.admin-table-wrap::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+}
+
+.table-wrap::-webkit-scrollbar-thumb,
+.table-container::-webkit-scrollbar-thumb,
+.products-table-container::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+.cart-list::-webkit-scrollbar-thumb,
+#orderInfo::-webkit-scrollbar-thumb,
+.orders-table-wrap::-webkit-scrollbar-thumb,
+.admin-table-wrap::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #60a5fa, #38bdf8) !important;
+  border: 2px solid rgba(7, 20, 38, 0.72);
+  border-radius: 12px;
+}
+
+.table-wrap::-webkit-scrollbar-thumb:hover,
+.table-container::-webkit-scrollbar-thumb:hover,
+.products-table-container::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover,
+.cart-list::-webkit-scrollbar-thumb:hover,
+#orderInfo::-webkit-scrollbar-thumb:hover,
+.orders-table-wrap::-webkit-scrollbar-thumb:hover,
+.admin-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7db4fc, #56ccf2) !important;
+}
