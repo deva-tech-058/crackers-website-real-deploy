@@ -796,6 +796,34 @@
       return `\u20B9${amount}`;
     }
 
+    function normalizeStatus(status) {
+      const raw = String(status || '').trim().toLowerCase();
+      const compact = raw.replace(/[^a-z]/g, '');
+
+      if (compact === 'delivered') return 'delivered';
+      if (compact === 'shipped' || compact === 'dispatch' || compact === 'dispatched') return 'shipped';
+      if (compact === 'processing' || compact === 'inprogress') return 'processing';
+      if (compact === 'confirmed' || compact === 'conformed' || compact === 'confirm') return 'confirmed';
+      if (compact === 'cancelled' || compact === 'canceled') return 'cancelled';
+      if (compact === 'pending') return 'pending';
+
+      return 'pending';
+    }
+
+    function statusLabel(statusKey) {
+      if (!statusKey) return 'Pending';
+      return statusKey.charAt(0).toUpperCase() + statusKey.slice(1);
+    }
+
+    function statusIcon(statusKey) {
+      if (statusKey === 'delivered') return 'fa-circle-check';
+      if (statusKey === 'shipped') return 'fa-truck-fast';
+      if (statusKey === 'processing') return 'fa-gear';
+      if (statusKey === 'confirmed') return 'fa-check-circle';
+      if (statusKey === 'cancelled') return 'fa-circle-xmark';
+      return 'fa-clock';
+    }
+
     async function renderOrder() {
       const metaEl = document.getElementById('orderMeta');
       const container = document.getElementById('orderInfo');
@@ -850,9 +878,12 @@
         const items = order.items || [];
         const total = resolveOrderTotal(order, items);
         const paymentMethod = order.payment_method || order.paymentMethod;
+        const statusKey = normalizeStatus(order.status || 'confirmed');
+        const statusText = statusLabel(statusKey);
+        const statusFaIcon = statusIcon(statusKey);
 
         html += `<div class="order-record">`;
-        html += `<div class="order-header"><h2><i class="fas fa-receipt"></i> Order #${orderId}</h2><span class="order-status"><i class="fas fa-check-circle"></i> ${order.status || 'Confirmed'}</span></div>`;
+        html += `<div class="order-header"><h2><i class="fas fa-receipt"></i> Order #${orderId}</h2><span class="order-status status-badge status-${statusKey}"><i class="fas ${statusFaIcon}"></i> ${statusText}</span></div>`;
         html += `<p class="order-meta"><i class="fas fa-calendar"></i> Placed on ${new Date(orderDate).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</p>`;
         html += `<h3><i class="fas fa-shopping-bag"></i> Items</h3>`;
         html += `<div class="table-container"><table class="order-table"><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead><tbody>`;
