@@ -2854,3 +2854,224 @@ body[class*="page-"] {
     min-width: 460px !important;
   }
 }
+
+/* ===== Global Contrast Fix (v4) ===== */
+body,
+body[class*="page-"] {
+  color: #1f2937 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-title,
+.page-header h1,
+.summary-card h2,
+.section-head h1,
+.section-head h2,
+.item-title,
+.product-info h4,
+.modal-details h2,
+.header h1,
+.cards .card h3,
+.state-card h2,
+.stat-info p {
+  color: #111827 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+}
+
+p,
+small,
+label,
+.field-label,
+.subtitle,
+.form-note,
+.category-name,
+.product-category,
+.per-box,
+.product-availability,
+.item-meta,
+.item-original-line,
+.stock-warning,
+.order-meta,
+.order-address p,
+.order-payment p,
+.summary-row span,
+.summary-total span,
+.modal-category,
+.modal-saving,
+.modal-subtotal,
+#modalQtyHint,
+.meta-item span,
+.modal-meta-item span,
+.page-info,
+.admin-pagination-info,
+.pagination-info,
+.showing-info,
+.state,
+.no-results,
+.loading,
+.no-products,
+.empty-state p {
+  color: #475569 !important;
+  opacity: 1 !important;
+}
+
+label,
+.field-label {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+td,
+th,
+tr,
+table {
+  color: #334155 !important;
+}
+
+th {
+  color: #475569 !important;
+}
+
+.summary-row strong {
+  color: #334155 !important;
+}
+
+.summary-total strong,
+.offer-price,
+.item-price,
+.modal-offer,
+.page-product-details .offer-price,
+.page-order-details .order-total span,
+.page-checkout .order-total span,
+.page-payment .order-total span {
+  color: #ea580c !important;
+}
+
+.continue-link {
+  color: #334155 !important;
+  border-color: #d6dee9 !important;
+}
+
+.continue-link:hover {
+  color: #1f2937 !important;
+  background: #f8fafc !important;
+}
+
+.page-product-details .category,
+.page-product-details .saving-text,
+.page-product-details #qtyHint,
+.page-product-details .highlights li,
+.page-product-details .meta-item span,
+.page-product-details .subtotal span {
+  color: #475569 !important;
+  opacity: 1 !important;
+}
+
+.page-product-details .meta-item strong,
+.page-product-details .subtotal strong {
+  color: #1f2937 !important;
+}
+
+.page-product-details .details-card,
+.page-product-details .price-row,
+.page-product-details .meta-grid,
+.page-product-details .qty-block,
+.page-product-details .subtotal,
+.page-product-details .video-section,
+.page-product-details .image-panel {
+  background: #ffffff !important;
+}
+
+.page-payment .input-group label,
+.page-payment .address-form label,
+.page-payment .payment-options label,
+.page-payment .save-address-checkbox span,
+.page-payment .address-line,
+.page-payment .phone,
+.page-payment .form-note,
+.page-payment .no-addresses-message p,
+.page-payment .name {
+  color: #334155 !important;
+  opacity: 1 !important;
+}
+
+.page-payment .payment-options label i,
+.page-payment .payment-options p,
+.page-payment .address-header h2,
+.page-payment .saved-addresses-section h3,
+.page-payment .address-form h3 {
+  color: #1f2937 !important;
+}
+
+.page-checkout .summary-row span,
+.page-checkout .summary-row strong,
+.page-checkout .summary-total span,
+.page-checkout .summary-total strong,
+.page-checkout #cartMeta,
+.page-checkout .item-meta,
+.page-checkout .item-original-line {
+  color: #475569 !important;
+  opacity: 1 !important;
+}
+
+.page-order-details .section-head h1,
+.page-order-details #orderMeta,
+.page-order-details .order-meta,
+.page-order-details .order-status,
+.page-order-details .order-address p,
+.page-order-details .order-payment p,
+.page-order-details td,
+.page-order-details th {
+  opacity: 1 !important;
+}
+
+.page-order-details .order-status {
+  color: #15803d !important;
+}
+
+body[class*="page-admin"] {
+  background: #f3f5f9 !important;
+  color: #1f2937 !important;
+}
+
+body[class*="page-admin"] p,
+body[class*="page-admin"] span,
+body[class*="page-admin"] td,
+body[class*="page-admin"] th,
+body[class*="page-admin"] label,
+body[class*="page-admin"] .subtitle,
+body[class*="page-admin"] .state,
+body[class*="page-admin"] .action-message,
+body[class*="page-admin"] .admin-pagination-info {
+  color: #475569 !important;
+  opacity: 1 !important;
+}
+
+body[class*="page-admin"] h1,
+body[class*="page-admin"] h2,
+body[class*="page-admin"] h3,
+body[class*="page-admin"] h4,
+body[class*="page-admin"] .section-title {
+  color: #111827 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+}
+
+body[class*="page-admin"] .card,
+body[class*="page-admin"] .form-card,
+body[class*="page-admin"] .table-wrap,
+body[class*="page-admin"] .table-container,
+body[class*="page-admin"] .products-table-container,
+body[class*="page-admin"] .stat-card,
+body[class*="page-admin"] .count-card,
+body[class*="page-admin"] .modal-content {
+  background: #ffffff !important;
+}
