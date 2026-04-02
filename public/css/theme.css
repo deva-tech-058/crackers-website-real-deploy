@@ -4067,3 +4067,151 @@ textarea::placeholder {
   border-color: rgba(248, 113, 113, 0.56) !important;
   color: #ffd3d3 !important;
 }
+
+/* ===== Global Text Contrast Guard (v9) ===== */
+body[class*="page-"],
+body[class*="page-admin"] {
+  --text-strong: #f5faff;
+  --text-normal: #dce9ff;
+  --text-muted-2: #c2d6f4;
+  --text-soft-2: #a8c1e5;
+  color: var(--text-normal) !important;
+}
+
+body[class*="page-"] h1,
+body[class*="page-"] h2,
+body[class*="page-"] h3,
+body[class*="page-"] h4,
+body[class*="page-"] h5,
+body[class*="page-"] h6,
+body[class*="page-admin"] h1,
+body[class*="page-admin"] h2,
+body[class*="page-admin"] h3,
+body[class*="page-admin"] h4,
+body[class*="page-admin"] h5,
+body[class*="page-admin"] h6,
+body[class*="page-"] .section-title,
+body[class*="page-"] .item-title,
+body[class*="page-"] .order-header h2,
+body[class*="page-"] .summary-card h2,
+body[class*="page-"] .address-header h2,
+body[class*="page-"] .modal-header h2,
+body[class*="page-"] .state-card h2,
+body[class*="page-"] .success-card h3,
+body[class*="page-admin"] .section-title,
+body[class*="page-admin"] .cards .card h3 {
+  color: var(--text-strong) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+body[class*="page-"] p,
+body[class*="page-"] small,
+body[class*="page-"] label,
+body[class*="page-"] li,
+body[class*="page-"] td,
+body[class*="page-"] th,
+body[class*="page-admin"] p,
+body[class*="page-admin"] small,
+body[class*="page-admin"] label,
+body[class*="page-admin"] li,
+body[class*="page-admin"] td,
+body[class*="page-admin"] th,
+body[class*="page-"] .subtitle,
+body[class*="page-"] .form-note,
+body[class*="page-"] .field-label,
+body[class*="page-"] .item-meta,
+body[class*="page-"] .item-original-line,
+body[class*="page-"] .stock-warning,
+body[class*="page-"] .order-meta,
+body[class*="page-"] .order-address p,
+body[class*="page-"] .order-payment p,
+body[class*="page-"] .summary-row span,
+body[class*="page-"] .summary-row strong,
+body[class*="page-"] .summary-total span,
+body[class*="page-"] .address-line,
+body[class*="page-"] .phone,
+body[class*="page-"] .meta-item span,
+body[class*="page-"] .meta-item strong,
+body[class*="page-"] .modal-meta-item span,
+body[class*="page-"] .modal-meta-item strong,
+body[class*="page-admin"] .subtitle,
+body[class*="page-admin"] .state,
+body[class*="page-admin"] .action-message,
+body[class*="page-admin"] .admin-pagination-info {
+  color: var(--text-normal) !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+body[class*="page-"] .category,
+body[class*="page-"] .saving-text,
+body[class*="page-"] #qtyHint,
+body[class*="page-"] .product-category,
+body[class*="page-"] .category-name,
+body[class*="page-"] .product-availability,
+body[class*="page-"] .per-box,
+body[class*="page-"] .page-info,
+body[class*="page-"] .pagination-info,
+body[class*="page-"] .showing-info,
+body[class*="page-"] .admin-pagination-info,
+body[class*="page-admin"] .page-info,
+body[class*="page-admin"] .pagination-info,
+body[class*="page-admin"] .showing-info {
+  color: var(--text-muted-2) !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+body[class*="page-"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+body[class*="page-"] select,
+body[class*="page-"] textarea,
+body[class*="page-admin"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+body[class*="page-admin"] select,
+body[class*="page-admin"] textarea {
+  color: var(--text-strong) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+body[class*="page-"] input::placeholder,
+body[class*="page-"] textarea::placeholder,
+body[class*="page-admin"] input::placeholder,
+body[class*="page-admin"] textarea::placeholder {
+  color: var(--text-soft-2) !important;
+  opacity: 1 !important;
+}
+
+/* Product details: explicit fix for Available Quantity / Product ID visibility */
+.page-product-details .meta-grid {
+  background: #102746 !important;
+  border-color: rgba(157, 185, 228, 0.3) !important;
+}
+
+.page-product-details .meta-item {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(157, 185, 228, 0.22) !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
+}
+
+.page-product-details .meta-item span,
+.page-product-details .meta-item span i,
+.page-product-details .qty-block p,
+.page-product-details .highlights li,
+.page-product-details .category,
+.page-product-details .saving-text,
+.page-product-details #qtyHint,
+.page-product-details #detailCategory {
+  color: #d7e7ff !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+.page-product-details .meta-item strong,
+.page-product-details #detailQuantity,
+.page-product-details #detailProductId,
+.page-product-details #subtotalValue {
+  color: #f5faff !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+  font-weight: 800 !important;
+}
