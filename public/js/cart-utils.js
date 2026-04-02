@@ -129,7 +129,7 @@
     function addProduct(product, quantity = 1, options = {}) {
         // ensure only authenticated users can add items
         if (!isLoggedIn()) {
-            showToast("Please login to add products to cart", "info");
+            showLoginPrompt("Please login to add products to cart.");
             return { added: 0, cart: getCart(), summary: getSummary() };
         }
 
@@ -289,6 +289,147 @@ function formatCurrency(value) {
         document.head.appendChild(style);
     }
 
+    function ensureLoginPromptStyles() {
+        if (document.getElementById("app-login-prompt-style")) return;
+
+        const style = document.createElement("style");
+        style.id = "app-login-prompt-style";
+        style.textContent = `
+            .app-login-prompt-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(2, 8, 22, 0.62);
+                backdrop-filter: blur(4px);
+                z-index: 14000;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+            }
+            .app-login-prompt-overlay.open {
+                display: flex;
+            }
+            .app-login-prompt-card {
+                width: min(360px, calc(100% - 12px));
+                border-radius: 14px;
+                border: 1px solid rgba(164, 191, 235, 0.28);
+                background: linear-gradient(160deg, rgba(16, 39, 71, 0.98), rgba(10, 24, 45, 0.98));
+                box-shadow: 0 24px 40px rgba(3, 10, 25, 0.52);
+                color: #e7f2ff;
+                padding: 16px;
+                font-family: "Poppins", "Segoe UI", sans-serif;
+            }
+            .app-login-prompt-title {
+                margin: 0 0 8px;
+                font-size: 18px;
+                font-weight: 700;
+                color: #f5faff;
+            }
+            .app-login-prompt-text {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.45;
+                color: #d5e7ff;
+            }
+            .app-login-prompt-actions {
+                margin-top: 14px;
+                display: flex;
+                justify-content: flex-end;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .app-login-prompt-btn {
+                min-height: 36px;
+                padding: 0 14px;
+                border-radius: 10px;
+                border: 1px solid transparent;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: 700;
+                font-family: inherit;
+            }
+            .app-login-prompt-btn.cancel {
+                background: rgba(255, 255, 255, 0.08);
+                border-color: rgba(171, 195, 233, 0.32);
+                color: #e2efff;
+            }
+            .app-login-prompt-btn.login {
+                background: linear-gradient(135deg, #3b82f6, #2563eb);
+                border-color: #2563eb;
+                color: #ffffff;
+                box-shadow: 0 10px 20px rgba(37, 99, 235, 0.28);
+            }
+            .app-login-prompt-btn:hover {
+                filter: brightness(1.06);
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    function closeLoginPrompt() {
+        const overlay = document.getElementById("appLoginPrompt");
+        if (!overlay) return;
+        overlay.classList.remove("open");
+    }
+
+    function ensureLoginPrompt() {
+        let overlay = document.getElementById("appLoginPrompt");
+        if (overlay) return overlay;
+
+        ensureLoginPromptStyles();
+
+        overlay = document.createElement("div");
+        overlay.id = "appLoginPrompt";
+        overlay.className = "app-login-prompt-overlay";
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.innerHTML = `
+            <div class="app-login-prompt-card" role="document">
+                <h3 class="app-login-prompt-title">Login Required</h3>
+                <p class="app-login-prompt-text" id="appLoginPromptText">Please login to add products to cart.</p>
+                <div class="app-login-prompt-actions">
+                    <button type="button" class="app-login-prompt-btn cancel" id="appLoginPromptCancel">Cancel</button>
+                    <button type="button" class="app-login-prompt-btn login" id="appLoginPromptLogin">Login</button>
+                </div>
+            </div>
+        `;
+
+        overlay.addEventListener("click", (event) => {
+            if (event.target === overlay) {
+                closeLoginPrompt();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && overlay.classList.contains("open")) {
+                closeLoginPrompt();
+            }
+        });
+
+        overlay.querySelector("#appLoginPromptCancel")?.addEventListener("click", () => {
+            closeLoginPrompt();
+        });
+
+        overlay.querySelector("#appLoginPromptLogin")?.addEventListener("click", () => {
+            closeLoginPrompt();
+            const nextPath = `${window.location.pathname || "/"}${window.location.search || ""}`;
+            const loginUrl = `/login.html?next=${encodeURIComponent(nextPath)}`;
+            window.location.href = loginUrl;
+        });
+
+        document.body.appendChild(overlay);
+        return overlay;
+    }
+
+    function showLoginPrompt(message = "Please login to add products to cart.") {
+        const overlay = ensureLoginPrompt();
+        const textNode = overlay.querySelector("#appLoginPromptText");
+        if (textNode) {
+            textNode.textContent = message;
+        }
+        overlay.classList.add("open");
+    }
+
     function showToast(message, type = "success") {
         ensureToastStyles();
 
@@ -324,6 +465,7 @@ function formatCurrency(value) {
         getProductQuantity,
         formatCurrency,
         showToast,
+        showLoginPrompt,
         emitUpdate
     };
 })();

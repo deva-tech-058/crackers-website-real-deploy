@@ -332,7 +332,11 @@ function showCartMessage(message, type = "success") {
 function addToCart(productId, quantity = 1, options = {}) {
     // require login before modifying cart
     if (window.CartUtils && !window.CartUtils.isLoggedIn()) {
-        showCartMessage("Please login to add products to cart", "info");
+        if (typeof window.CartUtils.showLoginPrompt === "function") {
+            window.CartUtils.showLoginPrompt("Please login to add products to cart.");
+        } else {
+            showCartMessage("Please login to add products to cart", "info");
+        }
         return { added: 0 };
     }
 

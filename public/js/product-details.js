@@ -255,7 +255,11 @@ function addCurrentProductToCart(redirectToCheckout) {
     if (!selectedProduct) return;
 
     if (window.CartUtils && !window.CartUtils.isLoggedIn()) {
-        showCartMessage("Please login to add products to cart", "info");
+        if (typeof window.CartUtils.showLoginPrompt === "function") {
+            window.CartUtils.showLoginPrompt("Please login to add products to cart.");
+        } else {
+            showCartMessage("Please login to add products to cart", "info");
+        }
         return { added: 0 };
     }
 
