@@ -3420,3 +3420,225 @@ body[class*="page-admin"] .count-card,
 body[class*="page-admin"] .modal-content {
   background: linear-gradient(155deg, rgba(22, 39, 72, 0.92), rgba(12, 24, 46, 0.97)) !important;
 }
+
+/* ===== Final Alignment + Order Theme Sync (v6) ===== */
+body.page-order-details {
+  background:
+    radial-gradient(circle at 14% 16%, rgba(255, 107, 67, 0.16), transparent 36%),
+    radial-gradient(circle at 86% 4%, rgba(47, 215, 200, 0.14), transparent 40%),
+    linear-gradient(165deg, #13294a 0%, #0d1c35 46%, #070f1f 100%) !important;
+}
+
+.page-order-details .cart-section {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.2) !important;
+}
+
+.page-order-details .section-head {
+  background: #0f213f !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.page-order-details .section-head h1 {
+  color: #f5f9ff !important;
+}
+
+.page-order-details #orderMeta {
+  color: #9fb6d9 !important;
+}
+
+.page-order-details .continue-link {
+  color: #e6f0ff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  background: transparent !important;
+}
+
+.page-order-details .order-record {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.page-order-details .order-header h2,
+.page-order-details .order-meta,
+.page-order-details .order-address h4,
+.page-order-details .order-payment h4,
+.page-order-details .order-address p,
+.page-order-details .order-payment p {
+  color: #1f2937 !important;
+}
+
+.page-order-details .order-status {
+  color: #15803d !important;
+  background: #ecfdf3 !important;
+  border: 1px solid #bbf7d0 !important;
+}
+
+.page-order-details .table-container {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+}
+
+.page-order-details .order-table {
+  min-width: 560px !important;
+  border-collapse: collapse !important;
+}
+
+.page-order-details .order-table th {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  font-weight: 700 !important;
+}
+
+.page-order-details .order-table td {
+  color: #334155 !important;
+  background: #ffffff !important;
+}
+
+.page-order-details .order-total {
+  background: #0f213f !important;
+  color: #e6f0ff !important;
+  border: none !important;
+}
+
+.page-order-details .order-total span {
+  color: #f97316 !important;
+}
+
+body[class*="page-admin"] .table-wrap,
+body[class*="page-admin"] .table-container,
+body[class*="page-admin"] .products-table-container {
+  width: 100% !important;
+  overflow-x: auto !important;
+}
+
+body[class*="page-admin"] table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+body[class*="page-admin"] th,
+body[class*="page-admin"] td {
+  vertical-align: middle !important;
+}
+
+.page-admin-products .products-table-container table,
+.page-admin-view-products .products-table-container table {
+  min-width: 1260px !important;
+  table-layout: fixed;
+}
+
+.page-admin-products .products-table-container table th,
+.page-admin-products .products-table-container table td,
+.page-admin-view-products .products-table-container table th,
+.page-admin-view-products .products-table-container table td {
+  padding: 10px 8px !important;
+  font-size: 13px !important;
+}
+
+.page-admin-products .products-table-container table th:nth-child(1),
+.page-admin-products .products-table-container table td:nth-child(1),
+.page-admin-view-products .products-table-container table th:nth-child(1),
+.page-admin-view-products .products-table-container table td:nth-child(1) {
+  width: 56px;
+  text-align: center;
+}
+
+.page-admin-products .products-table-container table th:nth-child(2),
+.page-admin-products .products-table-container table td:nth-child(2),
+.page-admin-view-products .products-table-container table th:nth-child(2),
+.page-admin-view-products .products-table-container table td:nth-child(2) {
+  width: 84px;
+  text-align: center;
+}
+
+.page-admin-products .products-table-container table th:nth-child(3),
+.page-admin-products .products-table-container table td:nth-child(3),
+.page-admin-view-products .products-table-container table th:nth-child(3),
+.page-admin-view-products .products-table-container table td:nth-child(3) {
+  width: 80px;
+  text-align: center;
+}
+
+.page-admin-products .products-table-container table th:nth-child(4),
+.page-admin-products .products-table-container table td:nth-child(4),
+.page-admin-view-products .products-table-container table th:nth-child(4),
+.page-admin-view-products .products-table-container table td:nth-child(4) {
+  width: 190px;
+}
+
+.page-admin-products .products-table-container table th:nth-child(5),
+.page-admin-products .products-table-container table td:nth-child(5),
+.page-admin-view-products .products-table-container table th:nth-child(5),
+.page-admin-view-products .products-table-container table td:nth-child(5) {
+  width: 130px;
+}
+
+.page-admin-products .products-table-container table th:nth-child(6),
+.page-admin-products .products-table-container table td:nth-child(6),
+.page-admin-products .products-table-container table th:nth-child(7),
+.page-admin-products .products-table-container table td:nth-child(7),
+.page-admin-view-products .products-table-container table th:nth-child(6),
+.page-admin-view-products .products-table-container table td:nth-child(6),
+.page-admin-view-products .products-table-container table th:nth-child(7),
+.page-admin-view-products .products-table-container table td:nth-child(7) {
+  width: 106px;
+  text-align: right;
+}
+
+.page-admin-products .products-table-container table th:nth-child(8),
+.page-admin-products .products-table-container table td:nth-child(8),
+.page-admin-view-products .products-table-container table th:nth-child(8),
+.page-admin-view-products .products-table-container table td:nth-child(8),
+.page-admin-products .products-table-container table th:nth-child(9),
+.page-admin-products .products-table-container table td:nth-child(9),
+.page-admin-view-products .products-table-container table th:nth-child(9),
+.page-admin-view-products .products-table-container table td:nth-child(9),
+.page-admin-products .products-table-container table th:nth-child(10),
+.page-admin-products .products-table-container table td:nth-child(10),
+.page-admin-view-products .products-table-container table th:nth-child(10),
+.page-admin-view-products .products-table-container table td:nth-child(10) {
+  width: 90px;
+  text-align: center;
+}
+
+.page-admin-products .products-table-container table th:nth-child(11),
+.page-admin-products .products-table-container table td:nth-child(11),
+.page-admin-view-products .products-table-container table th:nth-child(11),
+.page-admin-view-products .products-table-container table td:nth-child(11) {
+  width: 170px;
+  text-align: center;
+}
+
+.page-admin-products .products-table-container table td:nth-child(4),
+.page-admin-products .products-table-container table td:nth-child(5),
+.page-admin-view-products .products-table-container table td:nth-child(4),
+.page-admin-view-products .products-table-container table td:nth-child(5) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-admin-products .products-table-container table tbody tr td:last-child,
+.page-admin-view-products .products-table-container table tbody tr td:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.page-admin-products .products-table-container table .view-btn,
+.page-admin-products .products-table-container table .edit-btn,
+.page-admin-products .products-table-container table .delete-btn,
+.page-admin-view-products .products-table-container table .view-btn,
+.page-admin-view-products .products-table-container table .edit-btn,
+.page-admin-view-products .products-table-container table .delete-btn {
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
