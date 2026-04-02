@@ -3075,3 +3075,348 @@ body[class*="page-admin"] .count-card,
 body[class*="page-admin"] .modal-content {
   background: #ffffff !important;
 }
+
+/* ===== Dark Theme Restore (v5) ===== */
+:root {
+  --bg-0: #070f1f;
+  --bg-1: #0d1c35;
+  --bg-2: #13294a;
+  --surface: rgba(16, 30, 58, 0.92);
+  --surface-2: rgba(13, 25, 48, 0.96);
+  --line: rgba(255, 255, 255, 0.11);
+  --text: #f5f9ff;
+  --text-soft: #d7e5ff;
+  --text-muted: #9db4d6;
+  --shadow: 0 16px 34px rgba(5, 9, 21, 0.42);
+  --shadow-strong: 0 24px 48px rgba(3, 7, 18, 0.58);
+}
+
+body,
+body[class*="page-"] {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 107, 67, 0.18), transparent 35%),
+    radial-gradient(circle at 90% 0, rgba(47, 215, 200, 0.16), transparent 40%),
+    linear-gradient(165deg, var(--bg-2), var(--bg-1) 46%, var(--bg-0)) !important;
+  color: var(--text) !important;
+}
+
+body::before {
+  display: block !important;
+  opacity: 0.35 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-title,
+.page-header h1,
+.summary-card h2,
+.section-head h1,
+.section-head h2,
+.item-title,
+.product-info h4,
+.modal-details h2,
+.header h1,
+.cards .card h3,
+.state-card h2,
+.stat-info p {
+  color: #f5f9ff !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+}
+
+p,
+small,
+label,
+.field-label,
+.subtitle,
+.form-note,
+.category-name,
+.product-category,
+.per-box,
+.product-availability,
+.item-meta,
+.item-original-line,
+.stock-warning,
+.order-meta,
+.order-address p,
+.order-payment p,
+.summary-row span,
+.summary-total span,
+.modal-category,
+.modal-saving,
+.modal-subtotal,
+#modalQtyHint,
+.meta-item span,
+.modal-meta-item span,
+.page-info,
+.admin-pagination-info,
+.pagination-info,
+.showing-info,
+.state,
+.no-results,
+.loading,
+.no-products,
+.empty-state p {
+  color: #9fb6d9 !important;
+  opacity: 1 !important;
+}
+
+label,
+.field-label {
+  color: #c7daf6 !important;
+}
+
+.offers-banner {
+  background: #f2c35f !important;
+  color: #1f2937 !important;
+}
+
+.navbar {
+  background: linear-gradient(115deg, rgba(9, 19, 38, 0.92), rgba(14, 30, 57, 0.88)) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 12px 28px rgba(4, 8, 20, 0.46) !important;
+}
+
+.logo {
+  color: #ffffff !important;
+}
+
+.logo i {
+  color: #ffe5b7 !important;
+  -webkit-text-fill-color: #ffe5b7 !important;
+}
+
+.logo .brand-text {
+  background: linear-gradient(130deg, #ffe8b8, #ffc37f 50%, #a8f0e8) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.navbar .nav-item,
+.navbar .nav-links > a {
+  color: var(--text-soft) !important;
+}
+
+.navbar .nav-item:hover,
+.navbar .nav-links > a:hover {
+  background: rgba(255, 255, 255, 0.09) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.navbar .nav-item.active,
+.navbar .nav-links > a.active,
+.navbar .nav-links .active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+.welcome-user,
+.nav-auth-name,
+.admin-welcome {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #ffe6bd !important;
+}
+
+.orders,
+.cart {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ebf4ff !important;
+}
+
+.orders:hover,
+.cart:hover {
+  color: #ffe0a4 !important;
+  border-color: rgba(255, 212, 123, 0.74) !important;
+}
+
+.cart-count,
+.orders-count {
+  background: #f97316 !important;
+  color: #ffffff !important;
+}
+
+.btn,
+.nav-login-btn,
+.place-order-btn,
+.empty-cta,
+.buy-btn,
+.add-cart-btn,
+.modal-buy-btn,
+.search-btn,
+.add-btn {
+  background: #f97316 !important;
+  color: #ffffff !important;
+  border-color: #f97316 !important;
+}
+
+.nav-logout-btn,
+.logout-btn,
+.delete-btn,
+.address-delete-btn,
+.role-action-btn.demote {
+  background: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+.view-btn,
+.secondary-btn,
+.reset-btn,
+.action-btn,
+.edit-btn,
+.address-edit-btn,
+.video-icon-btn {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #eaf3ff !important;
+}
+
+.card,
+.form-card,
+.summary-card,
+.table-wrap,
+.table-container,
+.products-table-container,
+.auth-card,
+.state-card,
+.stat-card,
+.cart-section,
+.saved-addresses-section,
+.address-form,
+.payment-options-container,
+.details-card,
+.order-record,
+.success-card,
+.modal-content,
+.count-card,
+.orders-section,
+.payment-section,
+.product-card {
+  background: linear-gradient(155deg, rgba(22, 39, 72, 0.92), rgba(12, 24, 46, 0.97)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.11) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.product-card {
+  background: linear-gradient(160deg, rgba(19, 35, 66, 0.96), rgba(11, 23, 46, 0.97)) !important;
+}
+
+.cart-item,
+.address-radio-option,
+.payment-options label,
+.modal-meta-item,
+.meta-item,
+.item-image,
+.order-status,
+.status-badge,
+.order-total-box,
+.price-row,
+.meta-grid,
+.qty-block,
+.subtotal,
+.video-section,
+.image-panel {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+table,
+tr,
+td,
+th {
+  color: #dce8fb !important;
+}
+
+th {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffdf99 !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+textarea {
+  background: rgba(10, 22, 44, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #f5f9ff !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #8ea8cf !important;
+}
+
+.offer-price,
+.modal-offer,
+.summary-total strong,
+.item-price,
+.page-product-details .offer-price,
+.page-order-details .order-total span,
+.page-checkout .order-total span,
+.page-payment .order-total span {
+  color: #ffd381 !important;
+}
+
+.page-home .hero-content {
+  background: linear-gradient(150deg, rgba(10, 22, 44, 0.82), rgba(9, 18, 38, 0.58)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.page-home .hero-content h1 {
+  color: #f5f9ff !important;
+}
+
+.page-home .hero-content p {
+  color: #dbe8fb !important;
+}
+
+.page-order-details .order-status {
+  color: #8ff4c6 !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+body[class*="page-admin"] {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 107, 67, 0.18), transparent 35%),
+    radial-gradient(circle at 90% 0, rgba(47, 215, 200, 0.16), transparent 40%),
+    linear-gradient(165deg, var(--bg-2), var(--bg-1) 46%, var(--bg-0)) !important;
+  color: var(--text) !important;
+}
+
+body[class*="page-admin"] p,
+body[class*="page-admin"] span,
+body[class*="page-admin"] td,
+body[class*="page-admin"] th,
+body[class*="page-admin"] label,
+body[class*="page-admin"] .subtitle,
+body[class*="page-admin"] .state,
+body[class*="page-admin"] .action-message,
+body[class*="page-admin"] .admin-pagination-info {
+  color: #9fb6d9 !important;
+}
+
+body[class*="page-admin"] h1,
+body[class*="page-admin"] h2,
+body[class*="page-admin"] h3,
+body[class*="page-admin"] h4,
+body[class*="page-admin"] .section-title {
+  color: #f5f9ff !important;
+}
+
+body[class*="page-admin"] .card,
+body[class*="page-admin"] .form-card,
+body[class*="page-admin"] .table-wrap,
+body[class*="page-admin"] .table-container,
+body[class*="page-admin"] .products-table-container,
+body[class*="page-admin"] .stat-card,
+body[class*="page-admin"] .count-card,
+body[class*="page-admin"] .modal-content {
+  background: linear-gradient(155deg, rgba(22, 39, 72, 0.92), rgba(12, 24, 46, 0.97)) !important;
+}
