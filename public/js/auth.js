@@ -89,8 +89,8 @@ function validateLoginMobile() {
   const mobile = mobileInput.value.trim();
 
   if (!mobile) {
-    clearFieldError(mobileInput);
-    return true;
+    setFieldError(mobileInput, "Mobile number is required");
+    return false;
   }
 
   if (!MOBILE_REGEX.test(mobile)) {
@@ -156,8 +156,8 @@ function validateRegisterPasswordField() {
   const password = passwordInput.value;
 
   if (!password) {
-    clearFieldError(passwordInput);
-    return true;
+    setFieldError(passwordInput, "Password is required");
+    return false;
   }
 
   const passwordError = validateStrongPassword(password);
