@@ -206,7 +206,11 @@ function validateRegisterForm() {
   const confirmValid = validateRegisterConfirmPasswordField();
 
   if (!nameValid || !mobileValid || !passwordValid || !confirmValid) {
-    showMessage("error", "Please correct the highlighted fields.");
+    if (!confirmValid) {
+      showMessage("error", "Passwords do not match. Please correct it.");
+    } else {
+      showMessage("error", "Please correct the highlighted fields.");
+    }
     return false;
   }
 
