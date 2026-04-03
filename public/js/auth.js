@@ -318,13 +318,12 @@ async function handleLoginSubmit(event) {
   } catch (err) {
     const errorMessage = err.message || "Login failed. Try again.";
     
-    // Try to map API errors to specific fields
     if (errorMessage.toLowerCase().includes("mobile") || errorMessage.toLowerCase().includes("not found") || errorMessage.toLowerCase().includes("not registered")) {
       setFieldError(mobileInput, "Mobile number not registered. Please create an account.");
-      showMessage("error", "Please correct the highlighted fields.");
+      showMessage("error", "Mobile not registered.");
     } else if (errorMessage.toLowerCase().includes("password") || errorMessage.toLowerCase().includes("incorrect") || errorMessage.toLowerCase().includes("invalid")) {
-      setFieldError(passwordInput, "Invalid password. Please try again.");
-      showMessage("error", "Please correct the highlighted fields.");
+      setFieldError(passwordInput, "Incorrect password. Please check your password.");
+      showMessage("error", "Password is incorrect.");
     } else {
       showMessage("error", errorMessage);
     }
@@ -401,13 +400,14 @@ async function handleRegisterSubmit(event) {
     // Map API errors to specific fields
     if (errorMessage.toLowerCase().includes("mobile") || errorMessage.toLowerCase().includes("already")) {
       setFieldError(mobileInput, "This mobile number is already registered. Please use a different number or login.");
-      showMessage("error", "Please correct the highlighted fields.");
+      showMessage("error", "Mobile number already registered.");
     } else if (errorMessage.toLowerCase().includes("password")) {
-      setFieldError(passwordInput, "Password does not meet requirements. " + passwordInput.getAttribute("data-error") || errorMessage);
-      showMessage("error", "Please correct the highlighted fields.");
+      const defaultMessage = validateStrongPassword(password);
+      setFieldError(passwordInput, defaultMessage || "Password does not meet requirements. Please include uppercase, lowercase, number, special character.");
+      showMessage("error", "Password validation error.");
     } else if (errorMessage.toLowerCase().includes("name")) {
       setFieldError(nameInput, errorMessage);
-      showMessage("error", "Please correct the highlighted fields.");
+      showMessage("error", "Name field validation error.");
     } else {
       showMessage("error", errorMessage);
     }
@@ -447,7 +447,14 @@ function validateStrongPassword(password) {
 
 function setFieldError(inputElement, message) {
   inputElement.classList.add("invalid");
-  const errorEl = inputElement.parentElement.querySelector(".field-error");
+  inputElement.classList.add("invalid-animated");
+
+  const parent = inputElement.parentElement;
+  if (parent) {
+    parent.classList.add("field-error-animation");
+  }
+
+  const errorEl = parent.querySelector(".field-error");
   if (errorEl) {
     errorEl.textContent = message;
   }
@@ -455,7 +462,14 @@ function setFieldError(inputElement, message) {
 
 function clearFieldError(inputElement) {
   inputElement.classList.remove("invalid");
-  const errorEl = inputElement.parentElement.querySelector(".field-error");
+  inputElement.classList.remove("invalid-animated");
+
+  const parent = inputElement.parentElement;
+  if (parent) {
+    parent.classList.remove("field-error-animation");
+  }
+
+  const errorEl = parent.querySelector(".field-error");
   if (errorEl) {
     errorEl.textContent = "";
   }

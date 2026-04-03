@@ -383,6 +383,28 @@
       box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
     }
 
+    .input-group.field-error-animation {
+      animation: fieldShake 0.4s ease-in-out;
+    }
+
+    @keyframes fieldShake {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+      100% { transform: translateX(0); }
+    }
+
+    .input-group input.invalid-animated {
+      animation: pulseBorder 1s ease-in-out;
+    }
+
+    @keyframes pulseBorder {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.0); }
+      50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.15); }
+    }
+
     .input-group input::placeholder {
       color: var(--text-muted);
       font-size: 14px;
