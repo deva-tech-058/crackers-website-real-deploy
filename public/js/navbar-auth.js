@@ -191,11 +191,11 @@
       loginLink = document.createElement("a");
       loginLink.href = "/login.html";
       loginLink.textContent = "Login";
-      loginLink.className = "btn nav-auth-login";
+      loginLink.className = "btn nav-auth-login nav-login-btn";
       loginLink.setAttribute("data-auth-login", "true");
       placeAuthNode(navLinks, loginLink);
     } else {
-      loginLink.classList.add("nav-auth-login");
+      loginLink.classList.add("nav-auth-login", "nav-login-btn");
       if (!loginLink.getAttribute("href")) {
         loginLink.setAttribute("href", "/login.html");
       }
@@ -252,12 +252,12 @@
     if (!logoutBtn) {
       logoutBtn = document.createElement("button");
       logoutBtn.type = "button";
-      logoutBtn.className = "btn nav-auth-logout";
+      logoutBtn.className = "btn nav-auth-logout nav-logout-btn";
       logoutBtn.textContent = "Logout";
       logoutBtn.setAttribute("data-auth-logout", "true");
       userSection.appendChild(logoutBtn);
     } else {
-      logoutBtn.classList.add("nav-auth-logout");
+      logoutBtn.classList.add("nav-auth-logout", "nav-logout-btn");
       logoutBtn.setAttribute("data-auth-logout", "true");
     }
 
