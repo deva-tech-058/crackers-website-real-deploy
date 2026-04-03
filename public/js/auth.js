@@ -114,8 +114,8 @@ function validateLoginPasswordField() {
   const password = passwordInput.value;
 
   if (!password) {
-    clearFieldError(passwordInput);
-    return true;
+    setFieldError(passwordInput, "Password is required");
+    return false;
   }
 
   clearFieldError(passwordInput);
@@ -127,8 +127,8 @@ function validateRegisterName() {
   const name = nameInput.value.trim().replace(/\s+/g, " ");
 
   if (!name) {
-    clearFieldError(nameInput);
-    return true;
+    setFieldError(nameInput, "Name is required");
+    return false;
   }
 
   if (name.length < 2 || name.length > 80) {
@@ -145,8 +145,8 @@ function validateRegisterMobile() {
   const mobile = mobileInput.value.trim();
 
   if (!mobile) {
-    clearFieldError(mobileInput);
-    return true;
+    setFieldError(mobileInput, "Mobile number is required");
+    return false;
   }
 
   if (!MOBILE_REGEX.test(mobile)) {
@@ -186,8 +186,8 @@ function validateRegisterConfirmPasswordField() {
   const confirmPassword = confirmPasswordInput.value;
 
   if (!confirmPassword) {
-    clearFieldError(confirmPasswordInput);
-    return true;
+    setFieldError(confirmPasswordInput, "Confirm password is required");
+    return false;
   }
 
   if (password !== confirmPassword) {
