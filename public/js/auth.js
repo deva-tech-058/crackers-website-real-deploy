@@ -316,7 +316,18 @@ async function handleLoginSubmit(event) {
 
     window.location.replace(isAdmin ? "/admin/admin-dashboard.html" : "/");
   } catch (err) {
-    showMessage("error", err.message || "Login failed. Try again.");
+    const errorMessage = err.message || "Login failed. Try again.";
+    
+    // Try to map API errors to specific fields
+    if (errorMessage.toLowerCase().includes("mobile") || errorMessage.toLowerCase().includes("not found") || errorMessage.toLowerCase().includes("not registered")) {
+      setFieldError(mobileInput, "Mobile number not registered. Please create an account.");
+      showMessage("error", "Please correct the highlighted fields.");
+    } else if (errorMessage.toLowerCase().includes("password") || errorMessage.toLowerCase().includes("incorrect") || errorMessage.toLowerCase().includes("invalid")) {
+      setFieldError(passwordInput, "Invalid password. Please try again.");
+      showMessage("error", "Please correct the highlighted fields.");
+    } else {
+      showMessage("error", errorMessage);
+    }
   } finally {
     loginSubmitBtn.disabled = false;
     loginSubmitBtn.textContent = "Login";
@@ -385,7 +396,21 @@ async function handleRegisterSubmit(event) {
 
     showMessage("success", "Registration successful. Please login to continue.");
   } catch (err) {
-    showMessage("error", err.message || "Registration failed. Try again.");
+    const errorMessage = err.message || "Registration failed. Try again.";
+    
+    // Map API errors to specific fields
+    if (errorMessage.toLowerCase().includes("mobile") || errorMessage.toLowerCase().includes("already")) {
+      setFieldError(mobileInput, "This mobile number is already registered. Please use a different number or login.");
+      showMessage("error", "Please correct the highlighted fields.");
+    } else if (errorMessage.toLowerCase().includes("password")) {
+      setFieldError(passwordInput, "Password does not meet requirements. " + passwordInput.getAttribute("data-error") || errorMessage);
+      showMessage("error", "Please correct the highlighted fields.");
+    } else if (errorMessage.toLowerCase().includes("name")) {
+      setFieldError(nameInput, errorMessage);
+      showMessage("error", "Please correct the highlighted fields.");
+    } else {
+      showMessage("error", errorMessage);
+    }
   } finally {
     registerSubmitBtn.disabled = false;
     registerSubmitBtn.textContent = "Create Account";
@@ -393,9 +418,30 @@ async function handleRegisterSubmit(event) {
 }
 
 function validateStrongPassword(password) {
-  if (!PASSWORD_REGEX.test(password || "")) {
-    return "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.";
+  if (!password) {
+    return "Password is required";
   }
+  
+  if (password.length < 8) {
+    return "Password must be at least 8 characters long";
+  }
+  
+  if (!/[a-z]/.test(password)) {
+    return "Password must contain at least one lowercase letter";
+  }
+  
+  if (!/[A-Z]/.test(password)) {
+    return "Password must contain at least one uppercase letter";
+  }
+  
+  if (!/\d/.test(password)) {
+    return "Password must contain at least one number (0-9)";
+  }
+  
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    return "Password must contain at least one special character (!@#$%^&*)";
+  }
+  
   return "";
 }
 
