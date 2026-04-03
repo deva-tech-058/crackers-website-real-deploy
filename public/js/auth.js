@@ -74,15 +74,8 @@ function setupRealTimeValidation() {
   }
 
   if (registerPassword) {
-    registerPassword.addEventListener("input", () => {
-      validateRegisterPasswordField();
-      updateRegisterPasswordRules(registerPassword.value);
-    });
-    registerPassword.addEventListener("blur", () => {
-      validateRegisterPasswordField();
-      updateRegisterPasswordRules(registerPassword.value);
-    });
-    updateRegisterPasswordRules(registerPassword.value);
+    registerPassword.addEventListener("input", () => validateRegisterPasswordField());
+    registerPassword.addEventListener("blur", () => validateRegisterPasswordField());
   }
 
   if (registerConfirmPassword) {
@@ -162,16 +155,13 @@ function validateRegisterPasswordField() {
   const passwordInput = document.getElementById("registerPassword");
   const password = passwordInput.value;
 
-  updateRegisterPasswordRules(password);
-
   if (!password) {
     setFieldError(passwordInput, "Password is required");
     return false;
   }
 
-  const passwordError = validateStrongPassword(password);
-  if (passwordError) {
-    setFieldError(passwordInput, passwordError);
+  if (password.length < 8) {
+    setFieldError(passwordInput, "Password must be at least 8 characters");
     return false;
   }
 
@@ -251,7 +241,6 @@ function setActiveTab(tabName) {
   clearMessage();
   clearFormErrors(loginForm);
   clearFormErrors(registerForm);
-  updateRegisterPasswordRules("");
 }
 
 function enforceNumericMobileInput(inputId) {
@@ -413,8 +402,7 @@ async function handleRegisterSubmit(event) {
       setFieldError(mobileInput, "This mobile number is already registered. Please use a different number or login.");
       showMessage("error", "Mobile number already registered.");
     } else if (errorMessage.toLowerCase().includes("password")) {
-      const defaultMessage = validateStrongPassword(password);
-      setFieldError(passwordInput, defaultMessage || "Password does not meet requirements. Please include uppercase, lowercase, number, special character.");
+      setFieldError(passwordInput, "Password does not meet requirements. Please use at least 8 characters.");
       showMessage("error", "Password validation error.");
     } else if (errorMessage.toLowerCase().includes("name")) {
       setFieldError(nameInput, errorMessage);
@@ -427,49 +415,6 @@ async function handleRegisterSubmit(event) {
     registerSubmitBtn.textContent = "Create Account";
   }
 }
-
-function getPasswordRuleStatus(password) {
-  return [
-    { key: "length", label: "At least 8 characters", valid: password.length >= 8 },
-    { key: "lowercase", label: "At least one lowercase letter", valid: /[a-z]/.test(password) },
-    { key: "uppercase", label: "At least one uppercase letter", valid: /[A-Z]/.test(password) },
-    { key: "number", label: "At least one number", valid: /\d/.test(password) },
-    { key: "special", label: "At least one special character (!@#$%^&*)", valid: /[^A-Za-z0-9]/.test(password) },
-  ];
-}
-
-function validateStrongPassword(password) {
-  if (!password) {
-    return "Password is required";
-  }
-
-  const rules = getPasswordRuleStatus(password);
-  const failed = rules.filter((rule) => !rule.valid);
-
-  if (failed.length === 0) {
-    return "";
-  }
-
-  return `Password must contain ${failed.map((rule) => rule.label.toLowerCase()).join(", ")}.`;
-}
-
-function updateRegisterPasswordRules(password) {
-  const container = document.getElementById("registerPasswordRules");
-  if (!container) return;
-
-  const rules = getPasswordRuleStatus(password);
-
-  container.innerHTML = "";
-  rules.forEach((rule) => {
-    const li = document.createElement("li");
-    li.textContent = rule.label;
-    if (rule.valid) {
-      li.classList.add("valid");
-    }
-    container.appendChild(li);
-  });
-}
-
 
 function setFieldError(inputElement, message) {
   inputElement.classList.add("invalid");
