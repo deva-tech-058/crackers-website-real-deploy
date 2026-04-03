@@ -246,6 +246,7 @@ video { max-width: 100%; }
   transition: all 0.2s ease;
 }
 
+.navbar .nav-login-btn,
 .nav-login-btn,
 .btn.nav-login-btn {
   background: linear-gradient(135deg, #22c55e, #16a34a) !important;
