@@ -74,8 +74,15 @@ function setupRealTimeValidation() {
   }
 
   if (registerPassword) {
-    registerPassword.addEventListener("input", () => validateRegisterPasswordField());
-    registerPassword.addEventListener("blur", () => validateRegisterPasswordField());
+    registerPassword.addEventListener("input", () => {
+      validateRegisterPasswordField();
+      updateRegisterPasswordRules(registerPassword.value);
+    });
+    registerPassword.addEventListener("blur", () => {
+      validateRegisterPasswordField();
+      updateRegisterPasswordRules(registerPassword.value);
+    });
+    updateRegisterPasswordRules(registerPassword.value);
   }
 
   if (registerConfirmPassword) {
@@ -154,6 +161,8 @@ function validateRegisterMobile() {
 function validateRegisterPasswordField() {
   const passwordInput = document.getElementById("registerPassword");
   const password = passwordInput.value;
+
+  updateRegisterPasswordRules(password);
 
   if (!password) {
     setFieldError(passwordInput, "Password is required");
@@ -238,6 +247,7 @@ function setActiveTab(tabName) {
   clearMessage();
   clearFormErrors(loginForm);
   clearFormErrors(registerForm);
+  updateRegisterPasswordRules("");
 }
 
 function enforceNumericMobileInput(inputId) {
@@ -414,35 +424,48 @@ async function handleRegisterSubmit(event) {
   }
 }
 
+function getPasswordRuleStatus(password) {
+  return [
+    { key: "length", label: "At least 8 characters", valid: password.length >= 8 },
+    { key: "lowercase", label: "At least one lowercase letter", valid: /[a-z]/.test(password) },
+    { key: "uppercase", label: "At least one uppercase letter", valid: /[A-Z]/.test(password) },
+    { key: "number", label: "At least one number", valid: /\d/.test(password) },
+    { key: "special", label: "At least one special character (!@#$%^&*)", valid: /[^A-Za-z0-9]/.test(password) },
+  ];
+}
+
 function validateStrongPassword(password) {
   if (!password) {
     return "Password is required";
   }
 
-  const rules = [];
+  const rules = getPasswordRuleStatus(password);
+  const failed = rules.filter((rule) => !rule.valid);
 
-  if (password.length < 8) {
-    rules.push("at least 8 characters");
-  }
-  if (!/[a-z]/.test(password)) {
-    rules.push("at least one lowercase letter");
-  }
-  if (!/[A-Z]/.test(password)) {
-    rules.push("at least one uppercase letter");
-  }
-  if (!/\d/.test(password)) {
-    rules.push("at least one number");
-  }
-  if (!/[^A-Za-z0-9]/.test(password)) {
-    rules.push("at least one special character (!@#$%^&*)");
-  }
-
-  if (rules.length === 0) {
+  if (failed.length === 0) {
     return "";
   }
 
-  return `Password must contain ${rules.join(", ")}.`;
+  return `Password must contain ${failed.map((rule) => rule.label.toLowerCase()).join(", ")}.`;
 }
+
+function updateRegisterPasswordRules(password) {
+  const container = document.getElementById("registerPasswordRules");
+  if (!container) return;
+
+  const rules = getPasswordRuleStatus(password);
+
+  container.innerHTML = "";
+  rules.forEach((rule) => {
+    const li = document.createElement("li");
+    li.textContent = rule.label;
+    if (rule.valid) {
+      li.classList.add("valid");
+    }
+    container.appendChild(li);
+  });
+}
+
 
 function setFieldError(inputElement, message) {
   inputElement.classList.add("invalid");
