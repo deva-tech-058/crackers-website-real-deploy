@@ -440,28 +440,30 @@ function validateStrongPassword(password) {
   if (!password) {
     return "Password is required";
   }
-  
+
+  const rules = [];
+
   if (password.length < 8) {
-    return "Password must be at least 8 characters long";
+    rules.push("at least 8 characters");
   }
-  
   if (!/[a-z]/.test(password)) {
-    return "Password must contain at least one lowercase letter";
+    rules.push("at least one lowercase letter");
   }
-  
   if (!/[A-Z]/.test(password)) {
-    return "Password must contain at least one uppercase letter";
+    rules.push("at least one uppercase letter");
   }
-  
   if (!/\d/.test(password)) {
-    return "Password must contain at least one number (0-9)";
+    rules.push("at least one number");
   }
-  
   if (!/[^A-Za-z0-9]/.test(password)) {
-    return "Password must contain at least one special character (!@#$%^&*)";
+    rules.push("at least one special character (!@#$%^&*)");
   }
-  
-  return "";
+
+  if (rules.length === 0) {
+    return "";
+  }
+
+  return `Password must contain ${rules.join(", ")}.`;
 }
 
 function setFieldError(inputElement, message) {
