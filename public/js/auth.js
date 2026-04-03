@@ -190,6 +190,39 @@ function validateRegisterConfirmPasswordField() {
   return true;
 }
 
+function validateRegisterForm() {
+  const nameValid = validateRegisterName();
+  const mobileValid = validateRegisterMobile();
+  const passwordValid = validateRegisterPasswordField();
+  const confirmValid = validateRegisterConfirmPasswordField();
+
+  if (!nameValid || !mobileValid || !passwordValid || !confirmValid) {
+    showMessage("error", "Please correct the highlighted fields.");
+    return false;
+  }
+
+  return true;
+}
+
+function validateLoginForm() {
+  const mobileValid = validateLoginMobile();
+  const passwordInput = document.getElementById("loginPassword");
+  const password = passwordInput.value;
+
+  if (!password) {
+    setFieldError(passwordInput, "Password is required");
+  } else {
+    clearFieldError(passwordInput);
+  }
+
+  if (!mobileValid || !password) {
+    showMessage("error", "Please correct the highlighted fields.");
+    return false;
+  }
+
+  return true;
+}
+
 function setActiveTab(tabName) {
   const showLogin = tabName === "login";
 
@@ -227,28 +260,15 @@ async function handleLoginSubmit(event) {
   clearMessage();
   clearFormErrors(loginForm);
 
+  if (!validateLoginForm()) {
+    return;
+  }
+
   const mobileInput = document.getElementById("loginMobile");
   const passwordInput = document.getElementById("loginPassword");
 
   const mobile = mobileInput.value.trim();
   const password = passwordInput.value;
-
-  let hasError = false;
-
-  if (!MOBILE_REGEX.test(mobile)) {
-    setFieldError(mobileInput, "Enter a valid 10 digit mobile number");
-    hasError = true;
-  }
-
-  if (!password) {
-    setFieldError(passwordInput, "Password is required");
-    hasError = true;
-  }
-
-  if (hasError) {
-    showMessage("error", "Please correct the highlighted fields.");
-    return;
-  }
 
   loginSubmitBtn.disabled = true;
   loginSubmitBtn.textContent = "Logging in...";
@@ -371,8 +391,7 @@ async function handleRegisterSubmit(event) {
     hasError = true;
   }
 
-  if (hasError) {
-    showMessage("error", "Please correct the highlighted fields.");
+  if (!validateRegisterForm()) {
     return;
   }
 
