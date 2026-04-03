@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   enforceNumericMobileInput("loginMobile");
   enforceNumericMobileInput("registerMobile");
+  setupRealTimeValidation();
   bindAuthTabSwitching();
   bindAuthForms();
 });
@@ -39,6 +40,154 @@ function bindAuthTabSwitching() {
 function bindAuthForms() {
   loginForm.addEventListener("submit", handleLoginSubmit);
   registerForm.addEventListener("submit", handleRegisterSubmit);
+}
+
+function setupRealTimeValidation() {
+  // Login form real-time validation
+  const loginMobile = document.getElementById("loginMobile");
+  const loginPassword = document.getElementById("loginPassword");
+
+  if (loginMobile) {
+    loginMobile.addEventListener("input", () => validateLoginMobile());
+    loginMobile.addEventListener("blur", () => validateLoginMobile());
+  }
+
+  if (loginPassword) {
+    loginPassword.addEventListener("input", () => validateLoginPasswordField());
+    loginPassword.addEventListener("blur", () => validateLoginPasswordField());
+  }
+
+  // Register form real-time validation
+  const registerName = document.getElementById("registerName");
+  const registerMobile = document.getElementById("registerMobile");
+  const registerPassword = document.getElementById("registerPassword");
+  const registerConfirmPassword = document.getElementById("registerConfirmPassword");
+
+  if (registerName) {
+    registerName.addEventListener("input", () => validateRegisterName());
+    registerName.addEventListener("blur", () => validateRegisterName());
+  }
+
+  if (registerMobile) {
+    registerMobile.addEventListener("input", () => validateRegisterMobile());
+    registerMobile.addEventListener("blur", () => validateRegisterMobile());
+  }
+
+  if (registerPassword) {
+    registerPassword.addEventListener("input", () => validateRegisterPasswordField());
+    registerPassword.addEventListener("blur", () => validateRegisterPasswordField());
+  }
+
+  if (registerConfirmPassword) {
+    registerConfirmPassword.addEventListener("input", () => validateRegisterConfirmPasswordField());
+    registerConfirmPassword.addEventListener("blur", () => validateRegisterConfirmPasswordField());
+  }
+}
+
+function validateLoginMobile() {
+  const mobileInput = document.getElementById("loginMobile");
+  const mobile = mobileInput.value.trim();
+
+  if (!mobile) {
+    clearFieldError(mobileInput);
+    return true;
+  }
+
+  if (!MOBILE_REGEX.test(mobile)) {
+    setFieldError(mobileInput, "Enter a valid 10 digit mobile number");
+    return false;
+  }
+
+  clearFieldError(mobileInput);
+  return true;
+}
+
+function validateLoginPasswordField() {
+  const passwordInput = document.getElementById("loginPassword");
+  const password = passwordInput.value;
+
+  if (!password) {
+    clearFieldError(passwordInput);
+    return true;
+  }
+
+  clearFieldError(passwordInput);
+  return true;
+}
+
+function validateRegisterName() {
+  const nameInput = document.getElementById("registerName");
+  const name = nameInput.value.trim().replace(/\s+/g, " ");
+
+  if (!name) {
+    clearFieldError(nameInput);
+    return true;
+  }
+
+  if (name.length < 2 || name.length > 80) {
+    setFieldError(nameInput, "Name must be between 2 and 80 characters");
+    return false;
+  }
+
+  clearFieldError(nameInput);
+  return true;
+}
+
+function validateRegisterMobile() {
+  const mobileInput = document.getElementById("registerMobile");
+  const mobile = mobileInput.value.trim();
+
+  if (!mobile) {
+    clearFieldError(mobileInput);
+    return true;
+  }
+
+  if (!MOBILE_REGEX.test(mobile)) {
+    setFieldError(mobileInput, "Enter a valid 10 digit mobile number");
+    return false;
+  }
+
+  clearFieldError(mobileInput);
+  return true;
+}
+
+function validateRegisterPasswordField() {
+  const passwordInput = document.getElementById("registerPassword");
+  const password = passwordInput.value;
+
+  if (!password) {
+    clearFieldError(passwordInput);
+    return true;
+  }
+
+  const passwordError = validateStrongPassword(password);
+  if (passwordError) {
+    setFieldError(passwordInput, passwordError);
+    return false;
+  }
+
+  clearFieldError(passwordInput);
+  return true;
+}
+
+function validateRegisterConfirmPasswordField() {
+  const passwordInput = document.getElementById("registerPassword");
+  const confirmPasswordInput = document.getElementById("registerConfirmPassword");
+  const password = passwordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+
+  if (!confirmPassword) {
+    clearFieldError(confirmPasswordInput);
+    return true;
+  }
+
+  if (password !== confirmPassword) {
+    setFieldError(confirmPasswordInput, "Passwords do not match");
+    return false;
+  }
+
+  clearFieldError(confirmPasswordInput);
+  return true;
 }
 
 function setActiveTab(tabName) {
@@ -255,6 +404,14 @@ function setFieldError(inputElement, message) {
   const errorEl = inputElement.parentElement.querySelector(".field-error");
   if (errorEl) {
     errorEl.textContent = message;
+  }
+}
+
+function clearFieldError(inputElement) {
+  inputElement.classList.remove("invalid");
+  const errorEl = inputElement.parentElement.querySelector(".field-error");
+  if (errorEl) {
+    errorEl.textContent = "";
   }
 }
 

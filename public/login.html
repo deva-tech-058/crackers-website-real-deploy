@@ -373,9 +373,49 @@
       box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
     }
 
+    .input-group input.invalid {
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    .input-group input.invalid:focus {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+
     .input-group input::placeholder {
       color: var(--text-muted);
       font-size: 14px;
+    }
+
+    /* Password field container */
+    .password-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-toggle-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 8px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-toggle-btn:hover {
+      color: var(--accent-gold);
+    }
+
+    .input-group.password-group input {
+      padding-right: 48px;
     }
 
     .field-error {
@@ -583,10 +623,15 @@
           <small class="field-error"></small>
         </div>
 
-        <div class="input-group">
+        <div class="input-group password-group">
           <label for="loginPassword">Password</label>
-          <input id="loginPassword" name="password" type="password" minlength="8" maxlength="64"
-            placeholder="Enter your password" autocomplete="current-password" required />
+          <div class="password-input-wrapper">
+            <input id="loginPassword" name="password" type="password" minlength="8" maxlength="64"
+              placeholder="Enter your password" autocomplete="current-password" required />
+            <button type="button" class="password-toggle-btn" id="loginPasswordToggle" tabindex="-1" aria-label="Toggle password visibility">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
           <small class="field-error"></small>
         </div>
 
@@ -608,17 +653,27 @@
           <small class="field-error"></small>
         </div>
 
-        <div class="input-group">
+        <div class="input-group password-group">
           <label for="registerPassword">Password</label>
-          <input id="registerPassword" name="password" type="password" minlength="8" maxlength="64"
-            placeholder="At least 8 chars with upper, lower, number, special" autocomplete="new-password" required />
+          <div class="password-input-wrapper">
+            <input id="registerPassword" name="password" type="password" minlength="8" maxlength="64"
+              placeholder="At least 8 chars with upper, lower, number, special" autocomplete="new-password" required />
+            <button type="button" class="password-toggle-btn" id="registerPasswordToggle" tabindex="-1" aria-label="Toggle password visibility">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
           <small class="field-error"></small>
         </div>
 
-        <div class="input-group">
+        <div class="input-group password-group">
           <label for="registerConfirmPassword">Confirm Password</label>
-          <input id="registerConfirmPassword" name="confirm_password" type="password" minlength="8" maxlength="64"
-            placeholder="Re-enter your password" autocomplete="new-password" required />
+          <div class="password-input-wrapper">
+            <input id="registerConfirmPassword" name="confirm_password" type="password" minlength="8" maxlength="64"
+              placeholder="Re-enter your password" autocomplete="new-password" required />
+            <button type="button" class="password-toggle-btn" id="registerConfirmPasswordToggle" tabindex="-1" aria-label="Toggle password visibility">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
           <small class="field-error"></small>
         </div>
 
@@ -634,12 +689,34 @@
   <script src="/js/auth.js"></script>
 
   <script>
+    // Password toggle functionality
+    function setupPasswordToggle(toggleBtnId, inputId) {
+      const toggleBtn = document.getElementById(toggleBtnId);
+      const input = document.getElementById(inputId);
+
+      if (!toggleBtn || !input) return;
+
+      toggleBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        toggleBtn.innerHTML = isPassword
+          ? '<i class="fa-solid fa-eye-slash"></i>'
+          : '<i class="fa-solid fa-eye"></i>';
+      });
+    }
+
     // Tab switching functionality
     document.addEventListener('DOMContentLoaded', function () {
       const loginTab = document.getElementById('loginTabBtn');
       const registerTab = document.getElementById('registerTabBtn');
       const loginForm = document.getElementById('loginForm');
       const registerForm = document.getElementById('registerForm');
+
+      // Setup password toggles
+      setupPasswordToggle('loginPasswordToggle', 'loginPassword');
+      setupPasswordToggle('registerPasswordToggle', 'registerPassword');
+      setupPasswordToggle('registerConfirmPasswordToggle', 'registerConfirmPassword');
 
       loginTab.addEventListener('click', function () {
         loginTab.classList.add('active');
