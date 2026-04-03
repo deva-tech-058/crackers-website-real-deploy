@@ -368,29 +368,7 @@ async function handleRegisterSubmit(event) {
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;
 
-  let hasError = false;
-
-  if (name.length < 2 || name.length > 80) {
-    setFieldError(nameInput, "Name must be between 2 and 80 characters");
-    hasError = true;
-  }
-
-  if (!MOBILE_REGEX.test(mobile)) {
-    setFieldError(mobileInput, "Enter a valid 10 digit mobile number");
-    hasError = true;
-  }
-
-  const passwordError = validateStrongPassword(password);
-  if (passwordError) {
-    setFieldError(passwordInput, passwordError);
-    hasError = true;
-  }
-
-  if (password !== confirmPassword) {
-    setFieldError(confirmPasswordInput, "Passwords do not match");
-    hasError = true;
-  }
-
+  // Run the unified validator which sets field errors and messages
   if (!validateRegisterForm()) {
     return;
   }
